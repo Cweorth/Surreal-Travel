@@ -109,7 +109,7 @@ public class Excursion {
 
     @Override
     public String toString() {
-        return "Excursion [id=" + id + ", date=" + excursionDate + "";
+        return "Excursion [id=" + id + ", date=" + excursionDate + ", duration="+ duration+", description="+description+", destination"+destination+", price="+price;
 
     }
 }
