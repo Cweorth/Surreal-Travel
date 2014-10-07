@@ -12,15 +12,15 @@ import javax.persistence.Persistence;
  */
 public class JPACustomerDAO implements CustomerDAO {
     
-    public static final String PERSISTANCE_NAME = "Surreal-Travel";
+    public static final String PERSISTENCE_NAME = "Surreal-Travel";
     
     EntityManagerFactory emf;
     
     public JPACustomerDAO() {
-        emf = Persistence.createEntityManagerFactory(JPACustomerDAO.PERSISTANCE_NAME);
+        emf = Persistence.createEntityManagerFactory(JPACustomerDAO.PERSISTENCE_NAME);
     }
 
-    public void addCustomer(Customer customer) throws NullPointerException, IllegalArgumentException {
+    public void addCustomer(Customer customer) {
         
         if(customer == null) throw new NullPointerException("Customer object is null.");
         if(customer.getId() < 0) throw new IllegalArgumentException("Customer object is not valid - id < 0");
@@ -28,14 +28,12 @@ public class JPACustomerDAO implements CustomerDAO {
         if(customer.getName().isEmpty()) throw new IllegalArgumentException("Name of customer is empty string.");
         
         EntityManager em = emf.createEntityManager();
-        em.getTransaction().begin();
         em.persist(customer);
-        em.getTransaction().commit();
         em.close();
         
     }
 
-    public Customer getCustomerById(long id) throws IllegalArgumentException {
+    public Customer getCustomerById(long id) {
        
         if(id < 0) throw new IllegalArgumentException("Id < 0");
         
@@ -48,7 +46,7 @@ public class JPACustomerDAO implements CustomerDAO {
         
     }
 
-    public List<Customer> getCustomerByName(String name) throws NullPointerException, IllegalArgumentException {
+    public List<Customer> getCustomerByName(String name) {
         
         if(name == null) throw new NullPointerException("Name of customer object is null.");
         if(name.isEmpty()) throw new IllegalArgumentException("Name of customer is empty string.");
@@ -78,7 +76,7 @@ public class JPACustomerDAO implements CustomerDAO {
         
     }
 
-    public void updateCustomer(Customer customer) throws NullPointerException {
+    public void updateCustomer(Customer customer) {
         
         if(customer == null) throw new NullPointerException("Customer object is null.");
         if(customer.getId() < 0) throw new IllegalArgumentException("Customer object is not valid - id < 0");
@@ -86,22 +84,18 @@ public class JPACustomerDAO implements CustomerDAO {
         if(customer.getName().isEmpty()) throw new IllegalArgumentException("Name of customer is empty string.");
         
         EntityManager em = emf.createEntityManager();
-        em.getTransaction().begin();
         em.merge(customer);
-        em.getTransaction().commit();
         em.close();
         
     }
 
-    public void deleteCustomer(Customer customer) throws NullPointerException {
+    public void deleteCustomer(Customer customer) {
         
         if(customer == null) throw new NullPointerException("Customer object is null.");
         if(customer.getId() < 0) throw new IllegalArgumentException("Customer object is not valid - id < 0");
         
         EntityManager em = emf.createEntityManager();
-        em.getTransaction().begin();
         em.remove(customer);
-        em.getTransaction().commit();
         em.close();
         
     }
@@ -111,11 +105,9 @@ public class JPACustomerDAO implements CustomerDAO {
         if(id < 0) throw new IllegalArgumentException("Customer id < 0");
         
         EntityManager em = emf.createEntityManager();
-        em.getTransaction().begin();
         em.createNamedQuery("Customer.removeById")
                 .setParameter(0, id)
                 .executeUpdate();
-        em.getTransaction().commit();
         em.close();
         
     }
