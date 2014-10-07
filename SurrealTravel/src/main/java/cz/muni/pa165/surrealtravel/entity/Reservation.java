@@ -1,5 +1,6 @@
 package cz.muni.pa165.surrealtravel.entity;
 
+import java.io.Serializable;
 import java.math.BigDecimal;
 import java.util.List;
 import javax.persistence.Column;
@@ -10,7 +11,7 @@ import javax.persistence.Id;
  *
  * @author Tomáš Kácel [359965]
  */
-public class Reservation {
+public class Reservation implements Serializable {
     //private methods
     @Id
     @GeneratedValue
@@ -69,9 +70,9 @@ public class Reservation {
     
     public BigDecimal getTotalPrice(){
         BigDecimal base= this.getTrip().getBasePrice();
-        List<Excursion> excursio=this.getExcursions();
+        //List<Excursion> excursio=this.getExcursions();
         //if(excursions.isEmpty()){return base;}
-        for(Excursion ext:excursio){
+        for(Excursion ext:getExcursions()){
           base.add(ext.getPrice());
         }
         return base;
