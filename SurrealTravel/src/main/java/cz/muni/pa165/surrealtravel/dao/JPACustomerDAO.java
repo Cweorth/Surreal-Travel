@@ -10,11 +10,15 @@ import javax.persistence.Persistence;
  * Implementation of DAO for Customer entity.
  * @author Jan Klimeš [374259]
  */
-public class CustomerDAOImpl implements CustomerDAO {
+public class JPACustomerDAO implements CustomerDAO {
     
     public static final String PERSISTANCE_NAME = "Surreal-Travel";
     
-    EntityManagerFactory emf = Persistence.createEntityManagerFactory(CustomerDAOImpl.PERSISTANCE_NAME);
+    EntityManagerFactory emf;
+    
+    public JPACustomerDAO() {
+        emf = Persistence.createEntityManagerFactory(JPACustomerDAO.PERSISTANCE_NAME);
+    }
 
     public void addCustomer(Customer customer) throws NullPointerException, IllegalArgumentException {
         
