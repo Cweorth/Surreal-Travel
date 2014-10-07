@@ -4,6 +4,7 @@ import java.io.Serializable;
 import java.math.BigDecimal;
 import java.util.Date;
 import java.util.List;
+import java.util.Objects;
 import javax.persistence.Column;
 import javax.persistence.Entity;
 import javax.persistence.GeneratedValue;
@@ -13,7 +14,7 @@ import javax.persistence.TemporalType;
 import javax.persistence.Transient;
 
 /**
- *
+ * 
  * @author Roman Lacko [396157]
  */
 @Entity
@@ -127,18 +128,21 @@ public class Trip implements Serializable {
         
         final Trip other = (Trip) obj;
         
-        return (id          == other.id)
-            && (capacity    == other.capacity)
-            && (basePrice   != null && basePrice.equals(other.basePrice))
-            && (dateFrom    != null && dateFrom.equals(other.dateFrom))
-            && (dateTo      != null && dateTo.equals(other.dateTo))
-            && (destination != null && destination.equals(other.destination))
-            && (excursions  != null && excursions.equals(other.excursions));
+        return (id       == other.id)
+            && (capacity == other.capacity)
+            && (Objects.equals(basePrice,   other.basePrice))
+            && (Objects.equals(dateFrom,    other.dateFrom))
+            && (Objects.equals(dateTo,      other.dateTo))
+            && (Objects.equals(destination, other.destination))
+            && (Objects.equals(excursions,  other.excursions));
     }
     
     @Override
     public String toString() {
-        return "Trip[" + "id=" + id + ", dateFrom=" + dateFrom + ", dateTo=" + dateTo + ", destination=" + destination + ", capacity=" + capacity + ", basePrice=" + basePrice + ", excursions=" + excursions + ']';
+        return "Trip[id="      + id         + ", dateFrom="    + dateFrom 
+             + ", dateTo="     + dateTo     + ", destination=" + destination 
+             + ", capacity="   + capacity   + ", basePrice="   + basePrice 
+             + ", excursions=" + excursions + ']';
     }
     
     //</editor-fold>
