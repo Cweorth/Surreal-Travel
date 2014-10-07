@@ -5,11 +5,18 @@ import javax.persistence.Column;
 import javax.persistence.Entity;
 import javax.persistence.GeneratedValue;
 import javax.persistence.Id;
+import javax.persistence.NamedQueries;
+import javax.persistence.NamedQuery;
 
 /**
  * Customer entity.
  * @author Jan Klimeš [374259]
  */
+@NamedQueries({
+    @NamedQuery(name="Customer.getAll",query="SELECT c FROM Customer c"),
+    @NamedQuery(name="Customer.getByName",query="SELECT c FROM Customer c WHERE c.name = :name"),
+    @NamedQuery(name="Customer.removeById",query="DELETE FROM Customer c WHERE c.id = :id"),
+})
 @Entity
 public class Customer implements Serializable {
     

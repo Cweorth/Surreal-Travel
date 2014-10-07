@@ -13,14 +13,14 @@ public interface CustomerDAO {
      * Store new customer.
      * @param customer 
      */
-    public void addCustomer(Customer customer) throws NullPointerException;
+    public void addCustomer(Customer customer);
     
     /**
      * Get the customer with the given id.
      * @param id
      * @return 
      */
-    public Customer getCustomerById(long id) throws IllegalArgumentException;
+    public Customer getCustomerById(long id);
     
     /**
      * Get the customer with the given name. More customer with the same name can
@@ -28,7 +28,7 @@ public interface CustomerDAO {
      * @param name
      * @return 
      */
-    public List<Customer> getCustomerByName(String name) throws NullPointerException, IllegalArgumentException;
+    public List<Customer> getCustomerByName(String name);
     
     /**
      * Get all customers.
@@ -40,12 +40,18 @@ public interface CustomerDAO {
      * Modify the customer.
      * @param customer 
      */
-    public void updateCustomer(Customer customer) throws NullPointerException;
+    public void updateCustomer(Customer customer);
     
     /**
      * Remove customer.
      * @param customer 
      */
-    public void deleteCustomer(Customer customer) throws NullPointerException;
+    public void deleteCustomer(Customer customer);
+    
+    /**
+     * Remove customer by id.
+     * @param id 
+     */
+    public void deleteCustomerById(long id);
     
 }
