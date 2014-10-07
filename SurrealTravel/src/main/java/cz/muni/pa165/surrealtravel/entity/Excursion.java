@@ -1,5 +1,6 @@
 package cz.muni.pa165.surrealtravel.entity;
 
+import java.io.Serializable;
 import java.math.BigDecimal;
 import java.util.Date;
 import javax.persistence.Column;
@@ -17,7 +18,7 @@ import javax.persistence.Enumerated;
  * @author Petr Dvořák [359819]
  */
 @Entity
-public class Excursion {
+public class Excursion implements Serializable{
 
     @Id
     @GeneratedValue
