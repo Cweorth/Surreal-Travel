@@ -9,6 +9,7 @@ import javax.persistence.Column;
 import javax.persistence.Entity;
 import javax.persistence.GeneratedValue;
 import javax.persistence.Id;
+import javax.persistence.NamedQuery;
 import javax.persistence.Temporal;
 import javax.persistence.TemporalType;
 import javax.persistence.Transient;
@@ -18,6 +19,7 @@ import javax.persistence.Transient;
  * @author Roman Lacko [396157]
  */
 @Entity
+@NamedQuery(name = "getAllTrips", query = "SELECT t FROM Trip t")
 public class Trip implements Serializable {
 
     //--[  Private  ]-----------------------------------------------------------
@@ -44,6 +46,14 @@ public class Trip implements Serializable {
     private List<Excursion> excursions;
     
     //--[  Methods  ]-----------------------------------------------------------
+    
+    public void addExcursion(Excursion excursion) {
+        excursions.add(excursion);
+    }
+    
+    public void removeExcursion(Excursion excursion) {
+        excursions.remove(excursion);
+    }
     
     //<editor-fold desc="[  Getters | Setters  ]" defaultstate="collapsed">
     
