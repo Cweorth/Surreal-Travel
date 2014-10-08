@@ -28,20 +28,20 @@ public interface ReservationDAO {
      * get all reservations
      * @return 
      */
-    public List<Reservation> getAllReservation();
+    public List<Reservation> getAllReservations();
     /**
      * find all reservation by customer
      * @param customer
      * @return 
      */
     
-    public List<Reservation> getAllReservationByCustomer(Customer customer);
+    public List<Reservation> getAllReservationsByCustomer(Customer customer);
     
-    public List<Reservation> getAllReservationByExcursion(Excursion excursion);
+    public List<Reservation> getAllReservationsByExcursion(Excursion excursion);
     
-    public List<Reservation> updateReservation();
+    public List<Reservation> updateReservation(Reservation reservacion);
     
-    public void deleteReservation();
+    public void deleteReservation(Reservation reservacion);
     
     /**
      * get end price from all ereservation by one customer

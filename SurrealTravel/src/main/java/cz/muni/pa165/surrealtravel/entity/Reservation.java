@@ -7,6 +7,8 @@ import javax.persistence.Column;
 import javax.persistence.Entity;
 import javax.persistence.GeneratedValue;
 import javax.persistence.Id;
+import javax.persistence.ManyToMany;
+import javax.persistence.ManyToOne;
 
 /**
  *
@@ -20,14 +22,17 @@ public class Reservation implements Serializable {
     private long id = 0;
     
     @Column(nullable = false)
+    @ManyToOne
     private Customer customer;
     
     
     @Column(nullable = false)
+    @ManyToOne
     private Trip trip;
     
     
-    @Column(nullable = false)//empty list means no excursion but must be list
+    
+    @ManyToMany
     private List<Excursion> excursions;
     
     //methods
