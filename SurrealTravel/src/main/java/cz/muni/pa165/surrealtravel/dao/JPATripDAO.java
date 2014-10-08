@@ -1,5 +1,6 @@
 package cz.muni.pa165.surrealtravel.dao;
 
+import cz.muni.pa165.surrealtravel.entity.Excursion;
 import cz.muni.pa165.surrealtravel.entity.Trip;
 import java.util.List;
 import java.util.Objects;
@@ -13,12 +14,13 @@ import javax.persistence.Persistence;
  */
 public class JPATripDAO implements TripDAO {
 
-    private EntityManagerFactory emf;
+    private final EntityManagerFactory emf;
 
     public JPATripDAO() {
         emf = Persistence.createEntityManagerFactory("Surreal-Travel");
     }
     
+    @Override
     public void addTrip(Trip trip) {
         Objects.requireNonNull(trip, "trip");
         EntityManager em = emf.createEntityManager();
@@ -26,6 +28,7 @@ public class JPATripDAO implements TripDAO {
         em.close();
     }
 
+    @Override
     public Trip getTripById(long id) {
         EntityManager em = emf.createEntityManager();        
         Trip result = em.find(Trip.class, id);
@@ -33,6 +36,7 @@ public class JPATripDAO implements TripDAO {
         return result;
     }
 
+    @Override
     public List<Trip> getTripsByDestination(String destination) {
         EntityManager em = emf.createEntityManager();        
         List<Trip> result =
@@ -43,6 +47,7 @@ public class JPATripDAO implements TripDAO {
         return result;        
     }
 
+    @Override
     public List<Trip> getAllTrips() {
         EntityManager em = emf.createEntityManager();        
         List<Trip> result =
@@ -52,16 +57,23 @@ public class JPATripDAO implements TripDAO {
         return result;
     }
 
+    @Override
     public void updateTrip(Trip trip) {
         EntityManager em = emf.createEntityManager();
         em.merge(trip); 
         em.close();
     }    
 
+    @Override
     public void deleteTrip(Trip trip) {
         EntityManager em = emf.createEntityManager();
         em.remove(trip);
         em.close();
     }    
+
+    @Override
+    public List<Trip> getTripsWithExcursion(Excursion excursion) {
+        throw new UnsupportedOperationException("Not supported yet.");
+    }
     
 }

@@ -1,5 +1,6 @@
 package cz.muni.pa165.surrealtravel.dao;
 
+import cz.muni.pa165.surrealtravel.entity.Excursion;
 import cz.muni.pa165.surrealtravel.entity.Trip;
 import java.util.List;
 
@@ -41,5 +42,7 @@ public interface TripDAO {
      * @param  trip          The trip to remove.
      */
     public void deleteTrip(Trip trip);
+    
+    public List<Trip> getTripsWithExcursion(Excursion excursion);
     
 }

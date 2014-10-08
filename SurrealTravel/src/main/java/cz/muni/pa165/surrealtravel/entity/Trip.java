@@ -5,21 +5,22 @@ import java.math.BigDecimal;
 import java.util.Date;
 import java.util.List;
 import java.util.Objects;
+import javax.persistence.CascadeType;
 import javax.persistence.Column;
 import javax.persistence.Entity;
 import javax.persistence.GeneratedValue;
 import javax.persistence.Id;
 import javax.persistence.NamedQuery;
+import javax.persistence.OneToMany;
 import javax.persistence.Temporal;
 import javax.persistence.TemporalType;
-import javax.persistence.Transient;
 
 /**
  * 
  * @author Roman Lacko [396157]
  */
 @Entity
-@NamedQuery(name = "getAllTrips", query = "SELECT t FROM Trip t")
+@NamedQuery(name = "Trip.getAll", query = "SELECT t FROM Trip t")
 public class Trip implements Serializable {
 
     //--[  Private  ]-----------------------------------------------------------
@@ -42,7 +43,7 @@ public class Trip implements Serializable {
     @Column
     private BigDecimal basePrice;
     
-    @Transient /* TEMPORARILY */
+    @OneToMany(cascade = CascadeType.PERSIST)
     private List<Excursion> excursions;
     
     //--[  Methods  ]-----------------------------------------------------------
@@ -53,6 +54,16 @@ public class Trip implements Serializable {
     
     public void removeExcursion(Excursion excursion) {
         excursions.remove(excursion);
+    }
+    
+    public BigDecimal getFullPrice() {
+        BigDecimal price = basePrice;
+        
+        for(Excursion e : excursions) {
+            price.add(e.getPrice());
+        }
+        
+        return price;
     }
     
     //<editor-fold desc="[  Getters | Setters  ]" defaultstate="collapsed">
