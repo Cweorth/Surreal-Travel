@@ -4,6 +4,7 @@ import java.io.Serializable;
 import java.math.BigDecimal;
 import java.util.List;
 import javax.persistence.Column;
+import javax.persistence.Entity;
 import javax.persistence.GeneratedValue;
 import javax.persistence.Id;
 
@@ -11,6 +12,7 @@ import javax.persistence.Id;
  *
  * @author Tomáš Kácel [359965]
  */
+@Entity
 public class Reservation implements Serializable {
     //private methods
     @Id
@@ -20,8 +22,10 @@ public class Reservation implements Serializable {
     @Column(nullable = false)
     private Customer customer;
     
+    
     @Column(nullable = false)
     private Trip trip;
+    
     
     @Column(nullable = false)//empty list means no excursion but must be list
     private List<Excursion> excursions;
