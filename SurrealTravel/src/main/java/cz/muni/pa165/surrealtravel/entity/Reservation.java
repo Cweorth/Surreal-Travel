@@ -9,11 +9,18 @@ import javax.persistence.GeneratedValue;
 import javax.persistence.Id;
 import javax.persistence.ManyToMany;
 import javax.persistence.ManyToOne;
+import javax.persistence.NamedQueries;
+import javax.persistence.NamedQuery;
 
 /**
  *
  * @author Tomáš Kácel [359965]
  */
+@NamedQueries({
+    @NamedQuery(name="Reservation.getAll",query="SELECT r FROM Reservation r"),
+    @NamedQuery(name="Reservation.getAllByCustomer",query="SELECT c FROM Customer c WHERE c.name = :name"),
+    //@NamedQuery(name="Customer.removeById",query="DELETE FROM Customer c WHERE c.id = :id"),
+})
 @Entity
 public class Reservation implements Serializable {
     //private methods
