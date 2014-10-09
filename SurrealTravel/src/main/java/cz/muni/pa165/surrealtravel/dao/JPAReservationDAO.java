@@ -63,33 +63,68 @@ public class JPAReservationDAO implements ReservationDAO {
         List<Reservation> reserves = em.createQuery("SELECT r FROM Reservation r JOIN FETCH r.customer WHERE r.customer.id= :d", Reservation.class).setParameter("d", customer.getId()).getResultList();
 	em.close();
         return reserves;
-        /*
-        for (Reservation reservation : reserves){
-            if(reservation)
-            
-        }*/
+       
         
         
     }
 
     public List<Reservation> getAllReservationsByExcursion(Excursion excursion) {
-        throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
+        EntityManager em = emf.createEntityManager();
+        List<Reservation> reserves = em.createQuery("SELECT r FROM Reservation r JOIN FETCH r.excursions WHERE r.excursions.id= :d", Reservation.class).setParameter("d", excursion.getId()).getResultList();
+        em.close();
+        return reserves;
     }
 
-    public void updateReservation(Reservation reservacion) {
-        throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
+    public void updateReservation(Reservation reservation) {
+        if(reservation == null) throw new NullPointerException("reservation doesnt exist.");
+        if(reservation.getId() < 0) throw new IllegalArgumentException("reservation id must be positiv number.");
+        if(reservation.getCustomer() == null) throw new NullPointerException("customer in reservation is null.");
+        if(reservation.getCustomer().getClass() != Customer.class ) throw new IllegalArgumentException("customer is not customer is empty string.");
+        if(reservation.getExcursions()==null) throw new NullPointerException("no list of excursion");
+        
+        EntityManager em = emf.createEntityManager();
+        em.merge(reservation);
+        em.close();
+        
     }
 
-    public void deleteReservation(Reservation reservacion) {
-        throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
+    public void deleteReservation(Reservation reservation) {
+        if(reservation == null) throw new NullPointerException("reservation doesnt exist.");
+        
+        
+        EntityManager em = emf.createEntityManager();
+        em.remove(reservation);
+        em.close();
     }
 
     public BigDecimal getFullPriceByCustomer(Customer customer) {
-        throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
+      if(customer==null) throw new NullPointerException("customer doesnt exist.");
+      if(customer.getId() < 0) throw new IllegalArgumentException("customer id must be positiv number.");
+        
+      EntityManager em = emf.createEntityManager();
+      List<Reservation> reserv =getAllReservationsByCustomer(customer);
+      BigDecimal dec= new BigDecimal(0);
+      for(Reservation r: reserv){
+          dec.add(r.getTotalPrice());
+          
+      }
+      
+      return dec;  
+        
     }
 
     public void removeExcursionFromAllReservations(Excursion excursion) {
-        throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
+        if(excursion==null)throw new NullPointerException("excursion doesnt exist.");
+        if(excursion.getId() < 0) throw new IllegalArgumentException("excursion id must be positiv number.");
+        
+        List<Reservation> res= getAllReservations();
+        for(Reservation r: res){
+          if(r.getExcursions().contains(excursion)){
+              r.removeExcursion(excursion);
+              updateReservation(r);
+          }
+            
+        }
     }
     
 }
