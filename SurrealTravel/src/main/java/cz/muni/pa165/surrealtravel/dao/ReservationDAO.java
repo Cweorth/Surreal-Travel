@@ -35,13 +35,31 @@ public interface ReservationDAO {
      * @return 
      */
     
+    /**
+     * get all reservations from one customer
+     * @param customer
+     * @return 
+     */
     public List<Reservation> getAllReservationsByCustomer(Customer customer);
-    
+    /**
+     * 
+     * @param excursion
+     * @return 
+     */
     public List<Reservation> getAllReservationsByExcursion(Excursion excursion);
     
-    public List<Reservation> updateReservation(Reservation reservacion);
+    /**
+     * updatereservation
+     * @param reservacion
+     * @return 
+     */
+    public void updateReservation(Reservation reservation);
     
-    public void deleteReservation(Reservation reservacion);
+    /**
+     * 
+     * @param reservacion 
+     */
+    public void deleteReservation(Reservation reservation);
     
     /**
      * get end price from all ereservation by one customer
