@@ -76,7 +76,7 @@ public class JPAReservationDAO implements ReservationDAO {
         throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
     }
 
-    public List<Reservation> updateReservation(Reservation reservacion) {
+    public void updateReservation(Reservation reservacion) {
         throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
     }
 
