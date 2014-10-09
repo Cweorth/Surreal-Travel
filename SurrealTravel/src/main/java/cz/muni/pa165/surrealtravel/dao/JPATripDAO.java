@@ -2,11 +2,11 @@ package cz.muni.pa165.surrealtravel.dao;
 
 import cz.muni.pa165.surrealtravel.entity.Excursion;
 import cz.muni.pa165.surrealtravel.entity.Trip;
+import java.math.BigDecimal;
+import java.util.Date;
 import java.util.List;
 import java.util.Objects;
 import javax.persistence.EntityManager;
-import javax.persistence.EntityManagerFactory;
-import javax.persistence.Persistence;
 
 /**
  *
@@ -14,66 +14,119 @@ import javax.persistence.Persistence;
  */
 public class JPATripDAO implements TripDAO {
 
-    private final EntityManagerFactory emf;
-
-    public JPATripDAO() {
-        emf = Persistence.createEntityManagerFactory("Surreal-Travel");
+    private EntityManager entityManager;
+    
+    //--[  Private methods  ]---------------------------------------------------
+    
+    private void validate(Trip trip) {
+        Objects.requireNonNull(trip,                   "trip");
+        Objects.requireNonNull(trip.getDateFrom(),     "trip.dateFrom");
+        Objects.requireNonNull(trip.getDateTo(),       "trip.dateTo");
+        Objects.requireNonNull(trip.getDestination(),  "trip.destination");
+        Objects.requireNonNull(trip.getBasePrice(),    "trip.basePrice");
+        Objects.requireNonNull(trip.getExcursions(),   "trip.excursions");
+        
+        if (trip.getDateFrom().after(trip.getDateTo())) {
+            throw new IllegalArgumentException("The trip requires a time machine for it ends before it starts");
+        }
+        
+        if (trip.getBasePrice().compareTo(BigDecimal.ZERO) < 0) {
+            throw new IllegalArgumentException("The trip has a negative base price");
+        }
+        
+        if (trip.getDestination().isEmpty()) {
+            throw new IllegalArgumentException("The trip has an empty destination");
+        }
+        
+        for(Excursion excursion : trip.getExcursions()) {
+            Date excursionDate = excursion.getExcursionDate();
+            if (excursionDate.before(trip.getDateFrom()) || excursionDate.after(trip.getDateTo())) {
+                throw new IllegalArgumentException(String.format("Date of excursion '%s' is outside of that of the trip", excursion.getDescription()));
+            }
+        }
     }
     
+    //--[  Constructors  ]------------------------------------------------------
+    
+    public JPATripDAO(EntityManager em) {
+        Objects.requireNonNull(em);
+        this.entityManager = em;
+    }
+   
+    //--[  Getters-Setters  ]---------------------------------------------------
+    
+    public EntityManager getEntityManager() {
+        return entityManager;
+    }
+    
+    public void setEntityManager(EntityManager entityManager) {
+        Objects.requireNonNull(entityManager);
+        this.entityManager = entityManager;
+    }
+    
+    //--[  Overriden methods  ]-------------------------------------------------
+      
     @Override
     public void addTrip(Trip trip) {
-        Objects.requireNonNull(trip, "trip");
-        EntityManager em = emf.createEntityManager();
-        em.persist(trip);
-        em.close();
+        validate(trip);
+        
+        entityManager.persist(trip);
     }
 
     @Override
     public Trip getTripById(long id) {
-        EntityManager em = emf.createEntityManager();        
-        Trip result = em.find(Trip.class, id);
-        em.close();
-        return result;
+        if (id < 0) {
+            throw new IllegalArgumentException("The id has a negative value");
+        }
+        
+        return entityManager.find(Trip.class, id);
     }
 
     @Override
     public List<Trip> getTripsByDestination(String destination) {
-        EntityManager em = emf.createEntityManager();        
-        List<Trip> result =
-             em.createQuery("SELECT t FROM Trip t WHERE t.destination = :d", Trip.class)
-               .setParameter("d", destination)
-               .getResultList();
-        em.close();
-        return result;        
+        Objects.requireNonNull(destination, "destination");
+        
+        return entityManager.createQuery("SELECT t FROM Trip t WHERE t.destination = :d", Trip.class)
+            .setParameter("d", destination)
+            .getResultList();
     }
 
     @Override
-    public List<Trip> getAllTrips() {
-        EntityManager em = emf.createEntityManager();        
-        List<Trip> result =
-             em.createNamedQuery("getAllTrips", Trip.class)
-               .getResultList();
-        em.close();
-        return result;
+    public List<Trip> getTripsWithExcursion(Excursion excursion) {
+        Objects.requireNonNull(excursion, "excursion");
+        
+        return entityManager.createQuery("SELECT t FROM Trip t JOIN t.excursions e WHERE e.id = :eid", Trip.class)
+            .setParameter("eid", excursion.getId())
+            .getResultList();
+    }    
+    
+    @Override
+    public List<Trip> getAllTrips() {        
+        return entityManager.createNamedQuery("Trip.getAll", Trip.class)
+            .getResultList();
     }
 
     @Override
     public void updateTrip(Trip trip) {
-        EntityManager em = emf.createEntityManager();
-        em.merge(trip); 
-        em.close();
+        validate(trip);
+        entityManager.merge(trip);
     }    
 
     @Override
     public void deleteTrip(Trip trip) {
-        EntityManager em = emf.createEntityManager();
-        em.remove(trip);
-        em.close();
-    }    
+        Objects.requireNonNull(trip);
+        entityManager.remove(trip);
+    }
 
     @Override
-    public List<Trip> getTripsWithExcursion(Excursion excursion) {
-        throw new UnsupportedOperationException("Not supported yet.");
+    public void deleteTripById(long id) {
+        if (id < 0) {
+            throw new IllegalArgumentException("The id has a negative value");
+        }
+        
+        entityManager.createNamedQuery("Trip.removeById", Trip.class)
+            .setParameter("id", id)
+            .executeUpdate();
     }
     
 }

@@ -2,6 +2,7 @@ package cz.muni.pa165.surrealtravel.entity;
 
 import java.io.Serializable;
 import java.math.BigDecimal;
+import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
 import java.util.Objects;
@@ -10,17 +11,22 @@ import javax.persistence.Column;
 import javax.persistence.Entity;
 import javax.persistence.GeneratedValue;
 import javax.persistence.Id;
+import javax.persistence.ManyToMany;
+import javax.persistence.NamedQueries;
 import javax.persistence.NamedQuery;
-import javax.persistence.OneToMany;
 import javax.persistence.Temporal;
 import javax.persistence.TemporalType;
 
 /**
- * 
+ * The trip entity.
  * @author Roman Lacko [396157]
  */
 @Entity
-@NamedQuery(name = "Trip.getAll", query = "SELECT t FROM Trip t")
+@NamedQueries({
+    @NamedQuery(name = "Trip.getAll",     query = "SELECT t FROM Trip t"),
+    @NamedQuery(name = "Trip.getById",    query = "SELECT t FROM Trip t WHERE t.id = :id"),
+    @NamedQuery(name = "Trip.removeById", query = "DELETE   FROM Trip t WHERE t.id = :id")
+})
 public class Trip implements Serializable {
 
     //--[  Private  ]-----------------------------------------------------------
@@ -43,19 +49,37 @@ public class Trip implements Serializable {
     @Column
     private BigDecimal basePrice;
     
-    @OneToMany(cascade = CascadeType.PERSIST)
+    @ManyToMany(cascade = CascadeType.PERSIST)
     private List<Excursion> excursions;
+    
+    //--[  Constructors  ]------------------------------------------------------
+    
+    public Trip() {
+        excursions = new ArrayList<>();
+    }
     
     //--[  Methods  ]-----------------------------------------------------------
     
+    /**
+     * Adds an excursion to the trip.
+     * @param  excursion     The excursion to add.
+     */
     public void addExcursion(Excursion excursion) {
         excursions.add(excursion);
     }
     
+    /**
+     * Removes an excursion from the trip.
+     * @param  excursion     The excursion to remove.
+     */
     public void removeExcursion(Excursion excursion) {
         excursions.remove(excursion);
     }
     
+    /**
+     * Calculates the total price of the trip including all the excursions.
+     * @return The total price of the trip.
+     */
     public BigDecimal getFullPrice() {
         BigDecimal price = basePrice;
         
@@ -115,14 +139,14 @@ public class Trip implements Serializable {
     public void setBasePrice(BigDecimal basePrice) {
         this.basePrice = basePrice;
     }    
-    
-    public void setExcursions(List<Excursion> excursions) {
-        this.excursions = excursions;
-    }
 
     public List<Excursion> getExcursions() {
         return excursions;
     }
+    
+    public void setExcursions(List<Excursion> excursions) {
+        this.excursions = excursions;
+    }    
     
     //</editor-fold>
     

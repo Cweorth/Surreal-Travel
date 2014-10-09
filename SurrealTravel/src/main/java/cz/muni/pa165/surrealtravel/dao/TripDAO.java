@@ -5,7 +5,7 @@ import cz.muni.pa165.surrealtravel.entity.Trip;
 import java.util.List;
 
 /**
- * 
+ * The Trip Data Access Object interface.
  * @author Roman Lacko [396157]
  */
 public interface TripDAO {
@@ -24,17 +24,29 @@ public interface TripDAO {
     public Trip getTripById(long id);
     
     /**
-     * Returns all the trips that have the specified {@code destination}
+     * Returns all trips that have the specified {@code destination}.
      * @param  destination   The destination to look for in all trips.
      * @return               A list of trips.
      */
     public List<Trip> getTripsByDestination(String destination);
-        
+    
     /**
-     * @return  Returns all trips.
+     * Returns all trips that contain a given {@code excursion}.
+     * @param  excursion     The excursion to look for.
+     * @return               A list of trips.
+     */
+    public List<Trip> getTripsWithExcursion(Excursion excursion);
+    
+    /**
+     * Returns all trips.
+     * @return               All trips.
      */
     public List<Trip> getAllTrips();
     
+    /**
+     * Updates the trip.
+     * @param  trip          The trip to update.
+     */
     public void updateTrip(Trip trip);
     
     /**
@@ -42,7 +54,10 @@ public interface TripDAO {
      * @param  trip          The trip to remove.
      */
     public void deleteTrip(Trip trip);
-    
-    public List<Trip> getTripsWithExcursion(Excursion excursion);
-    
+
+    /**
+     * Removes the trip with the specified {@code id}.
+     * @param  id            The ID of the trip to remove.
+     */
+    public void deleteTripById(long id);
 }
