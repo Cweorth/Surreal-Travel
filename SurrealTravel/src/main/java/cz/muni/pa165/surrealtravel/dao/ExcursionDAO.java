@@ -12,21 +12,21 @@ public interface ExcursionDAO {
      * Store new excursion.
      * @param excursion 
      */
-    public void addExcursion(Excursion excursion) throws NullPointerException;
+    public void addExcursion(Excursion excursion);
     
     /**
      * Get the excursion with the given id.
      * @param id
      * @return 
      */
-    public Excursion getExcursionById(long id) throws IllegalArgumentException;
+    public Excursion getExcursionById(long id);
     
     /**
      * Get the excursion with the given destination. More excursion with the same destination can exist in the system.
      * @param destination
      * @return 
      */
-    public List<Excursion> getExcursionByDestination(String destination) throws NullPointerException, IllegalArgumentException;
+    public List<Excursion> getExcursionByDestination(String destination);
     
     /**
      * Get all excursions.
@@ -38,11 +38,17 @@ public interface ExcursionDAO {
      * Modify the excursion.
      * @param excursion 
      */
-    public void updateExcursion(Excursion excursion) throws NullPointerException;
+    public void updateExcursion(Excursion excursion);
     
     /**
      * Remove excursion.
      * @param excursion 
      */
-    public void deleteExcursion(Excursion excursion) throws NullPointerException;
+    public void deleteExcursion(Excursion excursion);
+     
+    /**
+     * Remove excursion by ID.
+     * @param id
+     */   
+    public void deleteExcursionById(long id);
 }

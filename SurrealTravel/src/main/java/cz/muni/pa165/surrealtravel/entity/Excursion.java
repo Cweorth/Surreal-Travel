@@ -12,11 +12,19 @@ import javax.persistence.TemporalType;
 import javax.persistence.Entity;
 import javax.persistence.EnumType;
 import javax.persistence.Enumerated;
+import javax.persistence.NamedQueries;
+import javax.persistence.NamedQuery;
 
 /**
  *
  * @author Petr Dvořák [359819]
  */
+
+@NamedQueries({
+    @NamedQuery(name="Excursion.getAll", query="SELECT e FROM Excursion e")
+})
+
+
 @Entity
 public class Excursion implements Serializable{
 
@@ -29,14 +37,14 @@ public class Excursion implements Serializable{
     
     private Integer duration;
     
-    @Enumerated(EnumType.STRING)
+    @Column(nullable = false)
     private String description;
     
-    @Enumerated(EnumType.STRING)
     @Column(nullable = false)
     private String destination;
     
     private BigDecimal price;
+    
 
     public long getId() {
         return id;
@@ -55,7 +63,7 @@ public class Excursion implements Serializable{
     public Integer getDuration() {
         return duration;
     }
-    public void setId(Integer duration) {
+    public void setDuration(Integer duration) {
         this.duration = duration;
     }
 
@@ -66,7 +74,7 @@ public class Excursion implements Serializable{
         this.description = description;
     }
     
-    public String geDestination() {
+    public String getDestination() {
         return destination;
     }
     public void setDestination(String destination) {
