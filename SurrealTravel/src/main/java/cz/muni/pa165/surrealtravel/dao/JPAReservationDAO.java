@@ -48,7 +48,7 @@ public class JPAReservationDAO implements ReservationDAO {
         //EntityManager em = emf.createEntityManager();
         
         entityManager.persist(reservation);
-        entityManager.close();
+        
         
         
     }
@@ -59,7 +59,7 @@ public class JPAReservationDAO implements ReservationDAO {
         
         //EntityManager em = emf.createEntityManager();
         Reservation result = entityManager.find(Reservation.class, id);
-        entityManager.close();
+        
         return result;
         }
 
@@ -83,7 +83,7 @@ public class JPAReservationDAO implements ReservationDAO {
     public List<Reservation> getAllReservationsByExcursion(Excursion excursion) {
         //EntityManager em = emf.createEntityManager();
         List<Reservation> reserves = entityManager.createQuery("SELECT r FROM Reservation r JOIN FETCH r.excursions WHERE r.excursions.id= :d", Reservation.class).setParameter("d", excursion.getId()).getResultList();
-        entityManager.close();
+        
         return reserves;
     }
 
@@ -96,7 +96,7 @@ public class JPAReservationDAO implements ReservationDAO {
         
         //EntityManager em = emf.createEntityManager();
         entityManager.merge(reservation);
-        entityManager.close();
+        
         
     }
 
@@ -106,7 +106,7 @@ public class JPAReservationDAO implements ReservationDAO {
         
         //EntityManager em = emf.createEntityManager();
         entityManager.remove(reservation);
-        entityManager.close();
+        
     }
 
     public BigDecimal getFullPriceByCustomer(Customer customer) {
