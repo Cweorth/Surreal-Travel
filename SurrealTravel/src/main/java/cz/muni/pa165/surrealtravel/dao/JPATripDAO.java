@@ -60,7 +60,7 @@ public class JPATripDAO implements TripDAO {
     }
     
     public void setEntityManager(EntityManager entityManager) {
-        Objects.requireNonNull(entityManager);
+        Objects.requireNonNull(entityManager, "entityManager");
         this.entityManager = entityManager;
     }
     

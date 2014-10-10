@@ -11,6 +11,7 @@
             <property name="hibernate.connection.password"     value="password"/>
             <property name="hibernate.connection.url"          value="jdbc:derby://localhost:1527/Surreal-Travel"/> 
             <property name="hibernate.cache.provider_class"    value="org.hibernate.cache.NoCacheProvider"/>
+            <property name="hibernate.dialect"                 value="org.hibernate.dialect.DerbyDialect" />
             <property name="hibernate.hbm2ddl.auto"            value="update"/>
             <property name="hibernate.temp.use_jdbc_metadata_defaults" value="false"/>
             <property name="javax.persistence.schema-generation.database.action" value ="drop-and-create"/>
