@@ -5,6 +5,7 @@
  */
 package cz.muni.pa165.surrealtravel.dao;
 
+import cz.muni.pa165.surrealtravel.AbstractTest;
 import cz.muni.pa165.surrealtravel.entity.Excursion;
 import cz.muni.pa165.surrealtravel.entity.Trip;
 import java.math.BigDecimal;
@@ -15,32 +16,69 @@ import javax.persistence.EntityManager;
 import javax.persistence.EntityManagerFactory;
 import javax.persistence.Persistence;
 import javax.persistence.PersistenceUnit;
-import junit.framework.TestCase;
+import org.junit.After;
+import static org.junit.Assert.assertEquals;
+import org.junit.Before;
+import org.junit.Test;
+import org.junit.runner.RunWith;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.test.annotation.DirtiesContext;
-import org.testng.annotations.BeforeMethod;
+import org.springframework.test.context.ContextConfiguration;
+import org.springframework.test.context.junit4.SpringJUnit4ClassRunner;
+//import junit.framework.TestCase;
+//import org.springframework.test.annotation.DirtiesContext;
+//import org.testng.annotations.BeforeMethod;
 
 /**
  *
  * @author Tomáš Kácel [359965]
  */
-public class JPATripDAOTest extends TestCase {
+public class JPATripDAOTest extends AbstractTest {
     
-    @PersistenceUnit
-    private JPAReservationDAO manager= new JPAReservationDAO();
+    //@PersistenceUnit
     
-    public EntityManagerFactory emf;
+    
+    //public EntityManagerFactory emf;
+    private JPATripDAO dao;
     private long tripId;
     
-    public JPATripDAOTest(String testName) {
-        super(testName);
+    @Override
+    public void setUp() {
+        super.setUp();
+        dao = new JPATripDAO(em);
     }
-    
-    @DirtiesContext
-    @BeforeMethod
+    /*
+    @Test
+    public void addTrip(Trip trip){
+        
+    }
+    */
+    @Test
+    public void getTripById(){
+        Trip trip1= mktrip(mkdate(2015,6,15),mkdate(2015,8,13),"Trip to tramtaria",15,new BigDecimal(1000));
+        Excursion ext= mkexcursion(mkdate(2015,6,15),21,"Tramtaria","Tramtaria castle",new BigDecimal(2020));
+        List<Excursion> extList= new ArrayList<Excursion>();
+        extList.add(ext);
+        trip1.setExcursions(extList);
+        em.getTransaction().begin();
+        em.persist(trip1);
+        Long id= trip1.getId();
+        em.persist(ext);
+        em.getTransaction().commit();
+        
+        Trip newTrip=dao.getTripById(id);
+        assertEquals(newTrip.getId(),trip1.getId());
+        
+        
+    }
+    /*
+    @Before
     protected void setUp() throws Exception {
         //emf = Persistence.createEntityManagerFactory("Surreal-Travel");
-        EntityManager em = manager.emf.createEntityManager();
-        //EntityManager em = emf.createEntityManager();
+        //EntityManager em = manager.emf.createEntityManager();
+        
+        EntityManager em = emf.createEntityManager();
+        dao= new JPATripDAO(em);
         //em.getTransaction().begin();
         
         Date dat1= new Date(2014,6,22);
@@ -89,9 +127,6 @@ public class JPATripDAOTest extends TestCase {
         trip2.setDestination(destionation2);
         trip2.setExcursions(ext2);
         
-        
-        
-        
         em.persist(trip1);
         em.persist(exc1);
         em.persist(trip1);
@@ -101,16 +136,14 @@ public class JPATripDAOTest extends TestCase {
 	em.close();
             
     }
+    */
     
+    //@Test
+    //public Trip getTripById(long id){}
     
+   
     
-    
-    @Override
-    protected void tearDown() throws Exception {
-        super.tearDown();
-    }
-    
-    
+       
 }
 
 

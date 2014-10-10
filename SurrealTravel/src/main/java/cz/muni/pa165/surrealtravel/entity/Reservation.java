@@ -28,12 +28,12 @@ public class Reservation implements Serializable {
     @GeneratedValue
     private long id = 0;
     
-    @Column(nullable = false)
+    //@Column(nullable = false)
     @ManyToOne
     private Customer customer;
     
     
-    @Column(nullable = false)
+    //@Column(nullable = false)
     @ManyToOne
     private Trip trip;
     

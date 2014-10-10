@@ -21,11 +21,22 @@ import javax.persistence.Persistence;
  */
 public class JPAReservationDAO implements ReservationDAO {
     
-    EntityManagerFactory emf;
+    //EntityManagerFactory emf;
+    private EntityManager entityManager;
+    
     
     public JPAReservationDAO(){
-        emf = Persistence.createEntityManagerFactory("Surreal-Travel");
+        //emf = Persistence.createEntityManagerFactory("Surreal-Travel");
     }
+
+    public JPAReservationDAO(EntityManager em) {
+         entityManager= em;
+    }
+    
+    public EntityManager getEntityManager() {
+        return entityManager;
+    }
+
 
     public void addReservation(Reservation reservation) {
         if(reservation == null) throw new NullPointerException("reservation doesnt exist.");
@@ -34,9 +45,10 @@ public class JPAReservationDAO implements ReservationDAO {
         if(reservation.getCustomer().getClass() != Customer.class ) throw new IllegalArgumentException("customer is not customer is empty string.");
         if(reservation.getExcursions()==null) throw new NullPointerException("no list of excursion");
         
-        EntityManager em = emf.createEntityManager();
-        em.persist(reservation);
-        em.close();
+        //EntityManager em = emf.createEntityManager();
+        
+        entityManager.persist(reservation);
+        entityManager.close();
         
         
     }
@@ -45,23 +57,23 @@ public class JPAReservationDAO implements ReservationDAO {
         
         if(id < 0) throw new IllegalArgumentException("problem in id- Id < 0");
         
-        EntityManager em = emf.createEntityManager();
-        Reservation result = em.find(Reservation.class, id);
-        em.close();
+        //EntityManager em = emf.createEntityManager();
+        Reservation result = entityManager.find(Reservation.class, id);
+        entityManager.close();
         return result;
         }
 
     public List<Reservation> getAllReservations() {
-        EntityManager em = emf.createEntityManager();
-        List<Reservation> reservation = em.createNamedQuery("Reservation.getAll", Reservation.class).getResultList();
-        em.close();
+        //EntityManager em = emf.createEntityManager();
+        List<Reservation> reservation = entityManager.createNamedQuery("Reservation.getAll", Reservation.class).getResultList();
+        entityManager.close();
         return reservation;
     }
 
     public List<Reservation> getAllReservationsByCustomer(Customer customer) {
-        EntityManager em = emf.createEntityManager();
-        List<Reservation> reserves = em.createQuery("SELECT r FROM Reservation r JOIN FETCH r.customer WHERE r.customer.id= :d", Reservation.class).setParameter("d", customer.getId()).getResultList();
-	em.close();
+        //EntityManager em = emf.createEntityManager();
+        List<Reservation> reserves = entityManager.createQuery("SELECT r FROM Reservation r JOIN FETCH r.customer WHERE r.customer.id= :d", Reservation.class).setParameter("d", customer.getId()).getResultList();
+	entityManager.close();
         return reserves;
        
         
@@ -69,9 +81,9 @@ public class JPAReservationDAO implements ReservationDAO {
     }
 
     public List<Reservation> getAllReservationsByExcursion(Excursion excursion) {
-        EntityManager em = emf.createEntityManager();
-        List<Reservation> reserves = em.createQuery("SELECT r FROM Reservation r JOIN FETCH r.excursions WHERE r.excursions.id= :d", Reservation.class).setParameter("d", excursion.getId()).getResultList();
-        em.close();
+        //EntityManager em = emf.createEntityManager();
+        List<Reservation> reserves = entityManager.createQuery("SELECT r FROM Reservation r JOIN FETCH r.excursions WHERE r.excursions.id= :d", Reservation.class).setParameter("d", excursion.getId()).getResultList();
+        entityManager.close();
         return reserves;
     }
 
@@ -82,9 +94,9 @@ public class JPAReservationDAO implements ReservationDAO {
         if(reservation.getCustomer().getClass() != Customer.class ) throw new IllegalArgumentException("customer is not customer is empty string.");
         if(reservation.getExcursions()==null) throw new NullPointerException("no list of excursion");
         
-        EntityManager em = emf.createEntityManager();
-        em.merge(reservation);
-        em.close();
+        //EntityManager em = emf.createEntityManager();
+        entityManager.merge(reservation);
+        entityManager.close();
         
     }
 
@@ -92,16 +104,16 @@ public class JPAReservationDAO implements ReservationDAO {
         if(reservation == null) throw new NullPointerException("reservation doesnt exist.");
         
         
-        EntityManager em = emf.createEntityManager();
-        em.remove(reservation);
-        em.close();
+        //EntityManager em = emf.createEntityManager();
+        entityManager.remove(reservation);
+        entityManager.close();
     }
 
     public BigDecimal getFullPriceByCustomer(Customer customer) {
       if(customer==null) throw new NullPointerException("customer doesnt exist.");
       if(customer.getId() < 0) throw new IllegalArgumentException("customer id must be positiv number.");
         
-      EntityManager em = emf.createEntityManager();
+      //EntityManager em = emf.createEntityManager();
       List<Reservation> reserv =getAllReservationsByCustomer(customer);
       BigDecimal dec= new BigDecimal(0);
       for(Reservation r: reserv){
