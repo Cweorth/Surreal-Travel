@@ -13,6 +13,7 @@ import java.util.Date;
 import java.util.List;
 import javax.persistence.EntityManager;
 import javax.persistence.EntityManagerFactory;
+import javax.persistence.Persistence;
 import javax.persistence.PersistenceUnit;
 import junit.framework.TestCase;
 import org.springframework.test.annotation.DirtiesContext;
@@ -20,12 +21,15 @@ import org.testng.annotations.BeforeMethod;
 
 /**
  *
- * @author Kiclus
+ * @author Tomáš Kácel [359965]
  */
 public class JPATripDAOTest extends TestCase {
     
     @PersistenceUnit
+    private JPAReservationDAO manager= new JPAReservationDAO();
+    
     public EntityManagerFactory emf;
+    private long tripId;
     
     public JPATripDAOTest(String testName) {
         super(testName);
@@ -34,8 +38,10 @@ public class JPATripDAOTest extends TestCase {
     @DirtiesContext
     @BeforeMethod
     protected void setUp() throws Exception {
-        EntityManager em = emf.createEntityManager();
-        em.getTransaction().begin();
+        //emf = Persistence.createEntityManagerFactory("Surreal-Travel");
+        EntityManager em = manager.emf.createEntityManager();
+        //EntityManager em = emf.createEntityManager();
+        //em.getTransaction().begin();
         
         Date dat1= new Date(2014,6,22);
         Date dat2= new Date(2014,6,29);
@@ -44,13 +50,28 @@ public class JPATripDAOTest extends TestCase {
         List<Excursion> ext= new ArrayList<Excursion>();
         BigDecimal price= new BigDecimal(1500);
         
-        Excursion exc= new Excursion();
-        exc.setDescription("Tramtaria Castle is one of the biggest...");
-        exc.setDestination("Tramtaria Castle");
-        exc.setDuration(10);
-        exc.setExcursionDate(dat2);
-        exc.setPrice(new BigDecimal(152));
-        ext.add(exc);
+        Date dat3= new Date(2014,8,22);
+        Date dat4= new Date(2014,9,14);
+        String destionation2="Transilnavia";
+        int capacity2=16;
+        List<Excursion> ext2= new ArrayList<Excursion>();
+        BigDecimal price2= new BigDecimal(1800);
+        
+        Excursion exc1= new Excursion();
+        exc1.setDescription("Tramtaria Castle is one of the biggest...");
+        exc1.setDestination("Tramtaria Castle");
+        exc1.setDuration(10);
+        exc1.setExcursionDate(dat2);
+        exc1.setPrice(new BigDecimal(152));
+        ext.add(exc1);
+        
+        Excursion exc2= new Excursion();
+        exc2.setDescription("In transelvania lived DRACULA...");
+        exc2.setDestination("Transilvania Castle");
+        exc2.setDuration(16);
+        exc2.setExcursionDate(dat3);
+        exc2.setPrice(new BigDecimal(1600));
+        ext2.add(exc2);
         
         Trip trip1= new Trip();
         trip1.setBasePrice(price);
@@ -60,22 +81,25 @@ public class JPATripDAOTest extends TestCase {
         trip1.setDestination(destination);
         trip1.setExcursions(ext);
         
+        Trip trip2= new Trip();
+        trip2.setBasePrice(price2);
+        trip2.setCapacity(capacity2);
+        trip2.setDateFrom(dat3);
+        trip2.setDateTo(dat4);
+        trip2.setDestination(destionation2);
+        trip2.setExcursions(ext2);
         
         
         
         
-        
-        
-        
-        
-        
-       
-        
-        
-        
-        
-        
-        
+        em.persist(trip1);
+        em.persist(exc1);
+        em.persist(trip1);
+        em.persist(exc2);
+        tripId=trip2.getId();
+        //em.getTransaction().commit();
+	em.close();
+            
     }
     
     
@@ -85,133 +109,8 @@ public class JPATripDAOTest extends TestCase {
     protected void tearDown() throws Exception {
         super.tearDown();
     }
-
-    /**
-     * Test of getEntityManager method, of class JPATripDAO.
-     */
-    public void testGetEntityManager() {
-        System.out.println("getEntityManager");
-        JPATripDAO instance = null;
-        EntityManager expResult = null;
-        EntityManager result = instance.getEntityManager();
-        assertEquals(expResult, result);
-        // TODO review the generated test code and remove the default call to fail.
-        fail("The test case is a prototype.");
-    }
-
-    /**
-     * Test of setEntityManager method, of class JPATripDAO.
-     */
-    public void testSetEntityManager() {
-        System.out.println("setEntityManager");
-        EntityManager entityManager = null;
-        JPATripDAO instance = null;
-        instance.setEntityManager(entityManager);
-        // TODO review the generated test code and remove the default call to fail.
-        fail("The test case is a prototype.");
-    }
-
-    /**
-     * Test of addTrip method, of class JPATripDAO.
-     */
-    public void testAddTrip() {
-        System.out.println("addTrip");
-        Trip trip = null;
-        JPATripDAO instance = null;
-        instance.addTrip(trip);
-        // TODO review the generated test code and remove the default call to fail.
-        fail("The test case is a prototype.");
-    }
-
-    /**
-     * Test of getTripById method, of class JPATripDAO.
-     */
-    public void testGetTripById() {
-        System.out.println("getTripById");
-        long id = 0L;
-        JPATripDAO instance = null;
-        Trip expResult = null;
-        Trip result = instance.getTripById(id);
-        assertEquals(expResult, result);
-        // TODO review the generated test code and remove the default call to fail.
-        fail("The test case is a prototype.");
-    }
-
-    /**
-     * Test of getTripsByDestination method, of class JPATripDAO.
-     */
-    public void testGetTripsByDestination() {
-        System.out.println("getTripsByDestination");
-        String destination = "";
-        JPATripDAO instance = null;
-        List<Trip> expResult = null;
-        List<Trip> result = instance.getTripsByDestination(destination);
-        assertEquals(expResult, result);
-        // TODO review the generated test code and remove the default call to fail.
-        fail("The test case is a prototype.");
-    }
-
-    /**
-     * Test of getTripsWithExcursion method, of class JPATripDAO.
-     */
-    public void testGetTripsWithExcursion() {
-        System.out.println("getTripsWithExcursion");
-        Excursion excursion = null;
-        JPATripDAO instance = null;
-        List<Trip> expResult = null;
-        List<Trip> result = instance.getTripsWithExcursion(excursion);
-        assertEquals(expResult, result);
-        // TODO review the generated test code and remove the default call to fail.
-        fail("The test case is a prototype.");
-    }
-
-    /**
-     * Test of getAllTrips method, of class JPATripDAO.
-     */
-    public void testGetAllTrips() {
-        System.out.println("getAllTrips");
-        JPATripDAO instance = null;
-        List<Trip> expResult = null;
-        List<Trip> result = instance.getAllTrips();
-        assertEquals(expResult, result);
-        // TODO review the generated test code and remove the default call to fail.
-        fail("The test case is a prototype.");
-    }
-
-    /**
-     * Test of updateTrip method, of class JPATripDAO.
-     */
-    public void testUpdateTrip() {
-        System.out.println("updateTrip");
-        Trip trip = null;
-        JPATripDAO instance = null;
-        instance.updateTrip(trip);
-        // TODO review the generated test code and remove the default call to fail.
-        fail("The test case is a prototype.");
-    }
-
-    /**
-     * Test of deleteTrip method, of class JPATripDAO.
-     */
-    public void testDeleteTrip() {
-        System.out.println("deleteTrip");
-        Trip trip = null;
-        JPATripDAO instance = null;
-        instance.deleteTrip(trip);
-        // TODO review the generated test code and remove the default call to fail.
-        fail("The test case is a prototype.");
-    }
-
-    /**
-     * Test of deleteTripById method, of class JPATripDAO.
-     */
-    public void testDeleteTripById() {
-        System.out.println("deleteTripById");
-        long id = 0L;
-        JPATripDAO instance = null;
-        instance.deleteTripById(id);
-        // TODO review the generated test code and remove the default call to fail.
-        fail("The test case is a prototype.");
-    }
-  
+    
+    
 }
+
+
