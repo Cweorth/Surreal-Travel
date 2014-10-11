@@ -51,7 +51,7 @@ public class JPAExcursionDAO implements ExcursionDAO {
     public List<Excursion> getExcursionsByDestination(String destination){
        Objects.requireNonNull(destination, "destination");
         
-        return entityManager.createQuery("SELECT e FROM Trip e WHERE e.destination = :d", Excursion.class)
+        return entityManager.createQuery("SELECT e FROM Excursion e WHERE e.destination = :d", Excursion.class)
             .setParameter("d", destination)
             .getResultList();
     }
@@ -82,7 +82,7 @@ public class JPAExcursionDAO implements ExcursionDAO {
     public void deleteExcursionById(long id){
         if (id < 0) throw new IllegalArgumentException("The id has a negative value");
         
-        entityManager.createNamedQuery("DELETE FROM Excursion e WHERE e.id = :id", Excursion.class)
+        entityManager.createQuery("DELETE FROM Excursion e WHERE e.id = :id")
              .setParameter("id", id)
              .executeUpdate();
         
