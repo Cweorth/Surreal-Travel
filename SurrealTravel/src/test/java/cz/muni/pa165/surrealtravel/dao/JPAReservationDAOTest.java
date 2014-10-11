@@ -164,6 +164,53 @@ public class JPAReservationDAOTest extends AbstractTest {
         truncateDb();
     }
     
+    @Test(expected = NullPointerException.class)
+    public void testUpdateReservationNull() {
+        dao.updateReservation(null);
+    }
+    
+    @Test(expected = NullPointerException.class)
+    public void testUpdateReservationCustomerNull() {
+        Trip trip = mktrip(mkdate(1, 11, 2014), mkdate(8, 11, 2014), "Iraq", 500, new BigDecimal(99));
+        Reservation reservation = mkreservation(null, trip);
+        
+        dao.updateReservation(reservation);
+    }
+    
+    @Test
+    public void testUpdateReservation() {
+        Customer customer = mkcustomer("Some dude", "not here");
+        Trip trip = mktrip(mkdate(1, 11, 2014), mkdate(8, 11, 2014), "Iraq", 500, new BigDecimal(99));
+        Reservation reservation = mkreservation(customer, trip);
+        Excursion excursion = mkexcursion(mkdate(8, 11, 2014), 4, "description of excursion", "someplace", new BigDecimal(99));
+        
+        em.getTransaction().begin();
+        em.persist(reservation);
+        em.persist(customer);
+        em.persist(trip);
+        em.getTransaction().commit();
+        
+        // we need to detach managed object or the update method below is redundant
+        em.detach(reservation);
+        
+        reservation.addExcursion(excursion);
+        
+        em.getTransaction().begin();
+        dao.updateReservation(reservation);
+//        reservation = em.merge(reservation);
+        em.getTransaction().commit();
+
+        em.getTransaction().begin();
+        Reservation retrieved = em.find(Reservation.class, reservation.getId());
+        em.getTransaction().commit();
+
+        assertEquals(retrieved, reservation);
+        truncateDb();
+    }
+    
+    
+    //--[  Helper methods  ]---------------------------------------------------
+    
     /**
      * Generate 10 random Reservation objects.
      * @return 
