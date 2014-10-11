@@ -46,8 +46,9 @@ public interface TripDAO {
     /**
      * Updates the trip.
      * @param  trip          The trip to update.
+     * @return The updated trip reference.
      */
-    public void updateTrip(Trip trip);
+    public Trip updateTrip(Trip trip);
     
     /**
      * Removes the specified {@code trip}.

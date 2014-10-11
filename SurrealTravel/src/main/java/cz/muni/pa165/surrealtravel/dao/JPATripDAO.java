@@ -119,9 +119,9 @@ public class JPATripDAO implements TripDAO {
     }
 
     @Override
-    public void updateTrip(Trip trip) {
+    public Trip updateTrip(Trip trip) {
         validate(trip);
-        entityManager.merge(trip);
+        return entityManager.merge(trip);
     }    
 
     @Override
