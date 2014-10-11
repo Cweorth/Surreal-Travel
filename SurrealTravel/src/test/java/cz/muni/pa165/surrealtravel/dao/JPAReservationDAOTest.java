@@ -10,6 +10,7 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.Random;
 import static org.junit.Assert.assertEquals;
+import static org.junit.Assert.assertFalse;
 import static org.junit.Assert.assertTrue;
 import org.junit.Test;
 
@@ -196,8 +197,7 @@ public class JPAReservationDAOTest extends AbstractTest {
         reservation.addExcursion(excursion);
         
         em.getTransaction().begin();
-        dao.updateReservation(reservation);
-//        reservation = em.merge(reservation);
+        reservation = dao.updateReservation(reservation);
         em.getTransaction().commit();
 
         em.getTransaction().begin();
@@ -205,6 +205,85 @@ public class JPAReservationDAOTest extends AbstractTest {
         em.getTransaction().commit();
 
         assertEquals(retrieved, reservation);
+        truncateDb();
+    }
+    
+    @Test(expected = NullPointerException.class)
+    public void testDeleteReservationNull() {
+        dao.deleteReservation(null);
+    }
+    
+    @Test
+    public void testDeleteReservation() {
+        List<Reservation> res = prepareReservationBatch();
+        storeReservations(res);
+        Reservation chosenReservation = res.get(0);
+        
+        em.getTransaction().begin();
+        dao.deleteReservation(chosenReservation);
+        em.getTransaction().commit();
+        
+        assertFalse(dao.getAllReservations().contains(chosenReservation));
+        truncateDb();
+    }
+    
+    @Test(expected = NullPointerException.class)
+    public void testGetFullPriceByCustomerNull() {
+        dao.getFullPriceByCustomer(null);
+    }
+    
+    @Test
+    public void testGetFullPriceByCustomer() {
+        Customer customer = mkcustomer("Some dude", "not here");
+        Trip trip1 = mktrip(mkdate(1, 11, 2014), mkdate(8, 11, 2014), "Iraq", 500, new BigDecimal(100));
+        Trip trip2 = mktrip(mkdate(1, 11, 2014), mkdate(8, 11, 2014), "Iraq", 500, new BigDecimal(200));
+        Reservation reservation1 = mkreservation(customer, trip1);
+        Reservation reservation2 = mkreservation(customer, trip2);
+        
+        Excursion excursion1 = mkexcursion(mkdate(8, 11, 2014), 4, "description of excursion", "someplace", new BigDecimal(1000));
+        Excursion excursion2 = mkexcursion(mkdate(8, 11, 2014), 4, "description of excursion", "someplace", new BigDecimal(2000));
+        
+        reservation1.addExcursion(excursion1);
+        reservation1.addExcursion(excursion2);
+        
+        BigDecimal expected = sumReservation(reservation1);
+        expected = expected.add(sumReservation(reservation2));
+
+        em.getTransaction().begin();
+        dao.addReservation(reservation1);
+        dao.addReservation(reservation2);
+        em.getTransaction().commit();
+        
+        em.getTransaction().begin();
+        BigDecimal retrieved = dao.getFullPriceByCustomer(customer);
+        em.getTransaction().commit();
+
+        assertEquals(expected, retrieved);
+        truncateDb();
+    }
+    
+    @Test(expected = NullPointerException.class)
+    public void testRemoveExcursionFromAllReservationsNull() {
+        dao.removeExcursionFromAllReservations(null);
+    }
+    
+    @Test
+    public void testRemoveExcursionFromAllReservations() {
+        List<Reservation> res = prepareReservationBatch();
+        storeReservations(res);
+        Excursion chosenExcursion = res.get(0).getExcursions().get(0);
+        
+        em.getTransaction().begin();
+        dao.removeExcursionFromAllReservations(chosenExcursion);
+        em.getTransaction().commit();
+        
+        em.getTransaction().begin();
+        List<Reservation> allReservations = dao.getAllReservations();
+        em.getTransaction().commit();
+        
+        for(Reservation r : allReservations)
+            assertFalse(r.getExcursions().contains(chosenExcursion));
+        
         truncateDb();
     }
     
@@ -243,8 +322,19 @@ public class JPAReservationDAOTest extends AbstractTest {
    
         List<Reservation> res = new ArrayList<>();
         
-        for(int i = 0; i < 10; i++)
-            res.add(mkreservation(customers[rand.nextInt(customers.length)], trips[rand.nextInt(trips.length)]));
+        for(int i = 0; i < 10; i++) {
+            Trip t = trips[rand.nextInt(trips.length)];
+            Customer c = customers[rand.nextInt(customers.length)];
+            Reservation r = mkreservation(c, t);
+            
+            // we assume that customer wants all excursions contained in this trip
+            for(Excursion e : t.getExcursions())
+                r.addExcursion(e);
+            
+            res.add(r);
+        }
+            
+            
         
         return res;
       
@@ -290,6 +380,20 @@ public class JPAReservationDAOTest extends AbstractTest {
         for(Reservation r : res)
             if(r.getTrip().getExcursions().contains(excursion)) subList.add(r);
         return subList;
+    }
+    
+    /**
+     * Sum reservation price.
+     * @param r
+     * @return 
+     */
+    private BigDecimal sumReservation(Reservation r) {
+        BigDecimal price = r.getTrip().getBasePrice();
+        
+        for(Excursion e : r.getExcursions())
+            price = price.add(e.getPrice());
+        
+        return price;
     }
     
     /**
