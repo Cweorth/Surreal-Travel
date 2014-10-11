@@ -67,14 +67,14 @@ public class JPACustomerDAO implements CustomerDAO {
     }
 
     @Override
-    public void updateCustomer(Customer customer) {
+    public Customer updateCustomer(Customer customer) {
         
         if(customer == null) throw new NullPointerException("Customer object is null.");
         if(customer.getId() < 0) throw new IllegalArgumentException("Customer object is not valid - id < 0");
         if(customer.getName() == null) throw new NullPointerException("Name of customer object is null.");
         if(customer.getName().isEmpty()) throw new IllegalArgumentException("Name of customer is empty string.");
         
-        em.merge(customer);
+        return em.merge(customer);
         
     }
 

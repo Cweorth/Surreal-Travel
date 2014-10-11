@@ -39,7 +39,7 @@ public interface CustomerDAO {
      * Modify the customer.
      * @param customer 
      */
-    public void updateCustomer(Customer customer);
+    public Customer updateCustomer(Customer customer);
     
     /**
      * Remove customer.
