@@ -33,11 +33,12 @@ public abstract class AbstractTest {
     @Autowired
     protected EntityManagerFactory entityManagerFactory;
     protected EntityManager        em;
-    
-    protected static final Logger logger = LogManager.getLogger("TestLogger");
+    protected static final Logger  logger = LogManager.getLogger("TestLogger");
     
     @Rule
-    public final TestName testName = new TestName();
+    public final TestName             testName   = new TestName();
+    @Rule
+    public final ExceptionLoggingRule excpLogger = new ExceptionLoggingRule(logger);
     
     //--[  Methods  ]-----------------------------------------------------------
     
@@ -71,7 +72,7 @@ public abstract class AbstractTest {
      * @param  year          The year of the date.
      * @return The date.
      */
-    protected Date mkdate(int day, int month, int year) {
+    protected static Date mkdate(int day, int month, int year) {
         Calendar calendar = new GregorianCalendar();
         calendar.set(year, month, day);
         return calendar.getTime();
@@ -83,7 +84,7 @@ public abstract class AbstractTest {
      * @param  address       Customer's address.
      * @return A new customer.
      */
-    protected Customer mkcustomer(String name, String address) {
+    protected static Customer mkcustomer(String name, String address) {
         Customer customer = new Customer();
         customer.setName(name);
         customer.setAddress(address);
@@ -101,7 +102,7 @@ public abstract class AbstractTest {
      * @param  price         The price of the excursion.
      * @return A new excursion.
      */
-    protected Excursion mkexcursion(Date date, int duration, String description, String destination, BigDecimal price) {
+    protected static Excursion mkexcursion(Date date, int duration, String description, String destination, BigDecimal price) {
         Excursion excursion = new Excursion();
         excursion.setExcursionDate(date);
         excursion.setDuration(duration);
@@ -119,7 +120,7 @@ public abstract class AbstractTest {
      * @param  trip          A trip this customer books.
      * @return A new reservation.
      */
-    protected Reservation mkreservation(Customer customer, Trip trip) {
+    protected static Reservation mkreservation(Customer customer, Trip trip) {
         Reservation reservation = new Reservation();
         reservation.setCustomer(customer);
         reservation.setTrip(trip);
@@ -137,7 +138,7 @@ public abstract class AbstractTest {
      * @param  price         The base price of this trip without excursions.
      * @return A new trip.
      */
-    protected Trip mktrip(Date from, Date to, String destination, int capacity, BigDecimal price) {
+    protected static Trip mktrip(Date from, Date to, String destination, int capacity, BigDecimal price) {
         Trip trip = new Trip();
         trip.setDateFrom(from);
         trip.setDateTo(to);

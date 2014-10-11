@@ -24,6 +24,7 @@
     <root>
         <level value="ERROR" />
         <appender-ref ref="console" />
+        <appender-ref ref="testlog" />la
     </root>
 	
 </log4j:configuration>
