@@ -149,7 +149,7 @@ public class JPAExcursionDAOTest extends AbstractTest {
         for(String destination : destinations) {
             logger.info(String.format("destination = %s", destination));
             List<Excursion> expected = filter(new DestEquals(destination), excursions);
-            List<Excursion> actual   = dao.getExcursionByDestination(destination);
+            List<Excursion> actual   = dao.getExcursionsByDestination(destination);
             
             Assert.assertEquals(expected.size(), actual.size());
             
@@ -163,14 +163,14 @@ public class JPAExcursionDAOTest extends AbstractTest {
     public void testGetAllExcursions() {
         insertTestExcursions();
         
-        Assert.assertEquals(excursions.size(), dao.getAllExcursion().size());
+        Assert.assertEquals(excursions.size(), dao.getAllExcursions().size());
     }
     
     @Test
     public void testUpdateExcursion() {
         insertTestExcursions();
         
-        List<Excursion> original = filter(new DestEquals("Mordor"), dao.getAllExcursion());
+        List<Excursion> original = filter(new DestEquals("Mordor"), dao.getAllExcursions());
         
         em.getTransaction().begin();
         for(Excursion excursion : original) {
@@ -179,7 +179,7 @@ public class JPAExcursionDAOTest extends AbstractTest {
         }
         em.getTransaction().commit();
         
-        List<Excursion> updated = filter(new DestEquals("Mordor"), dao.getAllExcursion());
+        List<Excursion> updated = filter(new DestEquals("Mordor"), dao.getAllExcursions());
         
         for(Excursion excursion : updated) {
             Assert.assertEquals(20, (int) excursion.getDuration());
@@ -195,7 +195,7 @@ public class JPAExcursionDAOTest extends AbstractTest {
         dao.deleteExcursion(excursion);
         em.getTransaction().commit();
        
-        Assert.assertFalse(dao.getAllExcursion().contains(excursion));
+        Assert.assertFalse(dao.getAllExcursions().contains(excursion));
     }
     
     @Test
@@ -207,6 +207,6 @@ public class JPAExcursionDAOTest extends AbstractTest {
         dao.deleteExcursionById(2L);
         em.getTransaction().commit();
        
-        Assert.assertFalse(dao.getAllExcursion().contains(excursion));
+        Assert.assertFalse(dao.getAllExcursions().contains(excursion));
     }
 }

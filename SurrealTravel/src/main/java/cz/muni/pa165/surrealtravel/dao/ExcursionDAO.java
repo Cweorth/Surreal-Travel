@@ -26,13 +26,13 @@ public interface ExcursionDAO {
      * @param destination
      * @return 
      */
-    public List<Excursion> getExcursionByDestination(String destination);
+    public List<Excursion> getExcursionsByDestination(String destination);
     
     /**
      * Get all excursions.
      * @return 
      */
-    public List<Excursion> getAllExcursion();
+    public List<Excursion> getAllExcursions();
     
     /**
      * Modify the excursion.

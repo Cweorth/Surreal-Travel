@@ -10,10 +10,10 @@ import java.util.Objects;
 import javax.persistence.EntityManager;
 
 /**
- *
- * @author Petr
+ * Implementation of DAO for Excursion entity.
+ * @author Petr Dvořák [359819]
  */
-public class JPAExcursionDAO {
+public class JPAExcursionDAO implements ExcursionDAO {
     
     private EntityManager entityManager;
 
@@ -21,7 +21,13 @@ public class JPAExcursionDAO {
         Objects.requireNonNull(em);
         this.entityManager = em;
     }
+    
+    public void setEntityManager(EntityManager em) {
+        this.entityManager = em;
+    }
 
+
+    @Override
     public void addExcursion(Excursion excursion){
         if(excursion == null) throw new NullPointerException("Excursion object is null.");
         if(excursion.getId() < 0) throw new IllegalArgumentException("Excursion object is not valid - id < 0");
@@ -34,27 +40,29 @@ public class JPAExcursionDAO {
         
     }
     
-
+    @Override
     public Excursion getExcursionById(long id){
         if (id < 0) throw new IllegalArgumentException("The id has a negative value");
                 
         return entityManager.find(Excursion.class, id);
     }
     
-    public List<Excursion> getExcursionByDestination(String destination){
+    @Override
+    public List<Excursion> getExcursionsByDestination(String destination){
        Objects.requireNonNull(destination, "destination");
         
         return entityManager.createQuery("SELECT e FROM Trip e WHERE e.destination = :d", Excursion.class)
             .setParameter("d", destination)
             .getResultList();
     }
-     
-    public List<Excursion> getAllExcursion(){
+    
+    @Override 
+    public List<Excursion> getAllExcursions(){
       return entityManager.createNamedQuery("Excursion.getAll", Excursion.class)
             .getResultList();
     }
     
-    
+    @Override
     public void updateExcursion(Excursion excursion){
         if(excursion == null) throw new NullPointerException("Excursion object is null.");
         if(excursion.getId() < 0) throw new IllegalArgumentException("Excursion object is not valid - id < 0");
@@ -64,13 +72,13 @@ public class JPAExcursionDAO {
         entityManager.merge(excursion);
     }
     
-   
+   @Override
     public void deleteExcursion(Excursion excursion){
         if(excursion == null) throw new NullPointerException("Excursion object is null.");
         
         entityManager.remove(excursion);
     }
-    
+    @Override
     public void deleteExcursionById(long id){
         if (id < 0) throw new IllegalArgumentException("The id has a negative value");
         
