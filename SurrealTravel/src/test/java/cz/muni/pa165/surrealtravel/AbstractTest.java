@@ -15,6 +15,8 @@ import org.apache.log4j.Logger;
 import org.apache.log4j.LogManager;
 import org.junit.After;
 import org.junit.Before;
+import org.junit.Rule;
+import org.junit.rules.TestName;
 import org.junit.runner.RunWith;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.test.context.ContextConfiguration;
@@ -32,35 +34,73 @@ public abstract class AbstractTest {
     protected EntityManagerFactory entityManagerFactory;
     protected EntityManager        em;
     
-    protected static final Logger logger = LogManager.getLogger(AbstractTest.class.getName());
+    protected static final Logger logger = LogManager.getLogger("TestLogger");
+    
+    @Rule
+    public final TestName testName = new TestName();
+    
+    //--[  Methods  ]-----------------------------------------------------------
     
     @Before
     public void setUp() {
+        logger.info(String.format("==[(  %s  )]==============================================", testName.getMethodName()));
+        logger.debug("[Setup] Creating entity manager for the test");
+        
         em = entityManagerFactory.createEntityManager();
     }
     
     @After
     public void tearDown() {
+        logger.debug("[TearDown] removing all entries");
+        
+        em.getTransaction().begin();
+        em.createQuery("DELETE FROM Reservation").executeUpdate();
+        em.createQuery("DELETE FROM Trip").executeUpdate();
+        em.createQuery("DELETE FROM Excursion").executeUpdate();
+        em.createQuery("DELETE FROM Customer").executeUpdate();
+        em.getTransaction().commit();
+        
         em.close();
+        logger.debug("[TearDown] finished");
     }
     
-    //--[  Methods  ]-----------------------------------------------------------
-    
+    /**
+     * Convenience method for creating a date.
+     * @param  day           The day of the date.
+     * @param  month         The month of the date.
+     * @param  year          The year of the date.
+     * @return The date.
+     */
     protected Date mkdate(int day, int month, int year) {
         Calendar calendar = new GregorianCalendar();
         calendar.set(year, month, day);
         return calendar.getTime();
     }
     
+    /**
+     * Convenience method for creating a customer entity.
+     * @param  name          Customer's name.
+     * @param  address       Customer's address.
+     * @return A new customer.
+     */
     protected Customer mkcustomer(String name, String address) {
         Customer customer = new Customer();
         customer.setName(name);
         customer.setAddress(address);
         
-        logger.info(String.format("Created %s", customer.toString()));
+        logger.info(String.format("[mk] Created %s", customer.toString()));
         return customer;
     }
     
+    /**
+     * Convenience method for creating an excursion entity.
+     * @param  date          The date of the excursion.
+     * @param  duration      Duration in days.
+     * @param  description   Excursion's description.
+     * @param  destination   Excursion's destination.
+     * @param  price         The price of the excursion.
+     * @return A new excursion.
+     */
     protected Excursion mkexcursion(Date date, int duration, String description, String destination, BigDecimal price) {
         Excursion excursion = new Excursion();
         excursion.setExcursionDate(date);
@@ -69,19 +109,34 @@ public abstract class AbstractTest {
         excursion.setDestination(destination);
         excursion.setPrice(price);
         
-        logger.info(String.format("Created %s", excursion.toString()));
+        logger.info(String.format("[mk] Created %s", excursion.toString()));
         return excursion;
     }
     
+    /**
+     * Convenience method for creating a reservation.
+     * @param  customer      A customer who makes this reservation.
+     * @param  trip          A trip this customer books.
+     * @return A new reservation.
+     */
     protected Reservation mkreservation(Customer customer, Trip trip) {
         Reservation reservation = new Reservation();
         reservation.setCustomer(customer);
         reservation.setTrip(trip);
         
-        logger.info(String.format("Created %s", reservation.toString()));
+        logger.info(String.format("[mk] Created %s", reservation.toString()));
         return reservation;
     }
     
+    /**
+     * Convenience method for creating a trip.
+     * @param  from          The date the trip starts.
+     * @param  to            The date the trip ends.
+     * @param  destination   The destination.
+     * @param  capacity      A Number of customers that can book this trip.
+     * @param  price         The base price of this trip without excursions.
+     * @return A new trip.
+     */
     protected Trip mktrip(Date from, Date to, String destination, int capacity, BigDecimal price) {
         Trip trip = new Trip();
         trip.setDateFrom(from);
@@ -90,7 +145,7 @@ public abstract class AbstractTest {
         trip.setCapacity(capacity);
         trip.setBasePrice(price);
         
-        logger.info(String.format("Created %s", trip.toString()));
+        logger.info(String.format("[mk] Created %s", trip.toString()));
         return trip;
     }
     
