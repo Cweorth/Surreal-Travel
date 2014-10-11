@@ -23,8 +23,7 @@ public interface CustomerDAO {
     public Customer getCustomerById(long id);
     
     /**
-     * Get the customer with the given name. More customer with the same name can
-     * exist in the system.
+     * Get the customer with the given name. All customers with the given name are returned.
      * @param name
      * @return 
      */
