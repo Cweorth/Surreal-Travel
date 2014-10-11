@@ -63,13 +63,13 @@ public class JPAExcursionDAO implements ExcursionDAO {
     }
     
     @Override
-    public void updateExcursion(Excursion excursion){
+    public Excursion updateExcursion(Excursion excursion){
         if(excursion == null) throw new NullPointerException("Excursion object is null.");
         if(excursion.getId() < 0) throw new IllegalArgumentException("Excursion object is not valid - id < 0");
         if(excursion.getDescription().isEmpty()) throw new IllegalArgumentException("Description of excursion is empty string.");
         if(excursion.getDestination().isEmpty()) throw new IllegalArgumentException("Destination of excursion is empty string.");
         
-        entityManager.merge(excursion);
+        return entityManager.merge(excursion);
     }
     
    @Override

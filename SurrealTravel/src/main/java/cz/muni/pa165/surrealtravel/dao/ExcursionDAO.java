@@ -38,11 +38,12 @@ public interface ExcursionDAO {
      * Modify the excursion.
      * @param excursion 
      */
-    public void updateExcursion(Excursion excursion);
+    public Excursion updateExcursion(Excursion excursion);
     
     /**
      * Remove excursion.
      * @param excursion 
+     * @return 
      */
     public void deleteExcursion(Excursion excursion);
      
