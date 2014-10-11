@@ -17,7 +17,7 @@ import javax.persistence.Persistence;
 
 /**
  *
- * @author Kiclus
+ * @author Tomáš Kácel [359965]
  */
 public class JPAReservationDAO implements ReservationDAO {
     
@@ -37,22 +37,25 @@ public class JPAReservationDAO implements ReservationDAO {
         return entityManager;
     }
 
-
+    @Override
     public void addReservation(Reservation reservation) {
         if(reservation == null) throw new NullPointerException("reservation doesnt exist.");
         if(reservation.getId() < 0) throw new IllegalArgumentException("reservation id must be positiv number.");
         if(reservation.getCustomer() == null) throw new NullPointerException("customer in reservation is null.");
         if(reservation.getCustomer().getClass() != Customer.class ) throw new IllegalArgumentException("customer is not customer is empty string.");
-        if(reservation.getExcursions()==null) throw new NullPointerException("no list of excursion");
+        if(reservation.getTrip()==null) throw new NullPointerException("trip in reservatio doesnt exist.");
+        //if(reservation.getExcursions()==null) throw new NullPointerException("no list of excursion");
         
         //EntityManager em = emf.createEntityManager();
-        
+        entityManager.persist(reservation.getTrip());
+        entityManager.persist(reservation.getCustomer());
         entityManager.persist(reservation);
         
         
         
     }
-
+    
+    @Override
     public Reservation getReservationById(long id) {
         
         if(id < 0) throw new IllegalArgumentException("problem in id- Id < 0");
@@ -62,31 +65,35 @@ public class JPAReservationDAO implements ReservationDAO {
         
         return result;
         }
-
+    
+    @Override
     public List<Reservation> getAllReservations() {
         //EntityManager em = emf.createEntityManager();
         List<Reservation> reservation = entityManager.createNamedQuery("Reservation.getAll", Reservation.class).getResultList();
-        entityManager.close();
+        
         return reservation;
     }
-
+    
+    @Override
     public List<Reservation> getAllReservationsByCustomer(Customer customer) {
         //EntityManager em = emf.createEntityManager();
         List<Reservation> reserves = entityManager.createQuery("SELECT r FROM Reservation r JOIN FETCH r.customer WHERE r.customer.id= :d", Reservation.class).setParameter("d", customer.getId()).getResultList();
-	entityManager.close();
+	
         return reserves;
        
         
         
     }
-
+    @Override
     public List<Reservation> getAllReservationsByExcursion(Excursion excursion) {
         //EntityManager em = emf.createEntityManager();
+        if(excursion == null) throw new NullPointerException("excursion doesnt exist.");
         List<Reservation> reserves = entityManager.createQuery("SELECT r FROM Reservation r JOIN FETCH r.excursions WHERE r.excursions.id= :d", Reservation.class).setParameter("d", excursion.getId()).getResultList();
         
         return reserves;
     }
-
+    
+    @Override
     public void updateReservation(Reservation reservation) {
         if(reservation == null) throw new NullPointerException("reservation doesnt exist.");
         if(reservation.getId() < 0) throw new IllegalArgumentException("reservation id must be positiv number.");
@@ -99,7 +106,8 @@ public class JPAReservationDAO implements ReservationDAO {
         
         
     }
-
+    
+    @Override
     public void deleteReservation(Reservation reservation) {
         if(reservation == null) throw new NullPointerException("reservation doesnt exist.");
         
@@ -108,7 +116,8 @@ public class JPAReservationDAO implements ReservationDAO {
         entityManager.remove(reservation);
         
     }
-
+    
+    @Override
     public BigDecimal getFullPriceByCustomer(Customer customer) {
       if(customer==null) throw new NullPointerException("customer doesnt exist.");
       if(customer.getId() < 0) throw new IllegalArgumentException("customer id must be positiv number.");
@@ -124,7 +133,8 @@ public class JPAReservationDAO implements ReservationDAO {
       return dec;  
         
     }
-
+    
+    @Override
     public void removeExcursionFromAllReservations(Excursion excursion) {
         if(excursion==null)throw new NullPointerException("excursion doesnt exist.");
         if(excursion.getId() < 0) throw new IllegalArgumentException("excursion id must be positiv number.");
