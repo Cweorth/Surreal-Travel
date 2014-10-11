@@ -38,6 +38,7 @@ public interface CustomerDAO {
     /**
      * Modify the customer.
      * @param customer 
+     * @return  
      */
     public Customer updateCustomer(Customer customer);
     

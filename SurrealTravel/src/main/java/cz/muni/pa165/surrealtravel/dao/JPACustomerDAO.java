@@ -54,7 +54,7 @@ public class JPACustomerDAO implements CustomerDAO {
         if(name.isEmpty()) throw new IllegalArgumentException("Name of customer is empty string.");
         
         return em.createNamedQuery("Customer.getByName", Customer.class)
-                .setParameter(0, name)
+                .setParameter("name", name)
                 .getResultList();
         
     }
