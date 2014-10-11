@@ -2,7 +2,9 @@ package cz.muni.pa165.surrealtravel.entity;
 
 import java.io.Serializable;
 import java.math.BigDecimal;
+import java.util.ArrayList;
 import java.util.List;
+import javax.persistence.CascadeType;
 import javax.persistence.Column;
 import javax.persistence.Entity;
 import javax.persistence.GeneratedValue;
@@ -39,11 +41,14 @@ public class Reservation implements Serializable {
     
     
     
-    @ManyToMany
+    @ManyToMany(cascade = CascadeType.ALL)
     private List<Excursion> excursions;
     
     //methods
     
+    public Reservation() {
+        excursions = new ArrayList<>();
+    }
     public long getId() {
         return id;
     }
@@ -77,6 +82,7 @@ public class Reservation implements Serializable {
     }
     
     public void addExcursion(Excursion excursion){
+        if(excursion==null)throw new NullPointerException("nejede");
         this.excursions.add(excursion);
     }
     

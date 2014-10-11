@@ -53,7 +53,7 @@ public interface ReservationDAO {
      * @param reservacion
      * @return 
      */
-    public void updateReservation(Reservation reservation);
+    public Reservation updateReservation(Reservation reservation);
     
     /**
      * 
