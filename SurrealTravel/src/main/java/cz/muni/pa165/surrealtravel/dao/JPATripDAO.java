@@ -3,13 +3,14 @@ package cz.muni.pa165.surrealtravel.dao;
 import cz.muni.pa165.surrealtravel.entity.Excursion;
 import cz.muni.pa165.surrealtravel.entity.Trip;
 import java.math.BigDecimal;
+import java.util.Calendar;
 import java.util.Date;
 import java.util.List;
 import java.util.Objects;
 import javax.persistence.EntityManager;
 
 /**
- *
+ * The JPA implementation of the {@link TripDAO} class.
  * @author Roman Lacko [396157]
  */
 public class JPATripDAO implements TripDAO {
@@ -19,12 +20,12 @@ public class JPATripDAO implements TripDAO {
     //--[  Private methods  ]---------------------------------------------------
     
     private void validate(Trip trip) {
-        Objects.requireNonNull(trip,                   "trip");
-        Objects.requireNonNull(trip.getDateFrom(),     "trip.dateFrom");
-        Objects.requireNonNull(trip.getDateTo(),       "trip.dateTo");
-        Objects.requireNonNull(trip.getDestination(),  "trip.destination");
-        Objects.requireNonNull(trip.getBasePrice(),    "trip.basePrice");
-        Objects.requireNonNull(trip.getExcursions(),   "trip.excursions");
+        Objects.requireNonNull(trip,                  "trip");
+        Objects.requireNonNull(trip.getDateFrom(),    "trip.dateFrom");
+        Objects.requireNonNull(trip.getDateTo(),      "trip.dateTo");
+        Objects.requireNonNull(trip.getDestination(), "trip.destination");
+        Objects.requireNonNull(trip.getBasePrice(),   "trip.basePrice");
+        Objects.requireNonNull(trip.getExcursions(),  "trip.excursions");
         
         if (trip.getDateFrom().after(trip.getDateTo())) {
             throw new IllegalArgumentException("The trip requires a time machine for it ends before it starts");
@@ -39,8 +40,15 @@ public class JPATripDAO implements TripDAO {
         }
         
         for(Excursion excursion : trip.getExcursions()) {
-            Date excursionDate = excursion.getExcursionDate();
-            if (excursionDate.before(trip.getDateFrom()) || excursionDate.after(trip.getDateTo())) {
+            Date excursionStart = excursion.getExcursionDate();
+            Calendar calendar   = Calendar.getInstance();
+            
+            calendar.setTime(excursionStart);
+            calendar.add(Calendar.DATE, excursion.getDuration());
+            
+            Date excursionEnd   = calendar.getTime();
+            
+            if (excursionStart.before(trip.getDateFrom()) || excursionEnd.after(trip.getDateTo())) {
                 throw new IllegalArgumentException(String.format("Date of excursion '%s' is outside of that of the trip", excursion.getDescription()));
             }
         }
@@ -53,7 +61,9 @@ public class JPATripDAO implements TripDAO {
         this.entityManager = em;
     }
    
-    //--[  Getters-Setters  ]---------------------------------------------------
+    //--[  Methods  ]-----------------------------------------------------------
+    
+    //<editor-fold desc="[  Getters | Setters  ]" defaultstate="collapsed">
     
     public EntityManager getEntityManager() {
         return entityManager;
@@ -63,6 +73,8 @@ public class JPATripDAO implements TripDAO {
         Objects.requireNonNull(entityManager, "entityManager");
         this.entityManager = entityManager;
     }
+    
+    //</editor-fold>
     
     //--[  Overriden methods  ]-------------------------------------------------
       

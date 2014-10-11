@@ -1,8 +1,3 @@
-/*
- * To change this license header, choose License Headers in Project Properties.
- * To change this template file, choose Tools | Templates
- * and open the template in the editor.
- */
 package cz.muni.pa165.surrealtravel.dao;
 
 import cz.muni.pa165.surrealtravel.AbstractTest;
@@ -14,23 +9,29 @@ import java.util.List;
 import java.util.Objects;
 import org.junit.Assert;
 import org.junit.Before;
-import org.junit.BeforeClass;
 import org.junit.Test;
 
 /**
- *
- * @author cweorth
+ * @author Roman Lacko [396157]
  */
 public class JPAExcursionDAOTest extends AbstractTest {
     
-    private static List<Excursion> excursions;
+    private List<Excursion> excursions;
     private ExcursionDAO dao;
     
     private void insertTestExcursions() {
+        excursions = new ArrayList<>();
+        excursions.add(mkexcursion(mkdate(20, 10, 2941), 2, "Battle of Five Armies",   "Erebor",      new BigDecimal(500)));
+        excursions.add(mkexcursion(mkdate(25, 10, 3018), 1, "Council of Elrond",       "Rivendell",   new BigDecimal(150)));
+        excursions.add(mkexcursion(mkdate(02, 03, 3019), 1, "Destruction of Isengard", "Isengard",    new BigDecimal(400)));
+        excursions.add(mkexcursion(mkdate(03, 03, 3019), 1, "Battle of Hornburg",      "Helm's Deep", new BigDecimal(350)));
+        excursions.add(mkexcursion(mkdate(14, 03, 3019), 3, "Mt Doom Excursion",       "Mordor",      new BigDecimal(200)));
+        excursions.add(mkexcursion(mkdate(25, 03, 3019), 2, "Downfall of Barad-dûr",   "Mordor",      new BigDecimal(300)));
+
         logger.info("adding test excursions");
         
         em.getTransaction().begin();
-        for(Excursion excursion : excursions) {
+        for(Excursion excursion : excursions) {        
             dao.addExcursion(excursion);
         }
         em.getTransaction().commit();
@@ -63,18 +64,7 @@ public class JPAExcursionDAOTest extends AbstractTest {
         public Boolean apply(Excursion x) 
         { return (x != null) && Objects.equals(x.getDestination(), dest); }
     }
-    
-    @BeforeClass
-    public static void createEntities() {
-        excursions = new ArrayList<>();
-        excursions.add(mkexcursion(mkdate(20, 10, 2941), 2, "Battle of Five Armies",   "Erebor",      new BigDecimal(500)));
-        excursions.add(mkexcursion(mkdate(25, 10, 3018), 1, "Council of Elrond",       "Rivendell",   new BigDecimal(150)));
-        excursions.add(mkexcursion(mkdate(02, 03, 3019), 1, "Destruction of Isengard", "Isengard",    new BigDecimal(400)));
-        excursions.add(mkexcursion(mkdate(03, 03, 3019), 1, "Battle of Hornburg",      "Helm's Deep", new BigDecimal(350)));
-        excursions.add(mkexcursion(mkdate(14, 03, 3019), 3, "Mt Doom Excursion",       "Mordor",      new BigDecimal(200)));
-        excursions.add(mkexcursion(mkdate(25, 03, 3019), 2, "Downfall of Barad-dûr",   "Mordor",      new BigDecimal(300)));
-    }
-    
+        
     @Before
     @Override
     public void setUp() {
@@ -144,6 +134,7 @@ public class JPAExcursionDAOTest extends AbstractTest {
     
     @Test
     public void testGetExcursionsByDestination() {
+        insertTestExcursions();
         String[] destinations = new String[] { "Erebor", "Mordor", "Esgaroth" };
         
         for(String destination : destinations) {
@@ -189,7 +180,7 @@ public class JPAExcursionDAOTest extends AbstractTest {
     @Test
     public void testDeleteExcursion() {
         insertTestExcursions();
-        Excursion excursion = dao.getExcursionById(1L);
+        Excursion excursion = excursions.get(0);
         
         em.getTransaction().begin();
         dao.deleteExcursion(excursion);
@@ -201,10 +192,10 @@ public class JPAExcursionDAOTest extends AbstractTest {
     @Test
     public void testDeleteExcursionById() {
         insertTestExcursions();
-        Excursion excursion = dao.getExcursionById(2L);
+        Excursion excursion = excursions.get(1);
         
         em.getTransaction().begin();
-        dao.deleteExcursionById(2L);
+        dao.deleteExcursionById(excursion.getId());
         em.getTransaction().commit();
        
         Assert.assertFalse(dao.getAllExcursions().contains(excursion));
