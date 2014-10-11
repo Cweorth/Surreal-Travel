@@ -80,14 +80,14 @@ public class JPATripDAOTest extends AbstractTest {
         @Test
     public void getAllTrips(){
       List<Trip> trp=new ArrayList<Trip>();
-      Trip trip1= mktrip(mkdate(2015,6,15),mkdate(2015,8,13),"Trip to Transilvania",15,new BigDecimal(1000));
+      Trip trip1= mktrip(mkdate(15,6,2015),mkdate(18,6,2018),"Trip to Transilvania",15,new BigDecimal(1000));
       Excursion ext= mkexcursion(mkdate(2015,6,15),21,"Transilvania","Transilvani castle",new BigDecimal(2020));
       List<Excursion> extList= new ArrayList<Excursion>();
       extList.add(ext);
       trip1.setExcursions(extList);
       
-      Trip trip2= mktrip(mkdate(2018,5,2),mkdate(2020,5,1),"Trip to gogoland",15,new BigDecimal(1000));
-      Excursion ext2= mkexcursion(mkdate(2015,6,15),21,"gogoland","gogoland is very goood",new BigDecimal(2020));
+      Trip trip2= mktrip(mkdate(5,2,2018),mkdate(5,1,2020),"Trip to gogoland",15,new BigDecimal(1000));
+      Excursion ext2= mkexcursion(mkdate(5,2,2018),21,"gogoland","gogoland is very goood",new BigDecimal(2020));
       List<Excursion> extList2= new ArrayList<Excursion>();
       extList.add(ext);
       trip1.setExcursions(extList);
@@ -120,17 +120,18 @@ public class JPATripDAOTest extends AbstractTest {
     
     @Test
     public void addTrip(){
-      Trip trip1= mktrip(mkdate(2015,6,15),mkdate(2015,8,13),"Trip to tramtaria",15,new BigDecimal(1000));
-      Excursion ext= mkexcursion(mkdate(2015,6,15),21,"Tramtaria","Tramtaria castle",new BigDecimal(2020));
+      Trip trip1= mktrip(mkdate(15,6,2015),mkdate(20,7,2015),"Trip to tramtaria",15,new BigDecimal(1000));
+      Excursion ext= mkexcursion(mkdate(16,6,2015),21,"Tramtaria","Tramtaria castle",new BigDecimal(2020));
       List<Excursion> extList= new ArrayList<Excursion>();
       extList.add(ext);
       trip1.setExcursions(extList);
-      
+      em.getTransaction().begin();
       dao.addTrip(trip1);
       
       
-      Long id= trip1.getId();
       
+      Long id= trip1.getId();
+      em.getTransaction().commit();
       
       Trip newTrip=dao.getTripById(id);
       assertEquals(newTrip.getBasePrice(),trip1.getBasePrice());
