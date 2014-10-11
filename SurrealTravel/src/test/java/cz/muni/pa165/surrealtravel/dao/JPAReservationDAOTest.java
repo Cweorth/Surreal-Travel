@@ -152,10 +152,10 @@ public class JPAReservationDAOTest extends AbstractTest {
     @Test
     public void testGetAllReservationsByExcursion() {
         List<Reservation> res = prepareReservationBatch();
-        Excursion chosenExcursion = res.get(0).getTrip().getExcursions().get(0); // every trip has at least 1 excursion, therefore this is a valid selection
-        List<Reservation> expected = getReservationsForExcursion(res, chosenExcursion);
-        
         storeReservations(res);
+        Excursion chosenExcursion = res.get(0).getTrip().getExcursions().get(0); // every trip has at least 1 excursion, therefore this is a valid selection
+        
+        List<Reservation> expected = getReservationsForExcursion(res, chosenExcursion);
 
         em.getTransaction().begin();
         List<Reservation> retrieved = dao.getAllReservationsByExcursion(chosenExcursion);
@@ -304,11 +304,6 @@ public class JPAReservationDAOTest extends AbstractTest {
             mkcustomer("Scrooge McDuck", "Duckburg"),
             mkcustomer("Weirdo", "hell-if-i-know")
         };
-        
-        Excursion[] excursions = {
-            mkexcursion(mkdate(8, 11, 2014), 4, "description of excursion", "someplace", new BigDecimal(99)),
-            mkexcursion(mkdate(10, 11, 2014), 2, "test text", "someplace else", new BigDecimal(199))
-        };
 
         Trip[] trips = {
             mktrip(mkdate(1, 11, 2014), mkdate(8, 11, 2014), "Iraq", 500, new BigDecimal(99)),
@@ -316,28 +311,34 @@ public class JPAReservationDAOTest extends AbstractTest {
             mktrip(mkdate(5, 11, 2014), mkdate(7, 11, 2014), "wherever", 60, new BigDecimal(1500))
         };
         
-        for(int i = 0; i < rand.nextInt(3) + 1; i++)
-            for(Trip t : trips)
-                t.addExcursion(excursions[rand.nextInt(excursions.length)]);
+        Excursion[] excursions = {
+            mkexcursion(mkdate(8, 11, 2014), 4, "description of excursion", "someplace", new BigDecimal(99)),
+            mkexcursion(mkdate(10, 11, 2014), 2, "test text", "someplace else", new BigDecimal(199))
+        };
+        
+        trips[0].addExcursion(excursions[0]);
+        trips[1].addExcursion(excursions[1]);
+        trips[2].addExcursion(excursions[0]);
+        trips[2].addExcursion(excursions[1]);
    
         List<Reservation> res = new ArrayList<>();
-        
-        for(int i = 0; i < 10; i++) {
-            Trip t = trips[rand.nextInt(trips.length)];
-            Customer c = customers[rand.nextInt(customers.length)];
-            Reservation r = mkreservation(c, t);
-            
-            // we assume that customer wants all excursions contained in this trip
-            for(Excursion e : t.getExcursions())
-                r.addExcursion(e);
-            
-            res.add(r);
-        }
-            
-            
+        res.add(createReservation(customers[0], trips[0]));
+        res.add(createReservation(customers[0], trips[1]));
+        res.add(createReservation(customers[1], trips[2]));
+        res.add(createReservation(customers[2], trips[0]));
+        res.add(createReservation(customers[2], trips[2]));
+        res.add(createReservation(customers[3], trips[1]));
         
         return res;
       
+    }
+    
+    private Reservation createReservation(Customer c, Trip t) {
+        Reservation r = mkreservation(c, t);
+        for(Excursion e : t.getExcursions())
+            r.addExcursion(e);
+
+        return r;
     }
     
     /**
