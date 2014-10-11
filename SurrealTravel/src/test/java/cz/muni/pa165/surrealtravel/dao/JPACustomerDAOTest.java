@@ -6,9 +6,13 @@ package cz.muni.pa165.surrealtravel.dao;
 
 import cz.muni.pa165.surrealtravel.AbstractTest;
 import cz.muni.pa165.surrealtravel.entity.Customer;
-import cz.muni.pa165.surrealtravel.entity.Reservation;
+import java.util.ArrayList;
+import java.util.Arrays;
+import java.util.List;
+import org.junit.Assert;
 import org.junit.Test;
 import static org.junit.Assert.assertEquals;
+
 
 /**
  *
@@ -16,6 +20,7 @@ import static org.junit.Assert.assertEquals;
  */
 public class JPACustomerDAOTest extends AbstractTest {
     
+     private List<Customer> customers;
      private JPACustomerDAO dao;
      
      @Override
@@ -50,8 +55,45 @@ public class JPACustomerDAOTest extends AbstractTest {
         em.getTransaction().begin();
         em.remove(customer1);
         em.getTransaction().commit();
-        
-        
     }
     
-}
+        @Test (expected = IllegalArgumentException.class)
+        public void getCustomerByEmptyName(){
+        dao.getCustomerByName("");
+        }
+        
+        @Test //(expected = IllegalArgumentException.class)
+        public void getCustomerByName(){
+        Customer customer1= mkcustomer("Josh","Brno");
+        Customer customer2= mkcustomer("Nick","Bratislava");
+        Customer customer3= mkcustomer("Josh","Praha");
+        customers = new ArrayList<>();
+        customers.add(customer1);
+        customers.add(customer3);
+        em.getTransaction().begin();
+        em.persist(customer1);
+        em.persist(customer2);
+        em.persist(customer3);
+        for(Customer customer : customers) {        
+            dao.addCustomer(customer);
+        }
+        em.getTransaction().commit();
+        
+        String name = customer1.getName();
+        List<Customer> actual = dao.getCustomerByName(name);
+        
+//        List<Customer> actual = em.createQuery("SELECT c FROM Customer c WHERE c.name = :name", Customer.class)
+//            .setParameter("name", name)
+//            .getResultList();
+        
+        
+        Assert.assertEquals(customers.size(),actual.size());
+       
+        em.getTransaction().begin();
+        em.remove(customer1);
+        em.remove(customer2);
+        em.remove(customer3);
+        em.getTransaction().commit();
+    }
+        
+ }
