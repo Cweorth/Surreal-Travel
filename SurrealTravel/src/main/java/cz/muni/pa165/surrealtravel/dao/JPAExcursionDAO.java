@@ -30,11 +30,12 @@ public class JPAExcursionDAO implements ExcursionDAO {
     @Override
     public void addExcursion(Excursion excursion){
         if(excursion == null) throw new NullPointerException("Excursion object is null.");
-        if(excursion.getId() < 0) throw new IllegalArgumentException("Excursion object is not valid - id < 0");
+        if(excursion.getId() < 0) throw new IllegalArgumentException("Excursion object is not valid: id < 0");
         if(excursion.getDescription().isEmpty()) throw new IllegalArgumentException("Description of excursion is empty string.");
         if(excursion.getDestination().isEmpty()) throw new IllegalArgumentException("Destination of excursion is empty string.");
-        if(excursion.getPrice() == null) throw new NullPointerException("Excursion object is not valid - price is null");
-        if(excursion.getExcursionDate() == null) throw new NullPointerException("Excursion object is not valid - excursionDate is null");
+        if(excursion.getPrice() == null) throw new NullPointerException("Excursion object is not valid: price is null");
+        if(excursion.getExcursionDate() == null) throw new NullPointerException("Excursion object is not valid: excursionDate is null");
+        if(excursion.getDuration() < 0) throw new IllegalArgumentException("Excursion object is not valid: Duration < 0");
         
         entityManager.persist(excursion);
         
@@ -68,6 +69,7 @@ public class JPAExcursionDAO implements ExcursionDAO {
         if(excursion.getId() < 0) throw new IllegalArgumentException("Excursion object is not valid - id < 0");
         if(excursion.getDescription().isEmpty()) throw new IllegalArgumentException("Description of excursion is empty string.");
         if(excursion.getDestination().isEmpty()) throw new IllegalArgumentException("Destination of excursion is empty string.");
+        if(excursion.getDuration() < 0) throw new IllegalArgumentException("Excursion object is not valid: Duration < 0");
         
         return entityManager.merge(excursion);
     }
