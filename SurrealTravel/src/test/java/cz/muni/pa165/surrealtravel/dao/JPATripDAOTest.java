@@ -61,7 +61,7 @@ public class JPATripDAOTest extends AbstractTest {
     public void getTripById(){
         Trip trip1= mktrip(mkdate(2015,6,15),mkdate(2015,8,13),"Trip to tramtaria",15,new BigDecimal(1000));
         Excursion ext= mkexcursion(mkdate(2015,6,15),21,"Tramtaria","Tramtaria castle",new BigDecimal(2020));
-        List<Excursion> extList= new ArrayList<Excursion>();
+        List<Excursion> extList= new ArrayList<>();
         extList.add(ext);
         trip1.setExcursions(extList);
         em.getTransaction().begin();
@@ -83,16 +83,16 @@ public class JPATripDAOTest extends AbstractTest {
     
         @Test
     public void getAllTrips(){
-      List<Trip> trp=new ArrayList<Trip>();
+      List<Trip> trp=new ArrayList<>();
       Trip trip1= mktrip(mkdate(15,6,2015),mkdate(18,6,2018),"Trip to Transilvania",15,new BigDecimal(1000));
       Excursion ext= mkexcursion(mkdate(2015,6,15),21,"Transilvania","Transilvani castle",new BigDecimal(2020));
-      List<Excursion> extList= new ArrayList<Excursion>();
+      List<Excursion> extList= new ArrayList<>();
       extList.add(ext);
       trip1.setExcursions(extList);
       
       Trip trip2= mktrip(mkdate(5,2,2018),mkdate(5,1,2020),"Trip to gogoland",15,new BigDecimal(1000));
       Excursion ext2= mkexcursion(mkdate(5,2,2018),21,"gogoland","gogoland is very goood",new BigDecimal(2020));
-      List<Excursion> extList2= new ArrayList<Excursion>();
+      List<Excursion> extList2= new ArrayList<>();
       extList.add(ext);
       trip1.setExcursions(extList);
       trp.add(trip2);
@@ -126,7 +126,7 @@ public class JPATripDAOTest extends AbstractTest {
     public void addTrip(){
       Trip trip1= mktrip(mkdate(15,6,2015),mkdate(20,7,2015),"Trip to tramtaria",15,new BigDecimal(1000));
       Excursion ext= mkexcursion(mkdate(16,6,2015),21,"Tramtaria","Tramtaria castle",new BigDecimal(2020));
-      List<Excursion> extList= new ArrayList<Excursion>();
+      List<Excursion> extList= new ArrayList<>();
       extList.add(ext);
       trip1.setExcursions(extList);
       em.getTransaction().begin();
@@ -149,7 +149,7 @@ public class JPATripDAOTest extends AbstractTest {
     public void deleteTrip(){
       Trip trip1= mktrip(mkdate(15,6,2015),mkdate(20,7,2015),"Trip to tramtaria",15,new BigDecimal(1000));
       Excursion ext= mkexcursion(mkdate(16,6,2015),21,"Tramtaria","Tramtaria castle",new BigDecimal(2020));
-      List<Excursion> extList= new ArrayList<Excursion>();
+      List<Excursion> extList= new ArrayList<>();
       extList.add(ext);
       trip1.setExcursions(extList);
       em.getTransaction().begin();
@@ -175,7 +175,7 @@ public class JPATripDAOTest extends AbstractTest {
     public void deleteTripById(){
        Trip trip1= mktrip(mkdate(15,6,2015),mkdate(20,7,2015),"Trip to prerov",15,new BigDecimal(1000));
       Excursion ext= mkexcursion(mkdate(16,6,2015),21,"Prerov","Prerov castle",new BigDecimal(2020));
-      List<Excursion> extList= new ArrayList<Excursion>();
+      List<Excursion> extList= new ArrayList<>();
       extList.add(ext);
       trip1.setExcursions(extList);
       em.getTransaction().begin();
@@ -196,16 +196,16 @@ public class JPATripDAOTest extends AbstractTest {
     @Test
     public void getTripsByDestination(){
         
-      List<Trip> trp=new ArrayList<Trip>();
+      List<Trip> trp=new ArrayList<>();
       Trip trip1= mktrip(mkdate(15,6,2015),mkdate(18,6,2018),"Trip to Transilvania",15,new BigDecimal(1000));
       Excursion ext= mkexcursion(mkdate(2015,6,15),21,"Transilvania","Transilvani castle",new BigDecimal(2020));
-      List<Excursion> extList= new ArrayList<Excursion>();
+      List<Excursion> extList= new ArrayList<>();
       extList.add(ext);
       trip1.setExcursions(extList);
       
       Trip trip2= mktrip(mkdate(5,2,2018),mkdate(5,1,2020),"Trip to gogoland",15,new BigDecimal(1000));
       Excursion ext2= mkexcursion(mkdate(5,2,2018),21,"gogoland","gogoland is very goood",new BigDecimal(2020));
-      List<Excursion> extList2= new ArrayList<Excursion>();
+      List<Excursion> extList2= new ArrayList<>();
       extList.add(ext);
       trip1.setExcursions(extList);
       trp.add(trip2);
@@ -241,10 +241,10 @@ public class JPATripDAOTest extends AbstractTest {
     
     @Test
     public void getTripsWithExcursion(){
-        List<Trip> trp=new ArrayList<Trip>();
+      List<Trip> trp=new ArrayList<>();
       Trip trip1= mktrip(mkdate(15,6,2015),mkdate(18,6,2018),"Trip to Transilvania",15,new BigDecimal(1000));
       Excursion ext= mkexcursion(mkdate(2015,6,15),21,"Metro","Metro castle",new BigDecimal(2020));
-      List<Excursion> extList= new ArrayList<Excursion>();
+      List<Excursion> extList= new ArrayList<>();
       extList.add(ext);
       trip1.setExcursions(extList);
       
@@ -277,100 +277,34 @@ public class JPATripDAOTest extends AbstractTest {
      
     }
     
-    /*
     @Test
-    public void setEntityManager(){
-        
-      EntityManager man= dao.setEntityManager();
-      assertTrue(man instanceof EntityManager);
-        
-    }/*
-    
-    
-    
-    
-    
-    
-    
-    
-    
-    
+    public void testUpdateTrip(){
+        List<Trip> trp=new ArrayList<>();
+      Trip trip1= mktrip(mkdate(15,6,2015),mkdate(18,6,2018),"Trip to Transilvania",15,new BigDecimal(1000));
+      
+      Excursion ext= mkexcursion(mkdate(15,6,2015),21,"Metro","Metro castle",new BigDecimal(2020));
+      
 
-    
-     
-    /*
-    @Before
-    protected void setUp() throws Exception {
-        //emf = Persistence.createEntityManagerFactory("Surreal-Travel");
-        //EntityManager em = manager.emf.createEntityManager();
-        
-        EntityManager em = emf.createEntityManager();
-        dao= new JPATripDAO(em);
-        //em.getTransaction().begin();
-        
-        Date dat1= new Date(2014,6,22);
-        Date dat2= new Date(2014,6,29);
-        String destination="Tramtaria";
-        int capacity=15;
-        List<Excursion> ext= new ArrayList<Excursion>();
-        BigDecimal price= new BigDecimal(1500);
-        
-        Date dat3= new Date(2014,8,22);
-        Date dat4= new Date(2014,9,14);
-        String destionation2="Transilnavia";
-        int capacity2=16;
-        List<Excursion> ext2= new ArrayList<Excursion>();
-        BigDecimal price2= new BigDecimal(1800);
-        
-        Excursion exc1= new Excursion();
-        exc1.setDescription("Tramtaria Castle is one of the biggest...");
-        exc1.setDestination("Tramtaria Castle");
-        exc1.setDuration(10);
-        exc1.setExcursionDate(dat2);
-        exc1.setPrice(new BigDecimal(152));
-        ext.add(exc1);
-        
-        Excursion exc2= new Excursion();
-        exc2.setDescription("In transelvania lived DRACULA...");
-        exc2.setDestination("Transilvania Castle");
-        exc2.setDuration(16);
-        exc2.setExcursionDate(dat3);
-        exc2.setPrice(new BigDecimal(1600));
-        ext2.add(exc2);
-        
-        Trip trip1= new Trip();
-        trip1.setBasePrice(price);
-        trip1.setCapacity(capacity);
-        trip1.setDateFrom(dat2);
-        trip1.setDateTo(dat1);
-        trip1.setDestination(destination);
-        trip1.setExcursions(ext);
-        
-        Trip trip2= new Trip();
-        trip2.setBasePrice(price2);
-        trip2.setCapacity(capacity2);
-        trip2.setDateFrom(dat3);
-        trip2.setDateTo(dat4);
-        trip2.setDestination(destionation2);
-        trip2.setExcursions(ext2);
-        
-        em.persist(trip1);
-        em.persist(exc1);
-        em.persist(trip1);
-        em.persist(exc2);
-        tripId=trip2.getId();
-        //em.getTransaction().commit();
-	em.close();
-            
+      List<Excursion> extList= new ArrayList<>();
+      extList.add(ext);
+      trip1.setExcursions(extList);
+      
+      em.getTransaction().begin();
+      dao.addTrip(trip1);
+      em.getTransaction().commit();
+      em.detach(trip1);
+      trip1.addExcursion(ext);
+      
+      em.getTransaction().begin();
+      trip1 = dao.updateTrip(trip1);
+      em.getTransaction().commit();
+
+      em.getTransaction().begin();
+      Trip retrieved = em.find(Trip.class, trip1.getId());
+      em.getTransaction().commit();
+
+      assertEquals(retrieved, trip1);
+      
     }
-    */
-    
-    //@Test
-    //public Trip getTripById(long id){}
-    
-   
-    
-       
-}
-
-
+        
+ }    
