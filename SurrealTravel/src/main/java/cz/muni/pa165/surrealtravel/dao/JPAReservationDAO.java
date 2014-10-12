@@ -103,7 +103,7 @@ public class JPAReservationDAO implements ReservationDAO {
         if(reservation.getId() < 0) throw new IllegalArgumentException("reservation id must be positiv number.");
         if(reservation.getCustomer() == null) throw new NullPointerException("customer in reservation is null.");
         if(reservation.getCustomer().getClass() != Customer.class ) throw new IllegalArgumentException("customer is not customer is empty string.");
-        if(reservation.getExcursions()==null) throw new NullPointerException("no list of excursion");
+        //if(reservation.getExcursions()==null) throw new NullPointerException("no list of excursion");
         if(reservation.getTrip()==null) throw new NullPointerException("No trip added to reservatio");
         
         //EntityManager em = emf.createEntityManager();
