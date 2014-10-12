@@ -113,6 +113,13 @@ public class JPATripDAOTest extends AbstractTest {
         
     }
     
+    @Test(expected = NullPointerException.class)
+    public void testAddTripNull() {
+        Trip trip1=null;
+        dao.addTrip(trip1);
+        
+    }
+    
     @Test
     public void addTrip(){
       Trip trip1= mktrip(mkdate(15,6,2015),mkdate(20,7,2015),"Trip to tramtaria",15,new BigDecimal(1000));
@@ -182,6 +189,13 @@ public class JPATripDAOTest extends AbstractTest {
       Trip trp3=dao.getTripById(id);
       assertNull(trp3);
       
+    }
+    
+    @Test(expected = NullPointerException.class)
+    public void getTripByDestinationNull() {
+        Trip trip1= mktrip(mkdate(15,6,2015),mkdate(18,6,2018),null,15,new BigDecimal(1000));
+        dao.addTrip(trip1);
+        
     }
     
     @Test
