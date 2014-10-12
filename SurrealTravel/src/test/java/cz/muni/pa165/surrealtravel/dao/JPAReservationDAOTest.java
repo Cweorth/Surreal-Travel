@@ -8,14 +8,13 @@ import cz.muni.pa165.surrealtravel.entity.Trip;
 import java.math.BigDecimal;
 import java.util.ArrayList;
 import java.util.List;
-import java.util.Random;
 import static org.junit.Assert.assertEquals;
 import static org.junit.Assert.assertFalse;
 import static org.junit.Assert.assertTrue;
 import org.junit.Test;
 
 /**
- *
+ * Test for JPAReservationDAO class.
  * @author Jan Klimeš [374259]
  */
 public class JPAReservationDAOTest extends AbstractTest {
@@ -71,7 +70,6 @@ public class JPAReservationDAOTest extends AbstractTest {
         em.getTransaction().commit();
         
         assertEquals(reservation, retrieved);
-        truncateDb();
     }
     
     @Test
@@ -81,23 +79,17 @@ public class JPAReservationDAOTest extends AbstractTest {
         Reservation reservation = mkreservation(customer, trip);
         
         em.getTransaction().begin();
-        em.persist(customer);
-        em.persist(trip);
-        em.persist(reservation);
+        dao.addReservation(reservation);
         em.getTransaction().commit();
         
         long id = reservation.getId();
         Reservation retrieved = dao.getReservationById(id);
         
         assertEquals(reservation, retrieved);
-        truncateDb();
     }
     
     @Test
     public void testGetAllReservationsEmptyTable() {
-        
-        truncateDb();
-        
         List<Reservation> expected = new ArrayList<>();
         em.getTransaction().begin();
         List<Reservation> retrieved = dao.getAllReservations();
@@ -105,12 +97,10 @@ public class JPAReservationDAOTest extends AbstractTest {
         
         assertEquals(expected, retrieved);
         assertTrue(expected.isEmpty() && retrieved.isEmpty());
-        
     }
     
     @Test
     public void testGetAllReservations() {
-        
         List<Reservation> expected = prepareReservationBatch();
         storeReservations(expected);
         
@@ -119,8 +109,6 @@ public class JPAReservationDAOTest extends AbstractTest {
         em.getTransaction().commit();
         
         assertDeepEquals(expected, retrieved);
-        truncateDb();
-        
     }
     
     @Test(expected = NullPointerException.class)
@@ -141,7 +129,6 @@ public class JPAReservationDAOTest extends AbstractTest {
         em.getTransaction().commit();
         
         assertDeepEquals(expected, retrieved);
-        truncateDb();
     }
     
     @Test(expected = NullPointerException.class)
@@ -162,7 +149,6 @@ public class JPAReservationDAOTest extends AbstractTest {
         em.getTransaction().commit();
 
         assertDeepEquals(expected, retrieved);
-        truncateDb();
     }
     
     @Test(expected = NullPointerException.class)
@@ -206,7 +192,6 @@ public class JPAReservationDAOTest extends AbstractTest {
         em.getTransaction().commit();
         
         assertEquals(retrieved, chosenReservation);
-        truncateDb();
     }
     
     @Test
@@ -234,7 +219,6 @@ public class JPAReservationDAOTest extends AbstractTest {
         em.getTransaction().commit();
 
         assertEquals(retrieved, reservation);
-        truncateDb();
     }
     
     @Test(expected = NullPointerException.class)
@@ -253,7 +237,6 @@ public class JPAReservationDAOTest extends AbstractTest {
         em.getTransaction().commit();
         
         assertFalse(dao.getAllReservations().contains(chosenReservation));
-        truncateDb();
     }
     
     @Test(expected = NullPointerException.class)
@@ -288,7 +271,6 @@ public class JPAReservationDAOTest extends AbstractTest {
         em.getTransaction().commit();
 
         assertEquals(expected, retrieved);
-        truncateDb();
     }
     
     @Test(expected = NullPointerException.class)
@@ -312,21 +294,17 @@ public class JPAReservationDAOTest extends AbstractTest {
         
         for(Reservation r : allReservations)
             assertFalse(r.getExcursions().contains(chosenExcursion));
-        
-        truncateDb();
     }
     
     
     //--[  Helper methods  ]---------------------------------------------------
     
     /**
-     * Generate 10 random Reservation objects.
+     * Generate dummy Reservation objects.
      * @return 
      */
     private List<Reservation> prepareReservationBatch() {
-        
-        Random rand = new Random();  
-        
+
         Customer[] customers = {
             mkcustomer("John Doe", "Six feet under"),
             mkcustomer("Jimbo Pennyless", "No-money-ville"),
@@ -337,18 +315,23 @@ public class JPAReservationDAOTest extends AbstractTest {
         Trip[] trips = {
             mktrip(mkdate(1, 11, 2014), mkdate(8, 11, 2014), "Iraq", 500, new BigDecimal(99)),
             mktrip(mkdate(1, 12, 2014), mkdate(8, 12, 2014), "Someplace no one will find you", 1, new BigDecimal(199)),
-            mktrip(mkdate(5, 11, 2014), mkdate(7, 11, 2014), "wherever", 60, new BigDecimal(1500))
+            mktrip(mkdate(5, 11, 2014), mkdate(7, 11, 2014), "wherever", 60, new BigDecimal(1500)),
+            mktrip(mkdate(8, 11, 2014), mkdate(15, 11, 2014), "No man's land", 120, new BigDecimal(9999))
         };
         
         Excursion[] excursions = {
-            mkexcursion(mkdate(8, 11, 2014), 4, "description of excursion", "someplace", new BigDecimal(99)),
-            mkexcursion(mkdate(10, 11, 2014), 2, "test text", "someplace else", new BigDecimal(199))
+            mkexcursion(mkdate(8, 11, 2014), 4, "Gunning with god", "Off the grid", new BigDecimal(99)),
+            mkexcursion(mkdate(10, 11, 2014), 2, "Sightseeing", "City of history", new BigDecimal(199)),
+            mkexcursion(mkdate(11, 11, 2014), 8, "Broken computers freaky exposition", "Dead circuit city", new BigDecimal(300)),
+            mkexcursion(mkdate(11, 11, 2014), 8, "Boring expo", "Boredomville", new BigDecimal(300)),
+            mkexcursion(mkdate(11, 11, 2014), 8, "Freaking lunapark", "Vienna", new BigDecimal(500))
         };
         
         trips[0].addExcursion(excursions[0]);
         trips[1].addExcursion(excursions[1]);
-        trips[2].addExcursion(excursions[0]);
-        trips[2].addExcursion(excursions[1]);
+        trips[2].addExcursion(excursions[2]);
+        trips[2].addExcursion(excursions[3]);
+        trips[2].addExcursion(excursions[4]);
    
         List<Reservation> res = new ArrayList<>();
         res.add(createReservation(customers[0], trips[0]));
@@ -356,12 +339,18 @@ public class JPAReservationDAOTest extends AbstractTest {
         res.add(createReservation(customers[1], trips[2]));
         res.add(createReservation(customers[2], trips[0]));
         res.add(createReservation(customers[2], trips[2]));
-        res.add(createReservation(customers[3], trips[1]));
+        res.add(createReservation(customers[3], trips[3]));
         
         return res;
       
     }
     
+    /**
+     * Create dummy reservation object and set all excursions from the trip as selected.
+     * @param c
+     * @param t
+     * @return 
+     */
     private Reservation createReservation(Customer c, Trip t) {
         Reservation r = mkreservation(c, t);
         for(Excursion e : t.getExcursions())
@@ -376,13 +365,8 @@ public class JPAReservationDAOTest extends AbstractTest {
      */
     private void storeReservations(List<Reservation> res) {
         em.getTransaction().begin();
-        for(Reservation r : res) {
-            if(em.find(Customer.class, r.getCustomer().getId()) == null) em.persist(r.getCustomer());
-            if(em.find(Trip.class, r.getTrip().getId()) == null) em.persist(r.getTrip());
-//            for(Excursion e : r.getTrip().getExcursions())
-//                if(em.find(Excursion.class, e.getId()) == null) em.persist(e);
-            em.persist(r);
-        }
+        for(Reservation r : res)
+            dao.addReservation(r);
         em.getTransaction().commit();
     }
     
@@ -424,18 +408,6 @@ public class JPAReservationDAOTest extends AbstractTest {
             price = price.add(e.getPrice());
         
         return price;
-    }
-    
-    /**
-     * Remove data from tables this test is working with.
-     */
-    private void truncateDb() {
-        em.getTransaction().begin();
-        em.createQuery("DELETE FROM Reservation").executeUpdate();
-        em.createQuery("DELETE FROM Trip").executeUpdate();
-        em.createQuery("DELETE FROM Excursion").executeUpdate();
-        em.createQuery("DELETE FROM Customer").executeUpdate();
-        em.getTransaction().commit();
     }
     
     /**
