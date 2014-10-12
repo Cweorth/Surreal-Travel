@@ -70,7 +70,7 @@ public class JPAReservationDAOTest extends AbstractTest {
         Reservation retrieved = em.find(Reservation.class, reservation.getId());
         em.getTransaction().commit();
         
-        assertEquals(retrieved, reservation);
+        assertEquals(reservation, retrieved);
         truncateDb();
     }
     
@@ -178,6 +178,37 @@ public class JPAReservationDAOTest extends AbstractTest {
         dao.updateReservation(reservation);
     }
     
+    @Test(expected = NullPointerException.class)
+    public void testUpdateReservationTripNull() {
+        Customer customer = mkcustomer("Some dude", "not here");
+        Reservation reservation = mkreservation(customer, null);
+        
+        dao.updateReservation(reservation);
+    }
+    
+    @Test
+    public void testUpdateReservationRemoveExcursions() {
+        List<Reservation> res = prepareReservationBatch();
+        storeReservations(res);
+        Reservation chosenReservation = res.get(0);
+        
+        // we need to detach managed object or the update method below is redundant
+        em.detach(chosenReservation);
+        
+        chosenReservation.setExcursions(null);
+        
+        em.getTransaction().begin();
+        chosenReservation = dao.updateReservation(chosenReservation);
+        em.getTransaction().commit();
+        
+        em.getTransaction().begin();
+        Reservation retrieved = dao.getReservationById(chosenReservation.getId());
+        em.getTransaction().commit();
+        
+        assertEquals(retrieved, chosenReservation);
+        truncateDb();
+    }
+    
     @Test
     public void testUpdateReservation() {
         Customer customer = mkcustomer("Some dude", "not here");
@@ -186,9 +217,7 @@ public class JPAReservationDAOTest extends AbstractTest {
         Excursion excursion = mkexcursion(mkdate(8, 11, 2014), 4, "description of excursion", "someplace", new BigDecimal(99));
         
         em.getTransaction().begin();
-        em.persist(reservation);
-        em.persist(customer);
-        em.persist(trip);
+        dao.addReservation(reservation);
         em.getTransaction().commit();
         
         // we need to detach managed object or the update method below is redundant
