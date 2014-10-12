@@ -10,31 +10,22 @@ import cz.muni.pa165.surrealtravel.entity.Excursion;
 import cz.muni.pa165.surrealtravel.entity.Trip;
 import java.math.BigDecimal;
 import java.util.ArrayList;
-import java.util.Date;
+
 import java.util.List;
 import javax.persistence.EntityManager;
-import javax.persistence.EntityManagerFactory;
-import javax.persistence.Persistence;
-import javax.persistence.PersistenceUnit;
-import org.junit.After;
+
 import static org.junit.Assert.assertEquals;
-import static org.junit.Assert.assertFalse;
-import static org.junit.Assert.assertNotNull;
+
 import static org.junit.Assert.assertNull;
 import static org.junit.Assert.assertTrue;
-import org.junit.Before;
 import org.junit.Test;
-import org.junit.runner.RunWith;
-import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.test.annotation.DirtiesContext;
-import org.springframework.test.context.ContextConfiguration;
-import org.springframework.test.context.junit4.SpringJUnit4ClassRunner;
+
 //import junit.framework.TestCase;
 //import org.springframework.test.annotation.DirtiesContext;
 //import org.testng.annotations.BeforeMethod;
 
 /**
- *
+ * Testo for JPATripDAO 
  * @author Tomáš Kácel [359965]
  */
 public class JPATripDAOTest extends AbstractTest {
@@ -196,7 +187,6 @@ public class JPATripDAOTest extends AbstractTest {
     @Test
     public void getTripsByDestination(){
         
-      List<Trip> trp=new ArrayList<>();
       Trip trip1= mktrip(mkdate(15,6,2015),mkdate(18,6,2018),"Trip to Transilvania",15,new BigDecimal(1000));
       Excursion ext= mkexcursion(mkdate(2015,6,15),21,"Transilvania","Transilvani castle",new BigDecimal(2020));
       List<Excursion> extList= new ArrayList<>();
@@ -208,8 +198,7 @@ public class JPATripDAOTest extends AbstractTest {
       List<Excursion> extList2= new ArrayList<>();
       extList.add(ext);
       trip1.setExcursions(extList);
-      trp.add(trip2);
-      trp.add(trip1);
+      
               
       
       em.getTransaction().begin();
@@ -241,7 +230,7 @@ public class JPATripDAOTest extends AbstractTest {
     
     @Test
     public void getTripsWithExcursion(){
-      List<Trip> trp=new ArrayList<>();
+      
       Trip trip1= mktrip(mkdate(15,6,2015),mkdate(18,6,2018),"Trip to Transilvania",15,new BigDecimal(1000));
       Excursion ext= mkexcursion(mkdate(2015,6,15),21,"Metro","Metro castle",new BigDecimal(2020));
       List<Excursion> extList= new ArrayList<>();
@@ -253,8 +242,7 @@ public class JPATripDAOTest extends AbstractTest {
       List<Excursion> extList2= new ArrayList<>();
       extList.add(ext);
       trip1.setExcursions(extList);
-      trp.add(trip2);
-      trp.add(trip1);
+      
       
       em.getTransaction().begin();
       em.persist(trip1);
@@ -306,5 +294,7 @@ public class JPATripDAOTest extends AbstractTest {
       assertEquals(retrieved, trip1);
       
     }
+    
+    
         
  }    
