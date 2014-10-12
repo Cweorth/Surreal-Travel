@@ -250,7 +250,7 @@ public class JPATripDAOTest extends AbstractTest {
       
       Trip trip2= mktrip(mkdate(5,2,2018),mkdate(5,1,2020),"Trip to gogoland",15,new BigDecimal(1000));
       Excursion ext2= mkexcursion(mkdate(5,2,2018),21,"gogoland","gogoland is very goood",new BigDecimal(2020));
-      List<Excursion> extList2= new ArrayList<Excursion>();
+      List<Excursion> extList2= new ArrayList<>();
       extList.add(ext);
       trip1.setExcursions(extList);
       trp.add(trip2);
@@ -273,9 +273,18 @@ public class JPATripDAOTest extends AbstractTest {
           assertEquals(e,ext);
           }
       }
-        
+      
+     
     }
     
+    /*
+    @Test
+    public void setEntityManager(){
+        
+      EntityManager man= dao.setEntityManager();
+      assertTrue(man instanceof EntityManager);
+        
+    }/*
     
     
     

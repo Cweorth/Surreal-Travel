@@ -41,7 +41,7 @@ public class Reservation implements Serializable {
     
     
     
-    @ManyToMany(cascade = CascadeType.ALL)
+    @ManyToMany(cascade={CascadeType.PERSIST,CascadeType.MERGE})
     private List<Excursion> excursions;
     
     //methods
@@ -94,10 +94,12 @@ public class Reservation implements Serializable {
         BigDecimal base= this.getTrip().getBasePrice();
         //List<Excursion> excursio=this.getExcursions();
         //if(excursions.isEmpty()){return base;}
+        BigDecimal dc=new BigDecimal(0);
         for(Excursion ext:getExcursions()){
-          base.add(ext.getPrice());
+          dc= dc.add(ext.getPrice());
         }
-        return base;
+        dc=dc.add(base);
+        return dc;
     }
     
     

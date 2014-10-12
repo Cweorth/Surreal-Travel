@@ -24,6 +24,8 @@ public class JPAReservationDAO implements ReservationDAO {
     //EntityManagerFactory emf;
     private EntityManager entityManager;
     
+    private BigDecimal price;
+    
     
     public JPAReservationDAO(){
         //emf = Persistence.createEntityManagerFactory("Surreal-Travel");
@@ -88,7 +90,9 @@ public class JPAReservationDAO implements ReservationDAO {
     public List<Reservation> getAllReservationsByExcursion(Excursion excursion) {
         //EntityManager em = emf.createEntityManager();
         if(excursion == null) throw new NullPointerException("excursion doesnt exist.");
-        List<Reservation> reserves = entityManager.createQuery("SELECT r FROM Reservation r JOIN r.excursions e WHERE e.id= :d", Reservation.class).setParameter("d", excursion.getId()).getResultList();
+        List<Reservation> reserves = entityManager.createQuery("SELECT r FROM Reservation r JOIN r.excursions e WHERE e.id= :d", Reservation.class)
+                .setParameter("d", excursion.getId())
+                .getResultList();
         
         return reserves;
     }
@@ -100,6 +104,7 @@ public class JPAReservationDAO implements ReservationDAO {
         if(reservation.getCustomer() == null) throw new NullPointerException("customer in reservation is null.");
         if(reservation.getCustomer().getClass() != Customer.class ) throw new IllegalArgumentException("customer is not customer is empty string.");
         if(reservation.getExcursions()==null) throw new NullPointerException("no list of excursion");
+        if(reservation.getTrip()==null) throw new NullPointerException("No trip added to reservatio");
         
         //EntityManager em = emf.createEntityManager();
         Reservation merge = entityManager.merge(reservation);
@@ -127,8 +132,8 @@ public class JPAReservationDAO implements ReservationDAO {
       List<Reservation> reserv =getAllReservationsByCustomer(customer);
       BigDecimal dec= new BigDecimal(0);
       for(Reservation r: reserv){
-          dec.add(r.getTotalPrice());
-          
+          dec= dec.add(r.getTotalPrice());
+          //dec=dec.add(new BigDecimal(2));
       }
       
       return dec;  
