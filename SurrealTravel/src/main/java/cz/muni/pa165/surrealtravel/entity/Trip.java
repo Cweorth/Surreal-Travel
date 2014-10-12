@@ -49,7 +49,7 @@ public class Trip implements Serializable {
     @Column
     private BigDecimal basePrice;
     
-    @ManyToMany(cascade = CascadeType.PERSIST)
+    @ManyToMany(cascade = {CascadeType.PERSIST, CascadeType.MERGE})
     private List<Excursion> excursions;
     
     //--[  Constructors  ]------------------------------------------------------
@@ -84,7 +84,7 @@ public class Trip implements Serializable {
         BigDecimal price = basePrice;
         
         for(Excursion e : excursions) {
-            price.add(e.getPrice());
+            price = price.add(e.getPrice());
         }
         
         return price;

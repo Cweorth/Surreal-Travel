@@ -5,13 +5,16 @@ import cz.muni.pa165.surrealtravel.entity.Excursion;
 import java.math.BigDecimal;
 import java.util.ArrayList;
 import java.util.Arrays;
+import java.util.HashSet;
 import java.util.List;
 import java.util.Objects;
+import java.util.Set;
 import org.junit.Assert;
 import org.junit.Before;
 import org.junit.Test;
 
 /**
+ * Tests for the {@link JPAReservationDAO} class.
  * @author Roman Lacko [396157]
  */
 public class JPAExcursionDAOTest extends AbstractTest {
@@ -74,32 +77,41 @@ public class JPAExcursionDAOTest extends AbstractTest {
     
     @Test(expected = NullPointerException.class)
     public void testAddNullExcursionToDAO() {
-        dao.addExcursion(null);
+        try {
+            em.getTransaction().begin();
+            dao.addExcursion(null);
+            em.getTransaction().commit();
+        } catch (Exception ex) {
+            em.getTransaction().rollback();
+            throw ex;
+        }
     }
     
     @Test
     public void testInvalidExcursions() {
         List<Excursion> invalidExcursions = Arrays.asList(
                 new Excursion(),
-                mkexcursion(null,                 3, "Battle of Hornburg",      "Helm's Deep",  new BigDecimal(350)),
-                mkexcursion(mkdate(15, 03, 3019), 1, null,                      "Minas Tirith", new BigDecimal(700)),
-                mkexcursion(mkdate(15, 03, 3019), 1, "",                        "Minas Tirith", new BigDecimal(750)),
-                mkexcursion(mkdate(27, 03, 3019), 2, "The Siege of Erebor",     null,           new BigDecimal(600)),
-                mkexcursion(mkdate(27, 03, 3019), 2, "The Siege of Erebor",     "",             new BigDecimal(600)),
-                mkexcursion(mkdate(02, 03, 3019), 1, "Destruction of Isengard", "Isengard",     null)
+                mkexcursion(null,                  3, "Battle of Hornburg",      "Helm's Deep",  new BigDecimal(350)),
+                mkexcursion(mkdate(25, 10, 3018), -1, "Council of Elrond",       "Rivendell",    new BigDecimal(150)),
+                mkexcursion(mkdate(15, 03, 3019),  1, null,                      "Minas Tirith", new BigDecimal(700)),
+                mkexcursion(mkdate(15, 03, 3019),  1, "",                        "Minas Tirith", new BigDecimal(750)),
+                mkexcursion(mkdate(27, 03, 3019),  2, "The Siege of Erebor",     null,           new BigDecimal(600)),
+                mkexcursion(mkdate(27, 03, 3019),  2, "The Siege of Erebor",     "",             new BigDecimal(600)),
+                mkexcursion(mkdate(02, 03, 3019),  1, "Destruction of Isengard", "Isengard",     null)
         );
         
         for(int ix = 0; ix < invalidExcursions.size(); ++ix) {
             try {
+                em.getTransaction().begin();
                 dao.addExcursion(invalidExcursions.get(ix));
+                em.getTransaction().commit();
             } catch (NullPointerException | IllegalArgumentException ex) {
                 // OK
+                em.getTransaction().rollback();
                 continue;
             }
             
-            String message = String.format("An exception should have been thrown for index %d", ix);
-            logger.error(message);
-            Assert.fail(message);
+            Assert.fail(String.format("An exception should have been thrown for index %d [%s]", ix, invalidExcursions.get(ix)));
         }
     }
     
@@ -132,6 +144,19 @@ public class JPAExcursionDAOTest extends AbstractTest {
         }
     }
     
+    @Test(expected = NullPointerException.class)
+    public void testGetExcursionsByNullDestination() {
+        dao.getExcursionsByDestination(null);
+    }
+    
+    @Test
+    public void testGetExcursionByDestinationEmpty() {
+        List<Excursion> expected = new ArrayList<>();
+        List<Excursion> actual   = dao.getExcursionsByDestination("Edoras");
+        
+        Assert.assertEquals(expected, actual);
+    }
+    
     @Test
     public void testGetExcursionsByDestination() {
         insertTestExcursions();
@@ -150,11 +175,59 @@ public class JPAExcursionDAOTest extends AbstractTest {
         }
     }
     
+    @Test 
+    public void testGetAllExcursionsEmpty() {
+        Assert.assertEquals(new ArrayList<Excursion>(), dao.getAllExcursions());
+    }
+    
     @Test
     public void testGetAllExcursions() {
         insertTestExcursions();
         
-        Assert.assertEquals(excursions.size(), dao.getAllExcursions().size());
+        Set<Excursion> expected = new HashSet(excursions);
+        Set<Excursion> actual   = new HashSet(dao.getAllExcursions());
+        
+        Assert.assertEquals(expected, actual);
+    }
+    
+    @Test(expected = NullPointerException.class)
+    public void testUpdateExcursionNull() {
+        try {
+            em.getTransaction().begin();
+            dao.updateExcursion(null);
+            em.getTransaction().commit();
+        } catch (Exception ex) {
+            em.getTransaction().rollback();
+            throw ex;
+        }
+    }
+    
+    @Test
+    public void testUpdateExcursionInvalid() {
+        insertTestExcursions();
+        
+        Assert.assertTrue("Checking excursions count", excursions.size() >= 6);
+        
+        excursions.get(0).setDescription(null);
+        excursions.get(1).setDestination(null);
+        excursions.get(2).setDuration(-1);
+        excursions.get(3).setExcursionDate(null);
+        excursions.get(4).setPrice(null);
+        excursions.get(5).setPrice(new BigDecimal(-200));
+        
+        for(int ix = 0; ix < excursions.size(); ++ix) {
+            try {
+                em.getTransaction().begin();
+                dao.updateExcursion(excursions.get(ix));
+                em.getTransaction().commit();
+            } catch (NullPointerException | IllegalArgumentException ex) {
+                // OK
+                em.getTransaction().rollback();
+                continue;
+            }
+            
+            Assert.fail(String.format("An exception should have been thrown for index %d  [%s]", ix, excursions.get(ix)));
+        }
     }
     
     @Test
@@ -163,12 +236,17 @@ public class JPAExcursionDAOTest extends AbstractTest {
         
         List<Excursion> original = filter(new DestEquals("Mordor"), dao.getAllExcursions());
         
-        em.getTransaction().begin();
-        for(Excursion excursion : original) {
-            excursion.setDuration(20);
-            dao.updateExcursion(excursion);
+        try {
+            em.getTransaction().begin();
+            for(Excursion excursion : original) {
+                excursion.setDuration(20);
+                dao.updateExcursion(excursion);
+            }
+            em.getTransaction().commit();
+        } catch (Exception ex) {
+            em.getTransaction().rollback();
+            throw ex;
         }
-        em.getTransaction().commit();
         
         List<Excursion> updated = filter(new DestEquals("Mordor"), dao.getAllExcursions());
         
@@ -177,14 +255,31 @@ public class JPAExcursionDAOTest extends AbstractTest {
         }
     }
     
+    @Test(expected = NullPointerException.class)
+    public void testDeleteExcursionNull() {
+        try {
+            em.getTransaction().begin();
+            dao.deleteExcursion(null);
+            em.getTransaction().commit();
+        } catch (Exception ex) {
+            em.getTransaction().rollback();
+            throw ex;
+        }
+    }
+    
     @Test
     public void testDeleteExcursion() {
         insertTestExcursions();
         Excursion excursion = excursions.get(0);
         
-        em.getTransaction().begin();
-        dao.deleteExcursion(excursion);
-        em.getTransaction().commit();
+        try {
+            em.getTransaction().begin();
+            dao.deleteExcursion(excursion);
+            em.getTransaction().commit();
+        } catch (Exception ex) {
+            em.getTransaction().rollback();
+            throw ex;
+        }
        
         Assert.assertFalse(dao.getAllExcursions().contains(excursion));
     }
@@ -194,9 +289,14 @@ public class JPAExcursionDAOTest extends AbstractTest {
         insertTestExcursions();
         Excursion excursion = excursions.get(1);
         
-        em.getTransaction().begin();
-        dao.deleteExcursionById(excursion.getId());
-        em.getTransaction().commit();
+        try {
+            em.getTransaction().begin();
+            dao.deleteExcursionById(excursion.getId());
+            em.getTransaction().commit();
+        } catch (Exception ex) {
+            em.getTransaction().rollback();
+            throw ex;
+        }
        
         Assert.assertFalse(dao.getAllExcursions().contains(excursion));
     }
