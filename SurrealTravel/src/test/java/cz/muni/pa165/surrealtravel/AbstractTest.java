@@ -21,6 +21,8 @@ import org.junit.runner.RunWith;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.test.context.ContextConfiguration;
 import org.springframework.test.context.junit4.SpringJUnit4ClassRunner;
+import org.springframework.test.context.transaction.TransactionConfiguration;
+import org.springframework.transaction.annotation.Transactional;
 
 /**
  * This class creates the in-memory database for testing.
@@ -28,6 +30,8 @@ import org.springframework.test.context.junit4.SpringJUnit4ClassRunner;
  */
 @RunWith(SpringJUnit4ClassRunner.class)
 @ContextConfiguration(locations = {"classpath:testContext.xml"})
+@TransactionConfiguration(defaultRollback = true)
+@Transactional
 public abstract class AbstractTest { 
     
     @Autowired
@@ -60,7 +64,7 @@ public abstract class AbstractTest {
         em.createQuery("DELETE FROM Excursion").executeUpdate();
         em.createQuery("DELETE FROM Customer").executeUpdate();
         em.getTransaction().commit();
-        
+  
         em.close();
         logger.debug("[TearDown] finished");
     }
