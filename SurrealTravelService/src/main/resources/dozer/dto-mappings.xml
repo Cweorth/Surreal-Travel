@@ -9,4 +9,9 @@
         <class-b>cz.muni.pa165.surrealtravel.dto.TripDTO</class-b>
     </mapping>
     
+    <mapping>
+        <class-a>cz.muni.pa165.surrealtravel.entity.Customer</class-a>
+        <class-b>cz.muni.pa165.surrealtravel.dto.CustomerDTO</class-b>
+    </mapping>
+    
 </mappings>
