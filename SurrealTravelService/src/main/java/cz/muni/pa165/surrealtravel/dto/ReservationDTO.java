@@ -18,9 +18,9 @@ import java.util.List;
  */
 public class ReservationDTO {
     private long id=0;
-    private Customer customer;
-    private Trip trip;
-    private List<Excursion> excursions;
+    private CustomerDTO customer;
+    private TripDTO trip;
+    private List<ExcursionDTO> excursions;
     
     public ReservationDTO() {
         excursions = new ArrayList<>();
@@ -36,36 +36,36 @@ public class ReservationDTO {
         this.id = id;
     }
     
-    public Customer getCustomer(){
+    public CustomerDTO getCustomer(){
         return customer;
     }
     
-    public void setCustomer(Customer customer){
+    public void setCustomer(CustomerDTO customer){
         this.customer= customer;
     }
 
-    public Trip getTrip() {
+    public TripDTO getTrip() {
         return trip;
     }
 
-    public List<Excursion> getExcursions() {
+    public List<ExcursionDTO> getExcursions() {
         return excursions;
     }
 
-    public void setTrip(Trip trip) {
+    public void setTrip(TripDTO trip) {
         this.trip = trip;
     }
 
-    public void setExcursions(List<Excursion> excursions) {
+    public void setExcursions(List<ExcursionDTO> excursions) {
         this.excursions = excursions;
     }
     
-    public void addExcursion(Excursion excursion){
+    public void addExcursion(ExcursionDTO excursion){
         if(excursion==null)throw new NullPointerException("nejede");
         this.excursions.add(excursion);
     }
     
-    public void removeExcursion(Excursion excursion){
+    public void removeExcursion(ExcursionDTO excursion){
         this.excursions.remove(excursion);
     }
     
@@ -74,7 +74,7 @@ public class ReservationDTO {
         //List<Excursion> excursio=this.getExcursions();
         //if(excursions.isEmpty()){return base;}
         BigDecimal dc=new BigDecimal(0);
-        for(Excursion ext:getExcursions()){
+        for(ExcursionDTO ext:getExcursions()){
           dc= dc.add(ext.getPrice());
         }
         dc=dc.add(base);
