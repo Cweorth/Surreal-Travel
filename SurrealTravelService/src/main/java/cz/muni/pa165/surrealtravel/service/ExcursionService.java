@@ -7,7 +7,7 @@ import cz.muni.pa165.surrealtravel.dao.ExcursionDAO;
 import cz.muni.pa165.surrealtravel.dto.ExcursionDTO;
 import cz.muni.pa165.surrealtravel.entity.Excursion;
 import java.util.ArrayList;
-import javax.transaction.Transactional;
+import org.springframework.transaction.annotation.Transactional;
 import org.dozer.DozerBeanMapper;
 import org.springframework.beans.factory.annotation.Autowired;
 
