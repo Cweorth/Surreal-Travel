@@ -1,6 +1,5 @@
 package cz.muni.pa165.surrealtravel.dto;
 
-import cz.muni.pa165.surrealtravel.entity.Excursion;
 import java.io.Serializable;
 import java.math.BigDecimal;
 import java.util.ArrayList;
@@ -8,6 +7,10 @@ import java.util.Date;
 import java.util.List;
 import java.util.Objects;
 
+/**
+ * The Trip Data Transfer Object
+ * @author Roman Lacko [396157]
+ */
 public class TripDTO implements Serializable {
 
     //--[  Private  ]-----------------------------------------------------------
@@ -24,7 +27,7 @@ public class TripDTO implements Serializable {
 
     private BigDecimal basePrice;
     
-    private List<Excursion> excursions;
+    private List<ExcursionDTO> excursions;
     
     //--[  Constructors  ]------------------------------------------------------
     
@@ -38,7 +41,7 @@ public class TripDTO implements Serializable {
      * Adds an excursion to the trip.
      * @param  excursion     The excursion to add.
      */
-    public void addExcursion(Excursion excursion) {
+    public void addExcursion(ExcursionDTO excursion) {
         excursions.add(excursion);
     }
     
@@ -46,7 +49,7 @@ public class TripDTO implements Serializable {
      * Removes an excursion from the trip.
      * @param  excursion     The excursion to remove.
      */
-    public void removeExcursion(Excursion excursion) {
+    public void removeExcursion(ExcursionDTO excursion) {
         excursions.remove(excursion);
     }
     
@@ -57,7 +60,7 @@ public class TripDTO implements Serializable {
     public BigDecimal getFullPrice() {
         BigDecimal price = basePrice;
         
-        for(Excursion e : excursions) {
+        for(ExcursionDTO e : excursions) {
             price = price.add(e.getPrice());
         }
         
@@ -114,11 +117,11 @@ public class TripDTO implements Serializable {
         this.basePrice = basePrice;
     }    
 
-    public List<Excursion> getExcursions() {
+    public List<ExcursionDTO> getExcursions() {
         return excursions;
     }
     
-    public void setExcursions(List<Excursion> excursions) {
+    public void setExcursions(List<ExcursionDTO> excursions) {
         this.excursions = excursions;
     }    
     
