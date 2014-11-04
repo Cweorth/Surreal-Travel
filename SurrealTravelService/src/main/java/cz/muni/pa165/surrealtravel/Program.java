@@ -1,11 +1,11 @@
 package cz.muni.pa165.surrealtravel;
 
-import cz.muni.pa165.surrealtravel.dto.TripDTO;
-import cz.muni.pa165.surrealtravel.entity.Trip;
-import java.math.BigDecimal;
 import org.dozer.DozerBeanMapper;
 import org.springframework.context.ApplicationContext;
 import org.springframework.context.support.ClassPathXmlApplicationContext;
+import cz.muni.pa165.surrealtravel.dao.CustomerDAO;
+import cz.muni.pa165.surrealtravel.service.CustomerService;
+import org.junit.Assert;
 
 public class Program {
 
@@ -13,21 +13,11 @@ public class Program {
     
     public void run() {
         ApplicationContext context = new ClassPathXmlApplicationContext("applicationContext.xml");
+        CustomerDAO     dao = context.getBean("customerDao",     CustomerDAO.class);
+        CustomerService svc = context.getBean("customerService", CustomerService.class);
         
-        mapper = context.getBean("mapper", DozerBeanMapper.class);
-        for(String file : mapper.getMappingFiles()) {
-            System.out.println(file);
-        }
-        
-        Trip classa = new Trip();
-        classa.setBasePrice(new BigDecimal(500L));
-        
-        TripDTO classb = mapper.map(classa, TripDTO.class);
-        Trip    classc = mapper.map(classb, Trip.class);
-        
-        System.out.println(classb.getBasePrice());
-        System.out.println(classc.getBasePrice());
-       
+        Assert.assertNotNull(dao);
+        Assert.assertNotNull(svc);
     }
     
     public static void main(String[] args) {
