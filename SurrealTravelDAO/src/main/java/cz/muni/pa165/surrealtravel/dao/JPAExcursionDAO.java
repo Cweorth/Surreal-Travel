@@ -1,7 +1,3 @@
-/*
- * To change this template, choose Tools | Templates
- * and open the template in the editor.
- */
 package cz.muni.pa165.surrealtravel.dao;
 
 import cz.muni.pa165.surrealtravel.entity.Excursion;
@@ -9,18 +5,21 @@ import java.math.BigDecimal;
 import java.util.List;
 import java.util.Objects;
 import javax.persistence.EntityManager;
+import javax.persistence.PersistenceContext;
+import org.springframework.stereotype.Repository;
 
 /**
  * Implementation of DAO for Excursion entity.
  * @author Petr Dvořák [359819]
  */
+@Repository(value = "excursionDao")
 public class JPAExcursionDAO implements ExcursionDAO {
     
+    @PersistenceContext
     private EntityManager entityManager;
 
-    public JPAExcursionDAO(EntityManager em) {
-        Objects.requireNonNull(em);
-        this.entityManager = em;
+    public EntityManager getEntityManager() {
+        return entityManager;
     }
     
     public void setEntityManager(EntityManager em) {
@@ -92,8 +91,6 @@ public class JPAExcursionDAO implements ExcursionDAO {
         entityManager.createQuery("DELETE FROM Excursion e WHERE e.id = :id")
              .setParameter("id", id)
              .executeUpdate();
-        
-        
         
     }
 }

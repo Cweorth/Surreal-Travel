@@ -8,9 +8,8 @@ import java.math.BigDecimal;
 import java.util.Calendar;
 import java.util.Date;
 import java.util.GregorianCalendar;
-import java.util.Objects;
 import javax.persistence.EntityManager;
-import javax.persistence.EntityManagerFactory;
+import javax.persistence.PersistenceContext;
 import org.apache.log4j.Logger;
 import org.apache.log4j.LogManager;
 import org.junit.After;
@@ -18,7 +17,6 @@ import org.junit.Before;
 import org.junit.Rule;
 import org.junit.rules.TestName;
 import org.junit.runner.RunWith;
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.test.context.ContextConfiguration;
 import org.springframework.test.context.junit4.SpringJUnit4ClassRunner;
 
@@ -30,10 +28,10 @@ import org.springframework.test.context.junit4.SpringJUnit4ClassRunner;
 @ContextConfiguration(locations = {"classpath:testContext.xml"})
 public abstract class AbstractTest { 
     
-    @Autowired
-    protected EntityManagerFactory entityManagerFactory;
-    protected EntityManager        em;
-    protected static final Logger  logger = LogManager.getLogger("TestLogger");
+    @PersistenceContext
+    protected EntityManager         em;
+    
+    protected static final Logger   logger = LogManager.getLogger("TestLogger");
     
     @Rule
     public final TestName             testName   = new TestName();
@@ -46,23 +44,11 @@ public abstract class AbstractTest {
     public void setUp() {
         logger.info(String.format("==[(  %s  )]==============================================", testName.getMethodName()));
         logger.debug("[Setup] Creating entity manager for the test");
-        
-        em = entityManagerFactory.createEntityManager();
     }
     
     @After
     public void tearDown() {
-        logger.debug("[TearDown] removing all entries");
-        
-        em.getTransaction().begin();
-        em.createQuery("DELETE FROM Reservation").executeUpdate();
-        em.createQuery("DELETE FROM Trip").executeUpdate();
-        em.createQuery("DELETE FROM Excursion").executeUpdate();
-        em.createQuery("DELETE FROM Customer").executeUpdate();
-        em.getTransaction().commit();
-  
-        em.close();
-        logger.debug("[TearDown] finished");
+        logger.debug("[TearDown] test finished");
     }
     
     /**
@@ -151,15 +137,17 @@ public abstract class AbstractTest {
     }
     
     //<editor-fold desc="[  Getters | Setters  ]" defaultstate="collapsed">
-    
+
+    /*
     public void setEntityManagerFactory(EntityManagerFactory emf) {
-        this.entityManagerFactory = Objects.requireNonNull(emf);
+        this.emf = Objects.requireNonNull(emf);
     }
     
     public EntityManagerFactory getEntityManagerFactory() {
-        return entityManagerFactory;
+        return emf;
     }
-    
+    */
+
     //</editor-fold>
     
 }

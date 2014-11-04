@@ -12,6 +12,8 @@ import static org.junit.Assert.assertEquals;
 import static org.junit.Assert.assertFalse;
 import static org.junit.Assert.assertTrue;
 import org.junit.Test;
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.transaction.annotation.Transactional;
 
 /**
  * Test for JPAReservationDAO class.
@@ -19,26 +21,24 @@ import org.junit.Test;
  */
 public class JPAReservationDAOTest extends AbstractTest {
     
+    @Autowired
     private ReservationDAO dao;
-
-    @Override
-    public void setUp() {
-        super.setUp();
-        dao = new JPAReservationDAO(em);
-    }
     
     @Test(expected = NullPointerException.class)
+    @Transactional
     public void testNullExcursion() {
         Reservation reservation = new Reservation();
         reservation.addExcursion(null);
     }
     
     @Test(expected = NullPointerException.class)
+    @Transactional
     public void testAddNullReservation() {
         dao.addReservation(null);
     }
     
     @Test(expected = NullPointerException.class)
+    @Transactional
     public void testAddReservationCustomerNull() {
         Trip trip = mktrip(mkdate(1, 11, 2014), mkdate(8, 11, 2014), "Iraq", 500, new BigDecimal(99));
         Reservation reservation = mkreservation(null, trip);
@@ -47,6 +47,7 @@ public class JPAReservationDAOTest extends AbstractTest {
     }
     
     @Test(expected = NullPointerException.class)
+    @Transactional
     public void testAddReservationTripNull() {
         Customer customer = mkcustomer("Some dude", "not here");
         Reservation reservation = mkreservation(customer, null);
@@ -55,32 +56,28 @@ public class JPAReservationDAOTest extends AbstractTest {
     }
     
     @Test
+    @Transactional
     public void testAddReservation() {
         Customer customer = mkcustomer("Some dude", "not here");
         Trip trip = mktrip(mkdate(1, 11, 2014), mkdate(8, 11, 2014), "Iraq", 500, new BigDecimal(99));
         Reservation reservation = mkreservation(customer, trip);
-        em.getTransaction().begin();
         dao.addReservation(reservation);
-        em.getTransaction().commit();
         
         assertTrue(reservation.getId() > 0);
 
-        em.getTransaction().begin();
         Reservation retrieved = em.find(Reservation.class, reservation.getId());
-        em.getTransaction().commit();
         
         assertEquals(reservation, retrieved);
     }
     
     @Test
+    @Transactional
     public void testGetReservationById() {
         Customer customer = mkcustomer("Some dude", "not here");
         Trip trip = mktrip(mkdate(1, 11, 2014), mkdate(8, 11, 2014), "Iraq", 500, new BigDecimal(99));
         Reservation reservation = mkreservation(customer, trip);
         
-        em.getTransaction().begin();
         dao.addReservation(reservation);
-        em.getTransaction().commit();
         
         long id = reservation.getId();
         Reservation retrieved = dao.getReservationById(id);
@@ -89,34 +86,34 @@ public class JPAReservationDAOTest extends AbstractTest {
     }
     
     @Test
+    @Transactional
     public void testGetAllReservationsEmptyTable() {
-        List<Reservation> expected = new ArrayList<>();
-        em.getTransaction().begin();
+        List<Reservation> expected  = new ArrayList<>();
         List<Reservation> retrieved = dao.getAllReservations();
-        em.getTransaction().commit();
         
         assertEquals(expected, retrieved);
         assertTrue(expected.isEmpty() && retrieved.isEmpty());
     }
     
     @Test
+    @Transactional
     public void testGetAllReservations() {
         List<Reservation> expected = prepareReservationBatch();
         storeReservations(expected);
         
-        em.getTransaction().begin();
         List<Reservation> retrieved = dao.getAllReservations();
-        em.getTransaction().commit();
         
         assertDeepEquals(expected, retrieved);
     }
     
     @Test(expected = NullPointerException.class)
+    @Transactional
     public void testGetAllReservationsByCustomerNull() {
         dao.getAllReservationsByCustomer(null);
     }
     
     @Test
+    @Transactional
     public void testGetAllReservationsByCustomer() {
         List<Reservation> res = prepareReservationBatch();
         Customer chosenCustomer = res.get(0).getCustomer();
@@ -124,39 +121,38 @@ public class JPAReservationDAOTest extends AbstractTest {
         
         storeReservations(res);
 
-        em.getTransaction().begin();
         List<Reservation> retrieved = dao.getAllReservationsByCustomer(chosenCustomer);
-        em.getTransaction().commit();
         
         assertDeepEquals(expected, retrieved);
     }
     
     @Test(expected = NullPointerException.class)
+    @Transactional
     public void testGetAllReservationsByExcursionNull() {
         dao.getAllReservationsByExcursion(null);
     }
     
     @Test
+    @Transactional
     public void testGetAllReservationsByExcursion() {
         List<Reservation> res = prepareReservationBatch();
         storeReservations(res);
         Excursion chosenExcursion = res.get(0).getTrip().getExcursions().get(0); // every trip has at least 1 excursion, therefore this is a valid selection
         
         List<Reservation> expected = getReservationsForExcursion(res, chosenExcursion);
-
-        em.getTransaction().begin();
         List<Reservation> retrieved = dao.getAllReservationsByExcursion(chosenExcursion);
-        em.getTransaction().commit();
 
         assertDeepEquals(expected, retrieved);
     }
     
     @Test(expected = NullPointerException.class)
+    @Transactional
     public void testUpdateReservationNull() {
         dao.updateReservation(null);
     }
     
     @Test(expected = NullPointerException.class)
+    @Transactional
     public void testUpdateReservationCustomerNull() {
         Trip trip = mktrip(mkdate(1, 11, 2014), mkdate(8, 11, 2014), "Iraq", 500, new BigDecimal(99));
         Reservation reservation = mkreservation(null, trip);
@@ -165,6 +161,7 @@ public class JPAReservationDAOTest extends AbstractTest {
     }
     
     @Test(expected = NullPointerException.class)
+    @Transactional
     public void testUpdateReservationTripNull() {
         Customer customer = mkcustomer("Some dude", "not here");
         Reservation reservation = mkreservation(customer, null);
@@ -173,6 +170,7 @@ public class JPAReservationDAOTest extends AbstractTest {
     }
     
     @Test
+    @Transactional
     public void testUpdateReservationRemoveExcursions() {
         List<Reservation> res = prepareReservationBatch();
         storeReservations(res);
@@ -183,68 +181,61 @@ public class JPAReservationDAOTest extends AbstractTest {
         
         chosenReservation.setExcursions(null);
         
-        em.getTransaction().begin();
         chosenReservation = dao.updateReservation(chosenReservation);
-        em.getTransaction().commit();
-        
-        em.getTransaction().begin();
+
         Reservation retrieved = dao.getReservationById(chosenReservation.getId());
-        em.getTransaction().commit();
         
         assertEquals(retrieved, chosenReservation);
     }
     
     @Test
+    @Transactional
     public void testUpdateReservation() {
         Customer customer = mkcustomer("Some dude", "not here");
         Trip trip = mktrip(mkdate(1, 11, 2014), mkdate(8, 11, 2014), "Iraq", 500, new BigDecimal(99));
         Reservation reservation = mkreservation(customer, trip);
         Excursion excursion = mkexcursion(mkdate(8, 11, 2014), 4, "description of excursion", "someplace", new BigDecimal(99));
         
-        em.getTransaction().begin();
         dao.addReservation(reservation);
-        em.getTransaction().commit();
         
         // we need to detach managed object or the update method below is redundant
         em.detach(reservation);
         
         reservation.addExcursion(excursion);
         
-        em.getTransaction().begin();
         reservation = dao.updateReservation(reservation);
-        em.getTransaction().commit();
 
-        em.getTransaction().begin();
         Reservation retrieved = em.find(Reservation.class, reservation.getId());
-        em.getTransaction().commit();
 
         assertEquals(retrieved, reservation);
     }
     
     @Test(expected = NullPointerException.class)
+    @Transactional
     public void testDeleteReservationNull() {
         dao.deleteReservation(null);
     }
     
     @Test
+    @Transactional
     public void testDeleteReservation() {
         List<Reservation> res = prepareReservationBatch();
         storeReservations(res);
         Reservation chosenReservation = res.get(0);
         
-        em.getTransaction().begin();
         dao.deleteReservation(chosenReservation);
-        em.getTransaction().commit();
         
         assertFalse(dao.getAllReservations().contains(chosenReservation));
     }
     
     @Test(expected = NullPointerException.class)
+    @Transactional
     public void testGetFullPriceByCustomerNull() {
         dao.getFullPriceByCustomer(null);
     }
     
     @Test
+    @Transactional
     public void testGetFullPriceByCustomer() {
         Customer customer = mkcustomer("Some dude", "not here");
         Trip trip1 = mktrip(mkdate(1, 11, 2014), mkdate(8, 11, 2014), "Iraq", 500, new BigDecimal(100));
@@ -261,36 +252,30 @@ public class JPAReservationDAOTest extends AbstractTest {
         BigDecimal expected = sumReservation(reservation1);
         expected = expected.add(sumReservation(reservation2));
 
-        em.getTransaction().begin();
         dao.addReservation(reservation1);
         dao.addReservation(reservation2);
-        em.getTransaction().commit();
         
-        em.getTransaction().begin();
         BigDecimal retrieved = dao.getFullPriceByCustomer(customer);
-        em.getTransaction().commit();
 
         assertEquals(expected, retrieved);
     }
     
     @Test(expected = NullPointerException.class)
+    @Transactional
     public void testRemoveExcursionFromAllReservationsNull() {
         dao.removeExcursionFromAllReservations(null);
     }
     
     @Test
+    @Transactional
     public void testRemoveExcursionFromAllReservations() {
         List<Reservation> res = prepareReservationBatch();
         storeReservations(res);
         Excursion chosenExcursion = res.get(0).getExcursions().get(0);
         
-        em.getTransaction().begin();
         dao.removeExcursionFromAllReservations(chosenExcursion);
-        em.getTransaction().commit();
         
-        em.getTransaction().begin();
         List<Reservation> allReservations = dao.getAllReservations();
-        em.getTransaction().commit();
         
         for(Reservation r : allReservations)
             assertFalse(r.getExcursions().contains(chosenExcursion));
@@ -364,10 +349,8 @@ public class JPAReservationDAOTest extends AbstractTest {
      * @param res 
      */
     private void storeReservations(List<Reservation> res) {
-        em.getTransaction().begin();
         for(Reservation r : res)
             dao.addReservation(r);
-        em.getTransaction().commit();
     }
     
     /**

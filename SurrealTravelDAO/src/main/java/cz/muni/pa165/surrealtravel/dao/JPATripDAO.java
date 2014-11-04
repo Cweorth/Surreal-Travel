@@ -8,13 +8,17 @@ import java.util.Date;
 import java.util.List;
 import java.util.Objects;
 import javax.persistence.EntityManager;
+import javax.persistence.PersistenceContext;
+import org.springframework.stereotype.Repository;
 
 /**
  * The JPA implementation of the {@link TripDAO} class.
  * @author Roman Lacko [396157]
  */
+@Repository(value = "tripDao")
 public class JPATripDAO implements TripDAO {
 
+    @PersistenceContext
     private EntityManager entityManager;
     
     //--[  Private methods  ]---------------------------------------------------
@@ -53,14 +57,7 @@ public class JPATripDAO implements TripDAO {
             }
         }
     }
-    
-    //--[  Constructors  ]------------------------------------------------------
-    
-    public JPATripDAO(EntityManager em) {
-        Objects.requireNonNull(em);
-        this.entityManager = em;
-    }
-   
+      
     //--[  Methods  ]-----------------------------------------------------------
     
     //<editor-fold desc="[  Getters | Setters  ]" defaultstate="collapsed">

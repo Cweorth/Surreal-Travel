@@ -2,20 +2,19 @@ package cz.muni.pa165.surrealtravel.dao;
 
 import cz.muni.pa165.surrealtravel.entity.Customer;
 import java.util.List;
-import java.util.Objects;
 import javax.persistence.EntityManager;
+import javax.persistence.PersistenceContext;
+import org.springframework.stereotype.Repository;
 
 /**
  * Implementation of DAO for Customer entity.
  * @author Jan Klimeš [374259]
  */
+@Repository(value = "customerDao")
 public class JPACustomerDAO implements CustomerDAO {
     
+    @PersistenceContext
     private EntityManager em;
-    
-    public JPACustomerDAO(EntityManager em) {
-        this.em = Objects.requireNonNull(em, "EntityManager cannot be null.");
-    }
 
     public EntityManager getEntityManager() {
         return em;
@@ -25,7 +24,6 @@ public class JPACustomerDAO implements CustomerDAO {
         this.em = em;
     }
 
-    
     @Override
     public void addCustomer(Customer customer) {
         

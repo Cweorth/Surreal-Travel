@@ -1,8 +1,3 @@
-/*
- * To change this license header, choose License Headers in Project Properties.
- * To change this template file, choose Tools | Templates
- * and open the template in the editor.
- */
 package cz.muni.pa165.surrealtravel.dao;
 
 import cz.muni.pa165.surrealtravel.entity.Customer;
@@ -12,26 +7,22 @@ import cz.muni.pa165.surrealtravel.entity.Reservation;
 import java.math.BigDecimal;
 import java.util.List;
 import javax.persistence.EntityManager;
+import javax.persistence.PersistenceContext;
+import org.springframework.stereotype.Repository;
 
 
 /**
  * Implementacion of DAO for Reservation entity
  * @author Tomáš Kácel [359965]
  */
+@Repository(value = "reservationDao")
 public class JPAReservationDAO implements ReservationDAO {
     
-    
+    @PersistenceContext
     private EntityManager entityManager;
-    
-    //private BigDecimal price;
-    
-    
-    public JPAReservationDAO(){
-        //emf = Persistence.createEntityManagerFactory("Surreal-Travel");
-    }
 
-    public JPAReservationDAO(EntityManager em) {
-         entityManager= em;
+    public void setEntityManager(EntityManager entityManager) {
+        this.entityManager = entityManager;
     }
     
     public EntityManager getEntityManager() {
@@ -45,14 +36,10 @@ public class JPAReservationDAO implements ReservationDAO {
         if(reservation.getCustomer() == null) throw new NullPointerException("customer in reservation is null.");
         if(reservation.getCustomer().getClass() != Customer.class ) throw new IllegalArgumentException("customer is not customer is empty string.");
         if(reservation.getTrip()==null) throw new NullPointerException("trip in reservatio doesnt exist.");
-        //if(reservation.getExcursions()==null) throw new NullPointerException("no list of excursion");
-        
         
         entityManager.persist(reservation.getTrip());
         entityManager.persist(reservation.getCustomer());
         entityManager.persist(reservation);
-        
-        
         
     }
     
@@ -61,11 +48,10 @@ public class JPAReservationDAO implements ReservationDAO {
         
         if(id < 0) throw new IllegalArgumentException("problem in id- Id < 0");
         
-        
         Reservation result = entityManager.find(Reservation.class, id);
         
         return result;
-        }
+    }
     
     @Override
     public List<Reservation> getAllReservations() {
@@ -80,11 +66,10 @@ public class JPAReservationDAO implements ReservationDAO {
         
         List<Reservation> reserves = entityManager.createQuery("SELECT r FROM Reservation r JOIN FETCH r.customer WHERE r.customer.id= :d", Reservation.class).setParameter("d", customer.getId()).getResultList();
 	
-        return reserves;
-       
-        
+        return reserves;    
         
     }
+    
     @Override
     public List<Reservation> getAllReservationsByExcursion(Excursion excursion) {
         
@@ -102,21 +87,16 @@ public class JPAReservationDAO implements ReservationDAO {
         if(reservation.getId() < 0) throw new IllegalArgumentException("reservation id must be positiv number.");
         if(reservation.getCustomer() == null) throw new NullPointerException("customer in reservation is null.");
         if(reservation.getCustomer().getClass() != Customer.class ) throw new IllegalArgumentException("customer is not customer is empty string.");
-        //if(reservation.getExcursions()==null) throw new NullPointerException("no list of excursion");
-        if(reservation.getTrip()==null) throw new NullPointerException("No trip added to reservatio");
-        
+        if(reservation.getTrip()==null) throw new NullPointerException("No trip added to reservatio");        
         
         Reservation merge = entityManager.merge(reservation);
         return merge;
-        
         
     }
     
     @Override
     public void deleteReservation(Reservation reservation) {
         if(reservation == null) throw new NullPointerException("reservation doesnt exist.");
-        
-        
         
         entityManager.remove(reservation);
         
@@ -126,13 +106,11 @@ public class JPAReservationDAO implements ReservationDAO {
     public BigDecimal getFullPriceByCustomer(Customer customer) {
       if(customer==null) throw new NullPointerException("customer doesnt exist.");
       if(customer.getId() < 0) throw new IllegalArgumentException("customer id must be positiv number.");
-        
       
       List<Reservation> reserv =getAllReservationsByCustomer(customer);
       BigDecimal dec= new BigDecimal(0);
       for(Reservation r: reserv){
           dec= dec.add(r.getTotalPrice());
-          
       }
       
       return dec;  
@@ -146,11 +124,10 @@ public class JPAReservationDAO implements ReservationDAO {
         
         List<Reservation> res= getAllReservations();
         for(Reservation r: res){
-          if(r.getExcursions().contains(excursion)){
-              r.removeExcursion(excursion);
-              updateReservation(r);
-          }
-            
+            if(r.getExcursions().contains(excursion)){
+                r.removeExcursion(excursion);
+                updateReservation(r);
+            }
         }
     }
     
