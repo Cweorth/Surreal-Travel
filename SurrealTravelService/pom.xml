@@ -23,7 +23,7 @@
         
         <dependency>
             <groupId>${project.groupId}</groupId>
-            <artifactId>SurrealTravel</artifactId>
+            <artifactId>SurrealTravelDAO</artifactId>
             <version>${project.version}</version>
         </dependency>
         

@@ -26,7 +26,6 @@ public class JPAExcursionDAO implements ExcursionDAO {
         this.entityManager = em;
     }
 
-
     @Override
     public void addExcursion(Excursion excursion){
         if(excursion == null) throw new NullPointerException("Excursion object is null.");

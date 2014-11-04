@@ -11,11 +11,13 @@ import java.util.Objects;
 import javax.transaction.Transactional;
 import org.dozer.DozerBeanMapper;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.stereotype.Service;
 
 /**
  * The Trip service implementation
  * @author Roman Lacko [396157]
  */
+@Service
 public class TripService {
     
     //<editor-fold desc="Extensions" defaultstate="collapsed">

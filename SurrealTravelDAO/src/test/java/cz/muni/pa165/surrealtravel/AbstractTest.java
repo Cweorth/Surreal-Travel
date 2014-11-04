@@ -25,7 +25,7 @@ import org.springframework.test.context.junit4.SpringJUnit4ClassRunner;
  * @author Roman Lacko [396157]
  */
 @RunWith(SpringJUnit4ClassRunner.class)
-@ContextConfiguration(locations = {"classpath:testContext.xml"})
+@ContextConfiguration(locations = {"classpath:persistence/testContext.xml"})
 public abstract class AbstractTest { 
     
     @PersistenceContext
