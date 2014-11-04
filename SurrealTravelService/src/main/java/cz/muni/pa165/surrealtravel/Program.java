@@ -8,8 +8,6 @@ import cz.muni.pa165.surrealtravel.service.CustomerService;
 import org.junit.Assert;
 
 public class Program {
-
-    private DozerBeanMapper mapper;
     
     public void run() {
         ApplicationContext context = new ClassPathXmlApplicationContext("applicationContext.xml");
