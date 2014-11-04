@@ -1,6 +1,6 @@
 package cz.muni.pa165.surrealtravel.dao;
 
-import cz.muni.pa165.surrealtravel.AbstractTest;
+import cz.muni.pa165.surrealtravel.AbstractPersistenceTest;
 import cz.muni.pa165.surrealtravel.entity.Customer;
 import java.util.ArrayList;
 import java.util.List;
@@ -15,7 +15,7 @@ import org.springframework.transaction.annotation.Transactional;
  * @author Petr Dvořák [359819]
  */
 @Transactional
-public class JPACustomerDAOTest extends AbstractTest {
+public class JPACustomerDAOTest extends AbstractPersistenceTest {
 
     private List<Customer> customers;
     

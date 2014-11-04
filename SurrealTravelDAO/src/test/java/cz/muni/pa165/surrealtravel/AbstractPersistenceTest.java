@@ -26,7 +26,7 @@ import org.springframework.test.context.junit4.SpringJUnit4ClassRunner;
  */
 @RunWith(SpringJUnit4ClassRunner.class)
 @ContextConfiguration(locations = {"classpath:persistence/testContext.xml"})
-public abstract class AbstractTest { 
+public abstract class AbstractPersistenceTest { 
     
     @PersistenceContext
     protected EntityManager         em;
@@ -43,7 +43,7 @@ public abstract class AbstractTest {
     @Before
     public void setUp() {
         logger.info(String.format("==[(  %s  )]==============================================", testName.getMethodName()));
-        logger.debug("[Setup] Creating entity manager for the test");
+        logger.debug("[Setup] test started");
     }
     
     @After

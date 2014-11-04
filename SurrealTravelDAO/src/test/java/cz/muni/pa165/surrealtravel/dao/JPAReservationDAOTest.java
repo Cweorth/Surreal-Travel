@@ -1,6 +1,6 @@
 package cz.muni.pa165.surrealtravel.dao;
 
-import cz.muni.pa165.surrealtravel.AbstractTest;
+import cz.muni.pa165.surrealtravel.AbstractPersistenceTest;
 import cz.muni.pa165.surrealtravel.entity.Customer;
 import cz.muni.pa165.surrealtravel.entity.Excursion;
 import cz.muni.pa165.surrealtravel.entity.Reservation;
@@ -19,7 +19,7 @@ import org.springframework.transaction.annotation.Transactional;
  * Test for JPAReservationDAO class.
  * @author Jan Klimeš [374259]
  */
-public class JPAReservationDAOTest extends AbstractTest {
+public class JPAReservationDAOTest extends AbstractPersistenceTest {
     
     @Autowired
     private ReservationDAO dao;

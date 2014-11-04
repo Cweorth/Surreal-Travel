@@ -1,6 +1,6 @@
 package cz.muni.pa165.surrealtravel.dao;
 
-import cz.muni.pa165.surrealtravel.AbstractTest;
+import cz.muni.pa165.surrealtravel.AbstractPersistenceTest;
 import cz.muni.pa165.surrealtravel.entity.Excursion;
 import cz.muni.pa165.surrealtravel.entity.Trip;
 import java.math.BigDecimal;
@@ -21,7 +21,7 @@ import org.springframework.transaction.annotation.Transactional;
  * @author Tomáš Kácel [359965]
  */
 @Transactional
-public class JPATripDAOTest extends AbstractTest {
+public class JPATripDAOTest extends AbstractPersistenceTest {
 
     @Autowired
     private JPATripDAO dao;

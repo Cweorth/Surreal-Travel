@@ -1,6 +1,6 @@
 package cz.muni.pa165.surrealtravel.dao;
 
-import cz.muni.pa165.surrealtravel.AbstractTest;
+import cz.muni.pa165.surrealtravel.AbstractPersistenceTest;
 import cz.muni.pa165.surrealtravel.entity.Excursion;
 import java.math.BigDecimal;
 import java.util.ArrayList;
@@ -17,7 +17,7 @@ import org.springframework.transaction.annotation.Transactional;
  * Tests for the {@link JPAReservationDAO} class.
  * @author Roman Lacko [396157]
  */
-public class JPAExcursionDAOTest extends AbstractTest {
+public class JPAExcursionDAOTest extends AbstractPersistenceTest {
     
     @Autowired
     private ExcursionDAO    dao;
