@@ -32,7 +32,9 @@ public class CustomerService {
     @Transactional
     public void addCustomer(CustomerDTO customer) {
         Objects.requireNonNull(customer, "Customer data transfer object is null.");
-        customerDao.addCustomer(mapper.map(customer, Customer.class));
+        Customer entity = mapper.map(customer, Customer.class);
+        customerDao.addCustomer(entity);
+        customer.setId(entity.getId());
     }
     
     /**
