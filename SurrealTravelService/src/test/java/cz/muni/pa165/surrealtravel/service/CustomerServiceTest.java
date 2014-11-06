@@ -147,10 +147,12 @@ public class CustomerServiceTest extends AbstractServiceTest {
     @Test
     public void updateCustomer() {
       List<CustomerDTO> customers = makeCustomerDTO();
-        CustomerDTO c = customers.get(1);
-        CustomerDTO a= service.updateCustomer(c);
+        CustomerDTO c = customers.get(0);
+        //CustomerDTO a= service.updateCustomer(c);
         Customer entity=makeCustomer();
-        entity.setId(2L);
+        entity.setId(1L);
+        when(dao.updateCustomer(entity)).thenReturn(entity);
+        CustomerDTO a= service.updateCustomer(c);
         verify(dao, times(1)).updateCustomer(entity);
     }
 
