@@ -25,13 +25,11 @@ public class ExcursionService {
     
     /**
      * Create new excursion.
-     * @param excursion
+     * @param excursionDTO
      */
     @Transactional
     public void addExcursion(ExcursionDTO excursionDTO){
-        if (excursionDTO == null) {
-            throw new IllegalArgumentException("excursion can't be null");
-        }
+      Objects.requireNonNull(excursionDTO);
       Excursion excursion=mapper.map(excursionDTO, Excursion.class);
       excursionDAO.addExcursion(excursion);
       excursionDTO.setId(excursion.getId());
@@ -77,8 +75,7 @@ public class ExcursionService {
     
     /**
      * Update excursion entry for the given DTO.
-     * @param excursion
-     * @return 
+     * @param excursionDTO 
      */
     @Transactional
     public void updateExcursion(ExcursionDTO excursionDTO){
@@ -90,7 +87,7 @@ public class ExcursionService {
    
      /**
      * Delete excursion entry for the given DTO.
-     * @param customer 
+     * @param excursionDTO
      */
     @Transactional
     public void deleteExcursion(ExcursionDTO excursionDTO){

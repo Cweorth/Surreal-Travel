@@ -6,12 +6,17 @@ import cz.muni.pa165.surrealtravel.dto.CustomerDTO;
 import cz.muni.pa165.surrealtravel.dto.ExcursionDTO;
 import cz.muni.pa165.surrealtravel.dto.ReservationDTO;
 import cz.muni.pa165.surrealtravel.dto.TripDTO;
+import cz.muni.pa165.surrealtravel.entity.Customer;
+import cz.muni.pa165.surrealtravel.entity.Excursion;
 import cz.muni.pa165.surrealtravel.entity.Reservation;
 import java.math.BigDecimal;
+import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
 import org.junit.Assert;
 import org.junit.Test;
+import org.mockito.invocation.InvocationOnMock;
+import org.mockito.stubbing.Answer;
 import org.mockito.InjectMocks;
 import org.mockito.Mock;
 
@@ -19,10 +24,11 @@ import static org.junit.Assert.*;
 import static org.mockito.Mockito.*;
 
 /**
+ * Tests for {@link ReservationService} class.
  * @author Roman Lacko [396157]
  */
 public class ReservationServiceTest extends AbstractServiceTest {
-    
+       
     @Mock
     private ReservationDAO     dao;
     @InjectMocks
@@ -32,15 +38,47 @@ public class ReservationServiceTest extends AbstractServiceTest {
     private final List<ExcursionDTO>   excursions;
     private final List<TripDTO>        trips;
     private final List<ReservationDTO> reservations;
-        
+    
+    //<editor-fold defaultstate="collapsed" desc="[  Extensions  ]">
+    
+    private interface Function<T,U> {
+        U apply (T x);
+    }
+    
+    private <T,U> List<U> map(Function<T,U> f, List<T> s) {
+        List<U> r = new ArrayList<>(s.size());
+        for(T x : s) r.add(f.apply(x));
+        return r;
+    }
+    
+    private static final Function<Reservation, ReservationDTO> toDTO
+        = new Function<Reservation, ReservationDTO>() {
+            @Override public ReservationDTO apply(Reservation x) { return mapper.map(x, ReservationDTO.class); }
+        };
+    
+    private static final Function<ReservationDTO, Reservation> toEntity
+        = new Function<ReservationDTO, Reservation>() {
+            @Override public Reservation apply(ReservationDTO x) { return mapper.map(x, Reservation.class); }
+        };
+    
+    //</editor-fold>
+    
+    private Customer customerDTOToEntity(CustomerDTO customer) {
+        return mapper.map(customer, Customer.class);
+    }
+    
+    private Excursion excursionDTOToEntity(ExcursionDTO excursion) {
+        return mapper.map(excursion, Excursion.class);
+    }
+    
     public ReservationServiceTest() {
         super();
                
         //<editor-fold defaultstate="collapsed" desc="(  Data Initialization  )">
         
         customers = Arrays.asList(
-            mkcustomer("Frodo Baggins",   "Hobbiton, The Shire"),
-            mkcustomer("Suron The Great", "Barad-dûr, Mordor")
+            mkcustomer("Frodo Baggins",    "Hobbiton, The Shire"),
+            mkcustomer("Sauron The Great", "Barad-dûr, Mordor")
         );
         
         excursions = Arrays.asList(
@@ -75,33 +113,8 @@ public class ReservationServiceTest extends AbstractServiceTest {
         //</editor-fold>
         
     }
-    
-    //==================================================//
-    //  REMOVE THE FOLLOWING BULLCRAP BEFORE DEPLOYING  //
-    //==================================================//
-    @Test
-    public void sanityTest() {
-        assertNotNull("dao",     dao);
-        assertNotNull("service", service);
-        assertNotNull("mapper",  mapper);
-        
-        java.lang.reflect.Field field;
-        try {
-            field = service.getClass().getDeclaredField("mapper");
-        } catch (NoSuchFieldException | SecurityException ex) {
-            fail("Goddammit f*ck!");
-            return;
-        }
-        
-        field.setAccessible(true);
-        try {
-            assertNotNull("service.mapper", field.get(service));
-        } catch (IllegalArgumentException | IllegalAccessException ex) {
-            fail("A spinning black hole of Belzeebub");
-        }
-    }
-    
-    @Test(expected = IllegalArgumentException.class)
+       
+    @Test(expected = NullPointerException.class)
     public void createNullReservationTest() {
         service.addReservation(null);
     }
@@ -117,12 +130,121 @@ public class ReservationServiceTest extends AbstractServiceTest {
     }
     
     @Test
-    public void createReservations() {
+    public void createReservationsTest() {
+        doAnswer(new Answer() {
+            private int counter = 0;
+            
+            @Override 
+            public Object answer(InvocationOnMock invocation) throws Throwable {
+                Reservation arg = invocation.getArgumentAt(0, Reservation.class);
+                arg.setId(counter++);
+                return arg;
+            }
+        }).when(dao).addReservation(any(Reservation.class));
+        
+        long prevkey = Long.MIN_VALUE;
         for(ReservationDTO reservation : reservations) {
             service.addReservation(reservation);
+            assertTrue("Expected increasing order of keys", prevkey < reservation.getId());
+            prevkey = reservation.getId();
         }
         
         verify(dao, times(reservations.size())).addReservation(any(Reservation.class));
+    }
+
+    @Test
+    public void getReservationByIdTest() {
+        for(int ix = 0; ix < reservations.size(); ++ix) {
+            Reservation r = toEntity.apply(reservations.get(ix));
+            when(dao.getReservationById(ix)).thenReturn(r);
+            assertEquals(reservations.get(ix), service.getReservationById(ix));
+        }
+        
+        verify(dao, times(reservations.size())).getReservationById(any(Long.class));
+    }
+    
+    @Test(expected = NullPointerException.class)
+    public void getReservationsByCustomerNullTest() {
+        service.getAllReservationsByCustomer(null);
+    }
+    
+    @Test
+    public void getReservationsByCustomerTest() {
+        Customer customer0 = customerDTOToEntity(customers.get(0));
+        Customer customer1 = customerDTOToEntity(customers.get(1));
+        List<Reservation> r0 = Arrays.asList(toEntity.apply(reservations.get(0)));
+        List<Reservation> r1 = map(toEntity, reservations.subList(1, 2));
+        
+        when(dao.getAllReservationsByCustomer(customer0)).thenReturn(r0);
+        when(dao.getAllReservationsByCustomer(customer1)).thenReturn(r1);
+        
+        List<ReservationDTO> act0 = service.getAllReservationsByCustomer(customers.get(0));
+        List<ReservationDTO> act1 = service.getAllReservationsByCustomer(customers.get(1));
+        
+        assertEquals(Arrays.asList(reservations.get(0)),       act0);
+        assertEquals(              reservations.subList(1, 2), act1);
+        
+        verify(dao, times(2)).getAllReservationsByCustomer(any(Customer.class));
+    }
+    
+    @Test(expected = NullPointerException.class)
+    public void getReservationsByExcursionNullTest() {
+        service.getAllReservationsByExcursion(null);
+    }
+    
+    @Test
+    public void getReservationsByExcursionTest() {
+        Excursion excursion = excursionDTOToEntity(excursions.get(0));
+        List<Reservation> result = map(toEntity, reservations.subList(0, 1));
+        
+        when(dao.getAllReservationsByExcursion(excursion)).thenReturn(result);
+        
+        List<ReservationDTO> actual = service.getAllReservationsByExcursion(excursions.get(0));
+        assertEquals(              reservations.subList(0, 1), actual);
+        verify(dao, times(1)).getAllReservationsByExcursion(any(Excursion.class));
+    }
+
+    @Test(expected = NullPointerException.class)
+    public void updateReservationNullTest() {
+        service.updateReservation(null);
+    }
+    
+    @Test
+    public void updateReservationTest() {
+        service.updateReservation(reservations.get(0));
+        verify(dao, times(1)).updateReservation(any(Reservation.class));
+    }
+    
+    @Test(expected = NullPointerException.class)
+    public void deleteReservationNullTest() {
+        service.deleteReservation(null);
+    }
+    
+    @Test
+    public void deleteReservationTest() {
+        service.deleteReservation(reservations.get(0));
+        verify(dao, times(1)).deleteReservation(any(Reservation.class));
+    }
+    
+    @Test(expected = NullPointerException.class)
+    public void getFullPriceNullTest() {
+        service.getFullPriceByCustomer(null);
+    }
+    
+    @Test
+    public void getFullPriceTest() {
+        service.getFullPriceByCustomer(customers.get(0));
+        verify(dao, times(1)).getFullPriceByCustomer(any(Customer.class));
+    }
+    
+    @Test(expected = NullPointerException.class)
+    public void removeExcursionNullTest() {
+        service.removeExcursionFromAllReservations(null);
+    }
+    
+    @Test
+    public void removeExcursionTest() {
+        service.removeExcursionFromAllReservations(excursions.get(0));
     }
     
 }

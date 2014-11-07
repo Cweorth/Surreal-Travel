@@ -1,13 +1,5 @@
-/*
- * To change this license header, choose License Headers in Project Properties.
- * To change this template file, choose Tools | Templates
- * and open the template in the editor.
- */
 package cz.muni.pa165.surrealtravel.dto;
 
-import cz.muni.pa165.surrealtravel.entity.Customer;
-import cz.muni.pa165.surrealtravel.entity.Excursion;
-import cz.muni.pa165.surrealtravel.entity.Trip;
 import java.math.BigDecimal;
 import java.util.ArrayList;
 import java.util.List;
@@ -71,8 +63,6 @@ public class ReservationDTO {
     
     public BigDecimal getTotalPrice(){
         BigDecimal base= this.getTrip().getBasePrice();
-        //List<Excursion> excursio=this.getExcursions();
-        //if(excursions.isEmpty()){return base;}
         BigDecimal dc=new BigDecimal(0);
         for(ExcursionDTO ext:getExcursions()){
           dc= dc.add(ext.getPrice());

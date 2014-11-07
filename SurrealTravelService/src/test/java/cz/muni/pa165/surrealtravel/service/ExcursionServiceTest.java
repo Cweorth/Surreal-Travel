@@ -38,7 +38,7 @@ public class ExcursionServiceTest extends AbstractServiceTest {
         super();
     }
     
-    @Test(expected = IllegalArgumentException.class)
+    @Test(expected = NullPointerException.class)
     public void testAddExcursionNull() {
         service.addExcursion(null);
     }

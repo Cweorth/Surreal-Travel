@@ -1,8 +1,3 @@
-/*
- * To change this license header, choose License Headers in Project Properties.
- * To change this template file, choose Tools | Templates
- * and open the template in the editor.
- */
 package cz.muni.pa165.surrealtravel.service;
 
 import cz.muni.pa165.surrealtravel.dao.ReservationDAO;
@@ -15,6 +10,7 @@ import cz.muni.pa165.surrealtravel.entity.Reservation;
 import java.math.BigDecimal;
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Objects;
 import org.dozer.DozerBeanMapper;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
@@ -38,9 +34,6 @@ public class ReservationService {
    */
   @Transactional
   public void addReservation(ReservationDTO reservationDTO){
-      if (reservationDTO == null) {
-            throw new IllegalArgumentException("reservation can't be null");
-        }
       validateReservation(reservationDTO );
       Reservation reservation=mapper.map(reservationDTO, Reservation.class);
       reservationDAO.addReservation(reservation);
@@ -74,6 +67,7 @@ public class ReservationService {
    * @return 
    */
   public List<ReservationDTO> getAllReservationsByCustomer(CustomerDTO customerDTO){
+      Objects.requireNonNull(customerDTO);
       List<ReservationDTO> result = new ArrayList<>();
       //Reservation reservation=mapper.map(reservationDTO, Reservation.class);
       Customer customer=mapper.map(customerDTO, Customer.class);
@@ -89,6 +83,7 @@ public class ReservationService {
    * @return 
    */
   public List<ReservationDTO> getAllReservationsByExcursion(ExcursionDTO excursionDTO){
+      Objects.requireNonNull(excursionDTO);
       List<ReservationDTO> result = new ArrayList<>();
       Excursion excursion=mapper.map(excursionDTO, Excursion.class);
       List<Reservation> reservations = reservationDAO.getAllReservationsByExcursion(excursion);
@@ -104,9 +99,6 @@ public class ReservationService {
    */
   @Transactional
   public void updateReservation(ReservationDTO reservationDTO){
-      if (reservationDTO == null) {
-            throw new IllegalArgumentException("reservationDTO to update can't be null");
-        }
      validateReservation(reservationDTO);
      Reservation reservation=mapper.map(reservationDTO, Reservation.class);
      reservationDAO.updateReservation(reservation);
@@ -118,9 +110,7 @@ public class ReservationService {
    */
   @Transactional
   public void deleteReservation(ReservationDTO reservationDTO){
-      if (reservationDTO == null) {
-            throw new IllegalArgumentException("reservationDTO to update can't be null");
-        }
+      Objects.requireNonNull(reservationDTO);
       Reservation reservation=mapper.map(reservationDTO, Reservation.class);
       reservationDAO.deleteReservation(reservation);
   }
@@ -131,6 +121,7 @@ public class ReservationService {
    */
   @Transactional
   public BigDecimal getFullPriceByCustomer(CustomerDTO customerDTO){
+      Objects.requireNonNull(customerDTO);
       Customer customer=mapper.map(customerDTO, Customer.class);
       BigDecimal result= reservationDAO.getFullPriceByCustomer(customer);
       return result;
@@ -141,9 +132,7 @@ public class ReservationService {
    */
   @Transactional
   public void removeExcursionFromAllReservations(ExcursionDTO excursionDTO){
-      if (excursionDTO == null) {
-            throw new IllegalArgumentException("excursionDTO to update can't be null");
-        }
+      Objects.requireNonNull(excursionDTO);
       Excursion excursion=mapper.map(excursionDTO, Excursion.class);
       reservationDAO.removeExcursionFromAllReservations(excursion);
   }

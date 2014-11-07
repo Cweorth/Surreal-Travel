@@ -1,24 +1,13 @@
-/*
- * To change this license header, choose License Headers in Project Properties.
- * To change this template file, choose Tools | Templates
- * and open the template in the editor.
- */
 package cz.muni.pa165.surrealtravel.service;
 
 import cz.muni.pa165.surrealtravel.AbstractServiceTest;
 import cz.muni.pa165.surrealtravel.dao.CustomerDAO;
-import cz.muni.pa165.surrealtravel.dao.JPACustomerDAO;
 import cz.muni.pa165.surrealtravel.dto.CustomerDTO;
 import cz.muni.pa165.surrealtravel.entity.Customer;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
-import org.dozer.DozerBeanMapper;
-import org.junit.After;
-import org.junit.AfterClass;
 import org.junit.Assert;
-import org.junit.Before;
-import org.junit.BeforeClass;
 import org.junit.Test;
 import static org.junit.Assert.*;
 import org.junit.runner.RunWith;
@@ -29,7 +18,6 @@ import org.mockito.Mock;
 import static org.mockito.Mockito.times;
 import static org.mockito.Mockito.verify;
 import static org.mockito.Mockito.when;
-//import org.mockito.MockitoAnnotations.Mock;
 import org.mockito.runners.MockitoJUnitRunner;
 
 /**
@@ -54,7 +42,6 @@ public class CustomerServiceTest extends AbstractServiceTest {
     
     @Test
     public void testAddCustomer() {
-        //System.out.println("addCustomer");
         List<CustomerDTO> customers = makeCustomerDTO();
         for(CustomerDTO customer : customers) {
             try {
@@ -127,14 +114,11 @@ public class CustomerServiceTest extends AbstractServiceTest {
         } catch (NullPointerException ex) {
             // OK
         }
-        //List<CustomerDTO> customers = makeCustomerDTO();
-        //customerDTO = customers.get(0);
        
     }
     
     @Test
     public void deleteCustomer(){
-        //CustomerDTO customerDTO = null;
         
         List<CustomerDTO> customers = makeCustomerDTO();
         CustomerDTO c = customers.get(0);
@@ -148,7 +132,6 @@ public class CustomerServiceTest extends AbstractServiceTest {
     public void updateCustomer() {
       List<CustomerDTO> customers = makeCustomerDTO();
         CustomerDTO c = customers.get(0);
-        //CustomerDTO a= service.updateCustomer(c);
         Customer entity=makeCustomer();
         entity.setId(1L);
         when(dao.updateCustomer(entity)).thenReturn(entity);
