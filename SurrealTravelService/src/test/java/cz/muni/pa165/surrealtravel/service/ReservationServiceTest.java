@@ -245,6 +245,7 @@ public class ReservationServiceTest extends AbstractServiceTest {
     @Test
     public void removeExcursionTest() {
         service.removeExcursionFromAllReservations(excursions.get(0));
+        verify(dao, times(1)).removeExcursionFromAllReservations(any(Excursion.class));
     }
     
 }
