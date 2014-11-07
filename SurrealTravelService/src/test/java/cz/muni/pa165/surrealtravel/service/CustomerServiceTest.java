@@ -149,9 +149,6 @@ public class CustomerServiceTest extends AbstractServiceTest {
      verify(dao, times(1)).deleteCustomerById(id);
     }
 
-    /**
-     * Test of getCustomerById method, of class CustomerService.
-     */
     
 
     private List<CustomerDTO> makeCustomerDTO() {

@@ -5,7 +5,7 @@ import java.util.ArrayList;
 import java.util.List;
 
 /**
- *
+ * the DTO for reservation
  * @author Tomáš Kácel [359965]
  */
 public class ReservationDTO {
@@ -51,16 +51,25 @@ public class ReservationDTO {
     public void setExcursions(List<ExcursionDTO> excursions) {
         this.excursions = excursions;
     }
-    
+    /**
+     * add excursion to reservation
+     * @param excursion to add
+     */
     public void addExcursion(ExcursionDTO excursion){
         if(excursion==null)throw new NullPointerException("nejede");
         this.excursions.add(excursion);
     }
-    
+    /**
+     * remove excursion form reservation
+     * @param excursion to remove
+     */
     public void removeExcursion(ExcursionDTO excursion){
         this.excursions.remove(excursion);
     }
-    
+    /**
+     * method calculate total price for reservation
+     * @return totalprice
+     */
     public BigDecimal getTotalPrice(){
         BigDecimal base= this.getTrip().getBasePrice();
         BigDecimal dc=new BigDecimal(0);
