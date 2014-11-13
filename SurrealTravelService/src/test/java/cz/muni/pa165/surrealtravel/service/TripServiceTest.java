@@ -30,7 +30,7 @@ public class TripServiceTest extends AbstractServiceTest{
     @Mock
     private TripDAO     dao;
     @InjectMocks
-    private TripService service;
+    private DefaultTripService service;
     
     private List<TripDTO> trips;
     private List<ExcursionDTO> excursions;
