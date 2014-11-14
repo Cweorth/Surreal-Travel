@@ -32,7 +32,7 @@ public class ExcursionServiceTest extends AbstractServiceTest {
     private ExcursionDAO dao;
     
     @InjectMocks
-    private ExcursionService service;
+    private DefaultExcursionService service;
     
     public ExcursionServiceTest() {
         super();
