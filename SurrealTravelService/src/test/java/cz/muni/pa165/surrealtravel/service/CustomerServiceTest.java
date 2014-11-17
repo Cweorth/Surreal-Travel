@@ -29,7 +29,7 @@ public class CustomerServiceTest extends AbstractServiceTest {
     @Mock
     private CustomerDAO dao;
     @InjectMocks
-    private CustomerService service;
+    private DefaultCustomerService service;
     
     public CustomerServiceTest() {
         super();

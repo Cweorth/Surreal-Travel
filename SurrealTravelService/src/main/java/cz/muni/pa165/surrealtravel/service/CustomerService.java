@@ -1,111 +1,57 @@
 package cz.muni.pa165.surrealtravel.service;
 
-import cz.muni.pa165.surrealtravel.dao.CustomerDAO;
 import cz.muni.pa165.surrealtravel.dto.CustomerDTO;
-import cz.muni.pa165.surrealtravel.entity.Customer;
-import java.util.ArrayList;
 import java.util.List;
-import java.util.Objects;
-import org.dozer.DozerBeanMapper;
-import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.stereotype.Service;
-import org.springframework.transaction.annotation.Transactional;
 
 /**
- * Customer service class.
- * @author Jan Klimeš [374259]
+ * Customer service interface.
+ * @author Jan Klimeš
  */
-@Service
-@Transactional
-public class CustomerService {
+public interface CustomerService {
     
-    @Autowired
-    private CustomerDAO customerDao;
-
-    @Autowired
-    private DozerBeanMapper mapper;
-
     /**
      * Create new customer entry.
      * @param customer 
      */
-    @Transactional
-    public void addCustomer(CustomerDTO customer) {
-        Objects.requireNonNull(customer, "Customer data transfer object is null.");
-        Customer entity = mapper.map(customer, Customer.class);
-        customerDao.addCustomer(entity);
-        customer.setId(entity.getId());
-    }
+    public void addCustomer(CustomerDTO customer);
     
     /**
      * Get customer DTO by id.
      * @param id
      * @return 
      */
-    public CustomerDTO getCustomerById(long id) {
-        return mapper.map(customerDao.getCustomerById(id), CustomerDTO.class);
-    }
+    public CustomerDTO getCustomerById(long id);
     
     /**
      * Get list of customer DTOs with the given name.
      * @param name
      * @return 
      */
-    public List<CustomerDTO> getCustomerByName(String name) {
-        List<CustomerDTO> customersDTO = new ArrayList<>();
-        for(Customer c : customerDao.getCustomerByName(name))
-            customersDTO.add(mapper.map(c, CustomerDTO.class));
-        return customersDTO;
-    }
+    public List<CustomerDTO> getCustomerByName(String name);
     
     /**
      * Get list of all customer DTOs.
      * @return 
      */
-    public List<CustomerDTO> getAllCustomers() {
-        List<CustomerDTO> customersDTO = new ArrayList<>();
-        for(Customer c : customerDao.getAllCustomers())
-            customersDTO.add(mapper.map(c, CustomerDTO.class));
-        return customersDTO;
-    }
+    public List<CustomerDTO> getAllCustomers();
     
     /**
      * Update customer entry for the given DTO.
      * @param customer
      * @return 
      */
-    @Transactional
-    public CustomerDTO updateCustomer(CustomerDTO customer) {
-        Objects.requireNonNull(customer, "Customer data transfer object is null.");
-        Customer updated = customerDao.updateCustomer(mapper.map(customer, Customer.class));
-        return mapper.map(updated, CustomerDTO.class);
-    }
+    public CustomerDTO updateCustomer(CustomerDTO customer);
     
     /**
      * Delete customer entry for the given id.
      * @param customer 
      */
-    @Transactional
-    public void deleteCustomer(CustomerDTO customer) {
-        Objects.requireNonNull(customer, "Customer data transfer object is null.");
-        customerDao.deleteCustomer(mapper.map(customer, Customer.class));
-    }
+    public void deleteCustomer(CustomerDTO customer);
     
     /**
      * Delete customer entry for the given DTO.
      * @param id 
      */
-    @Transactional
-    public void deleteCustomerById(long id) {
-        customerDao.deleteCustomerById(id);
-    }
-
-    public void setCustomerDao(CustomerDAO customerDao) {
-        this.customerDao = customerDao;
-    }
-    
-    public void setMapper(DozerBeanMapper mapper) {
-        this.mapper = mapper;
-    }
+    public void deleteCustomerById(long id);
     
 }
