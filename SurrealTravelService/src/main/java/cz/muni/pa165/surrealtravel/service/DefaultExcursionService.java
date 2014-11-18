@@ -14,7 +14,7 @@ import org.springframework.stereotype.Service;
  * Excursion service implementation
  * @author Petr Dvořák [359819]
  */
-@Service
+@Service(value = "excursionService")
 public class DefaultExcursionService implements ExcursionService{
     
     @Autowired
