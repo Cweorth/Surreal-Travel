@@ -24,7 +24,7 @@ import static org.junit.Assert.*;
 import static org.mockito.Mockito.*;
 
 /**
- * Tests for {@link ReservationService} class.
+ * Tests for {@link DefaultReservationService} class.
  * @author Roman Lacko [396157]
  */
 public class ReservationServiceTest extends AbstractServiceTest {
@@ -32,7 +32,7 @@ public class ReservationServiceTest extends AbstractServiceTest {
     @Mock
     private ReservationDAO     dao;
     @InjectMocks
-    private ReservationService service;
+    private DefaultReservationService service;
     
     private final List<CustomerDTO>    customers;
     private final List<ExcursionDTO>   excursions;
