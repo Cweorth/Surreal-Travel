@@ -17,7 +17,7 @@ import org.springframework.stereotype.Service;
  * The Trip service implementation
  * @author Roman Lacko [396157]
  */
-@Service
+@Service(value = "tripService")
 public class DefaultTripService implements TripService {
     
     //<editor-fold desc="Extensions" defaultstate="collapsed">
