@@ -10,25 +10,28 @@
     <modules>
         <module>SurrealTravelDAO</module>
         <module>SurrealTravelService</module>
-    </modules>
+        <module>SurrealTravelWeb</module>
+  </modules>
     
     <properties>
         <project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
+        <org.slf4j.version>1.7.6</org.slf4j.version>
+        <org.springframework.version>4.1.1.RELEASE</org.springframework.version>
+        <org.apache.derby.version>10.11.1.1</org.apache.derby.version>
     </properties>
     
     <dependencies>
-        <dependency>
+<!--        <dependency>
             <groupId>org.springframework</groupId>
             <artifactId>spring-beans</artifactId>
-            <version>4.0.6.RELEASE</version>
-        </dependency>
+            <version>4.1.1.RELEASE</version>
+        </dependency>-->
         
         <dependency>
             <groupId>org.springframework</groupId>
             <artifactId>spring-context</artifactId>
-            <version>4.0.6.RELEASE</version>
+            <version>${org.springframework.version}</version>
         </dependency>
-        
     </dependencies>
     
 </project>
