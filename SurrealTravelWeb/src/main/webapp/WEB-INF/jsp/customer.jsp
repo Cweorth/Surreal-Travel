@@ -9,5 +9,6 @@
     </head>
     <body>
         <h1>Hello Customer!</h1>
+        <p>${message}</p>
     </body>
 </html>

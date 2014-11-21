@@ -6,39 +6,35 @@
     xmlns:jdbc="http://www.springframework.org/schema/jdbc"
     xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
     xsi:schemaLocation="
-        http://www.springframework.org/schema/context
-        http://www.springframework.org/schema/context/spring-context.xsd
-        http://www.springframework.org/schema/beans
-        http://www.springframework.org/schema/beans/spring-beans.xsd
-        http://www.springframework.org/schema/mvc
-        http://www.springframework.org/schema/mvc/spring-mvc.xsd
-        http://www.springframework.org/schema/tx
-        http://www.springframework.org/schema/tx/spring-tx.xsd
-        http://www.springframework.org/schema/jdbc
-        http://www.springframework.org/schema/jdbc/spring-jdbc.xsd">
+        http://www.springframework.org/schema/context http://www.springframework.org/schema/context/spring-context.xsd
+        http://www.springframework.org/schema/beans   http://www.springframework.org/schema/beans/spring-beans.xsd
+        http://www.springframework.org/schema/mvc     http://www.springframework.org/schema/mvc/spring-mvc.xsd
+        http://www.springframework.org/schema/tx      http://www.springframework.org/schema/tx/spring-tx.xsd
+        http://www.springframework.org/schema/jdbc    http://www.springframework.org/schema/jdbc/spring-jdbc.xsd">
 
-    <jdbc:embedded-database id="dataSource" type="DERBY"/>
-
-    <bean id="transactionManager" class="org.springframework.orm.jpa.JpaTransactionManager">
-        <property name="entityManagerFactory" ref="localContainerEntityManagerFactory"/>
-    </bean>
-    <tx:annotation-driven transaction-manager="transactionManager"/>
-    
-    <bean id="localContainerEntityManagerFactory" class="org.springframework.orm.jpa.LocalContainerEntityManagerFactoryBean">
-        <property name="dataSource" ref="dataSource"/>
-        <property name="persistenceUnitName" value="Surreal-Travel"/>
-        <property name="persistenceProviderClass" value="org.hibernate.jpa.HibernatePersistenceProvider"/>
-    </bean>
-    
     <context:annotation-config/>
     <context:component-scan base-package="cz.muni.pa165.surrealtravel.dao"/>
     <context:component-scan base-package="cz.muni.pa165.surrealtravel.service"/>
-    <context:component-scan base-package="cz.muni.pa165.surrealtravel.surrealtravelweb.controller"/>
+    <context:component-scan base-package="cz.muni.pa165.surrealtravel.controller"/>
     
     <mvc:annotation-driven />
     <mvc:view-controller path="/" view-name="index"/>
     <mvc:view-controller path="/about" view-name="about"/>
     <mvc:default-servlet-handler/>
+    
+    <jdbc:embedded-database id="dataSource" type="DERBY"/>
+    
+    <tx:annotation-driven/>
+
+    <bean id="transactionManager" class="org.springframework.orm.jpa.JpaTransactionManager">
+        <property name="entityManagerFactory" ref="localContainerEntityManagerFactory"/>
+    </bean>
+
+    <bean id="localContainerEntityManagerFactory" class="org.springframework.orm.jpa.LocalContainerEntityManagerFactoryBean">
+        <property name="dataSource" ref="dataSource"/>
+        <property name="persistenceUnitName" value="Surreal-Travel"/>
+        <property name="persistenceProviderClass" value="org.hibernate.jpa.HibernatePersistenceProvider"/>
+    </bean>
 
     <bean id="messageSource" class="org.springframework.context.support.ResourceBundleMessageSource">
         <property name="basenames">
