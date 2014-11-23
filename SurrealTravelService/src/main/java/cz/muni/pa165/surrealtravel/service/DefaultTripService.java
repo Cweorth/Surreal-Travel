@@ -8,10 +8,10 @@ import cz.muni.pa165.surrealtravel.entity.Trip;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Objects;
-import javax.transaction.Transactional;
 import org.dozer.DozerBeanMapper;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 
 /**
  * The Trip service implementation
