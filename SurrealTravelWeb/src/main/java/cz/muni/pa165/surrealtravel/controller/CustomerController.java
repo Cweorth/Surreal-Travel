@@ -1,6 +1,8 @@
 package cz.muni.pa165.surrealtravel.controller;
 
+import cz.muni.pa165.surrealtravel.dto.CustomerDTO;
 import cz.muni.pa165.surrealtravel.service.CustomerService;
+import javax.annotation.PostConstruct;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -15,7 +17,7 @@ import org.springframework.web.bind.annotation.RequestMethod;
  * @author Jan Klimeš [374259]
  */
 @Controller
-@RequestMapping("/customer")
+@RequestMapping("/customers")
 public class CustomerController {
     
     final static Logger logger = LoggerFactory.getLogger(CustomerController.class);
@@ -25,11 +27,30 @@ public class CustomerController {
 
     @Autowired
     private MessageSource messageSource;
-    
+       
     @RequestMapping(method = RequestMethod.GET)
-    public String test(ModelMap model) {
-        model.addAttribute("message", "Template attribute test for customer!");
-        return "customer";
+    public String listCustomers(ModelMap model) {
+        model.addAttribute("customers", customerService.getAllCustomers());
+        return "customer/list";
+    }
+    
+    @PostConstruct
+    public void init() {
+        CustomerDTO c1 = new CustomerDTO();
+        c1.setName("Honza");
+        c1.setAddress("Olomouc");
+        
+        CustomerDTO c2 = new CustomerDTO();
+        c2.setName("Eva");
+        c2.setAddress("Olomouc");
+        
+        CustomerDTO c3 = new CustomerDTO();
+        c3.setName("Jonáš");
+        c3.setAddress("Olomouc");
+        
+        customerService.addCustomer(c1);
+        customerService.addCustomer(c2);
+        customerService.addCustomer(c3);
     }
     
 }
