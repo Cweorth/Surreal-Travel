@@ -33,7 +33,7 @@ $(document).ready(function() {
         changeYear: true
     });
     
-//    $( ".datepicker" ).datepicker( $.datepicker.regional[ "cs" ] );
+    $( ".datepicker" ).datepicker( $.datepicker.regional[ "cs" ] );
     
     $( ".dialogDelete" ).dialog({
         height: 200,
@@ -47,13 +47,13 @@ $(document).ready(function() {
 });
 
 $(document).on("click", ".dialogDeletePrompt", function(e){ 
-    
+
     e.preventDefault();
 
     url = $(this).attr('href');
-    parent = $(this).parent('li');
-    element = $('#dialogDelete_' + parent.attr('id'));
-
+    id = $(this).parent('li').attr('id');
+    element = $('#dialogDelete_' + id);
+    
     var buttons = element.dialog("option", "buttons");
 
     if(jQuery.isEmptyObject(buttons)) {
