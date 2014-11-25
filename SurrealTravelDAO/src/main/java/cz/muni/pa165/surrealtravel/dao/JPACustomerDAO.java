@@ -91,7 +91,7 @@ public class JPACustomerDAO implements CustomerDAO {
         if(id < 0) throw new IllegalArgumentException("Customer id < 0");
         
         em.createNamedQuery("Customer.removeById")
-                .setParameter(0, id)
+                .setParameter("id", id)
                 .executeUpdate();
         
     }
