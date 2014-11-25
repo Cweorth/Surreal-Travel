@@ -31,7 +31,7 @@
                         <td class="number">${count.index + 1}</td>
                         <td><c:out value="${excursion.destination}"/></td>
                         <td><c:out value="${excursion.description}"/></td>
-                        <td><c:out value="${excursion.excursionDate}"/></td>
+                        <td><f:formatDate value="${excursion.excursionDate}" pattern="yyyy-MM-dd"/></td>
                         <td><c:out value="${excursion.duration}"/></td>
                         <td><c:out value="${excursion.price}"/></td>
                         <td>

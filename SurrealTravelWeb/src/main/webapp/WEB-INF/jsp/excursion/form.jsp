@@ -10,7 +10,7 @@
     </tr>
     <tr>
         <td class="left"><f:message key="excursion.destination"/>:</td>
-        <td><form:input path="destination" cssClass="text" /></td>
+        <td><form:input path="destination" cssClass="text" /><form:errors path="destination" cssClass="formError" /></td>
     </tr>
     <tr>
         <td class="left"><f:message key="excursion.excursionDate"/>:</td>
