@@ -14,7 +14,7 @@
     </tr>
     <tr>
         <td class="left"><f:message key="excursion.excursionDate"/>:</td>
-        <td><form:input path="excursionDate" cssClass="text datepicker" /></td>
+        <td><form:input path="excursionDate" cssClass="text datepicker" /><form:errors path="excursionDate" cssClass="formError" /></td></td>
     </tr>
     <tr>
         <td class="left"><f:message key="excursion.duration"/>:</td>
@@ -22,7 +22,7 @@
     </tr>
         <tr>
         <td class="left"><f:message key="excursion.price"/>:</td>
-        <td><form:input path="price" cssClass="text" /></td>
+        <td><form:input path="price" cssClass="text" /><form:errors path="price" cssClass="formError" /></td></td>
     </tr>
 </table>
 

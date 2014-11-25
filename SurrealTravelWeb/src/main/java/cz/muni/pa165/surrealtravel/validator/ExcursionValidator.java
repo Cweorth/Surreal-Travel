@@ -21,7 +21,7 @@ public class ExcursionValidator implements Validator {
         ValidationUtils.rejectIfEmptyOrWhitespace(errors, "destination", "excursion.validator.destination");
         ValidationUtils.rejectIfEmptyOrWhitespace(errors, "description", "excursion.validator.description");
         ValidationUtils.rejectIfEmptyOrWhitespace(errors, "price", "excursion.validator.price");
-        ValidationUtils.rejectIfEmptyOrWhitespace(errors, "date", "excursion.validator.date");
+        ValidationUtils.rejectIfEmptyOrWhitespace(errors, "excursionDate", "excursion.validator.date");
     }
 
 }

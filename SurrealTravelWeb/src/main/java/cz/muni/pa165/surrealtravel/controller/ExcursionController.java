@@ -48,7 +48,7 @@ public class ExcursionController {
     protected void initBinder(WebDataBinder binder) {
         binder.setValidator(new ExcursionValidator());
         
-        CustomDateEditor editor = new CustomDateEditor(new SimpleDateFormat("MM/DD/YYYY"), true);
+        CustomDateEditor editor = new CustomDateEditor(new SimpleDateFormat("MM/dd/yyyy"), true);
         binder.registerCustomEditor(Date.class, editor);
     }
     
@@ -101,10 +101,10 @@ public class ExcursionController {
         }
         
         // add to the view message about successfull result
-        redirectAttributes.addFlashAttribute("successMessage", messageSource.getMessage("excursion.message.new", new Object[]{excursionDTO.getDescription()}, locale));
+        redirectAttributes.addFlashAttribute("successMessage", messageSource.getMessage("excursion.message.add", new Object[]{excursionDTO.getDescription()}, locale));
         
         // get back to excursion list, add the notification par to the url
-        return "redirect:" + uriBuilder.path("/excursion").queryParam("notification", "success").build();
+        return "redirect:" + uriBuilder.path("/excursions").queryParam("notification", "success").build();
     }
     
     /**
