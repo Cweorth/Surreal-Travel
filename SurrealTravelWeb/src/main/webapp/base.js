@@ -25,6 +25,16 @@ $(document).ready(function() {
         }
     });
     
+    $( ".datepicker" ).datepicker({
+        showAnim: "fadeIn",
+        showOtherMonths: true,
+        selectOtherMonths: true,
+        changeMonth: true,
+        changeYear: true
+    });
+    
+//    $( ".datepicker" ).datepicker( $.datepicker.regional[ "cs" ] );
+    
     $( ".dialogDelete" ).dialog({
         height: 200,
         resizable: false,
