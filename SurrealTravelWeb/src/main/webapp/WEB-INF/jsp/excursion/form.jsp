@@ -5,17 +5,29 @@
 
 <table border="0" cellpadding="0" cellspacing="0" class="tableForm">
     <tr>
-        <td class="left">* <f:message key="excursion.name"/>:</td>
-        <td><form:input path="name" cssClass="text" /><form:errors path="name" cssClass="formError" /></td>
+        <td class="left">* <f:message key="excursion.description"/>:</td>
+        <td><form:input path="description" cssClass="text" /><form:errors path="description" cssClass="formError" /></td>
     </tr>
     <tr>
-        <td class="left"><f:message key="excursion.address"/>:</td>
-        <td><form:input path="address" cssClass="text" /></td>
+        <td class="left"><f:message key="excursion.destination"/>:</td>
+        <td><form:input path="destination" cssClass="text" /></td>
+    </tr>
+    <tr>
+        <td class="left"><f:message key="excursion.excursionDate"/>:</td>
+        <td><form:input path="excursionDate" cssClass="text" /></td>
+    </tr>
+    <tr>
+        <td class="left"><f:message key="excursion.duration"/>:</td>
+        <td><form:input path="duration" cssClass="text" /></td>
+    </tr>
+        <tr>
+        <td class="left"><f:message key="excursion.price"/>:</td>
+        <td><form:input path="price" cssClass="text" /></td>
     </tr>
 </table>
 
 <br>
 
 <button type="button" class="submit" onclick="javascript:this.form.submit();"><f:message key="basic.submit" /></button>
-<button type="button" class="cancel" onclick="javascript:redirect('${pageContext.request.contextPath}/customers');"><f:message key="basic.cancel" /></button>
+<button type="button" class="cancel" onclick="javascript:redirect('${pageContext.request.contextPath}/excursions');"><f:message key="basic.cancel" /></button>
 
