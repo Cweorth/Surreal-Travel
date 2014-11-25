@@ -19,7 +19,7 @@
             <td width="25">#</td>
             <td><f:message key="excursion.destination"/></td>
             <td><f:message key="excursion.description"/></td>
-            <td><f:message key="excursion.date"/></td>
+            <td><f:message key="excursion.excursionDate"/></td>
             <td><f:message key="excursion.duration"/></td>
             <td><f:message key="excursion.price"/></td>
             <td width="200" align="right"><f:message key="basic.action"/></td>

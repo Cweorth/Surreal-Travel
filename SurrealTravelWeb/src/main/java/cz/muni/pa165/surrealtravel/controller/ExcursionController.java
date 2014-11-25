@@ -4,12 +4,14 @@ import cz.muni.pa165.surrealtravel.dto.ExcursionDTO;
 import cz.muni.pa165.surrealtravel.service.ExcursionService;
 import cz.muni.pa165.surrealtravel.validator.ExcursionValidator;
 import java.math.BigDecimal;
+import java.text.SimpleDateFormat;
 import java.util.Date;
 import java.util.Locale;
 import javax.annotation.PostConstruct;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.beans.propertyeditors.CustomDateEditor;
 import org.springframework.context.MessageSource;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.ModelMap;
@@ -45,6 +47,9 @@ public class ExcursionController {
     @InitBinder
     protected void initBinder(WebDataBinder binder) {
         binder.setValidator(new ExcursionValidator());
+        
+        CustomDateEditor editor = new CustomDateEditor(new SimpleDateFormat("MM/DD/YYYY"), true);
+        binder.registerCustomEditor(Date.class, editor);
     }
     
     /**

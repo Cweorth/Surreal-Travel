@@ -14,7 +14,7 @@
     </tr>
     <tr>
         <td class="left"><f:message key="excursion.excursionDate"/>:</td>
-        <td><form:input path="excursionDate" cssClass="text" /></td>
+        <td><form:input path="excursionDate" cssClass="text datepicker" /></td>
     </tr>
     <tr>
         <td class="left"><f:message key="excursion.duration"/>:</td>
