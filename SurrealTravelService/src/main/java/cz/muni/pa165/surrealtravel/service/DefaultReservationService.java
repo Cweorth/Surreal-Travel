@@ -20,7 +20,7 @@ import org.springframework.transaction.annotation.Transactional;
  *
  * @author Tomáš Kácel [359965]
  */
-@Service
+@Service(value="reservationService")
 public class DefaultReservationService implements ReservationService {
   @Autowired
   private ReservationDAO reservationDAO;
