@@ -71,7 +71,9 @@ public class DefaultTripService implements TripService {
     @Override
     public void addTrip(TripDTO trip) {
         Objects.requireNonNull(trip, "trip");
-        tripDao.addTrip(toEntity.apply(trip));
+        Trip entity = toEntity.apply(trip);
+        tripDao.addTrip(entity);
+        trip.setId(entity.getId());
     }
     
     /**
@@ -110,6 +112,7 @@ public class DefaultTripService implements TripService {
      * Yields a list of all trips.
      * @return               A list of all trips.
      */
+    @Transactional(readOnly = true)
     @Override
     public List<TripDTO> getAllTrips() {
         return map(toDTO, tripDao.getAllTrips());

@@ -1,10 +1,8 @@
 package cz.muni.pa165.surrealtravel.service;
 
-import cz.muni.pa165.surrealtravel.dao.TripDAO;
 import cz.muni.pa165.surrealtravel.dto.ExcursionDTO;
 import cz.muni.pa165.surrealtravel.dto.TripDTO;
 import java.util.List;
-import javax.transaction.Transactional;
 
 /**
  * The Trip Service interface
