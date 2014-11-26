@@ -7,22 +7,23 @@ a:hover {color: #0b5777; text-decoration: underline;}
 a img {text-decoration: none;}
 
 h1 {font-size: 28px; padding: 10px 0 20px 0; margin: 0 0 20px 0; color: #426e91; border-bottom: 1px solid #dddddd;}
-h2 {font-size: 20px; padding: 0 0 20px 0; margin: 0; color: #666666; /*color: #5db51e;*/}
-h3 {font-size: 17px; padding: 20px 0 10px 0; margin: 0; color: #444444;}
+h2 {font-size: 20px; padding: 0 0 20px 0; margin: 0; color: #666666;}
 
 table.tableForm {width: 100%;}
 table.tableForm tr td {padding: 7px; border-bottom: 1px solid #eeeeee;}
 table.tableForm tr td.left {width: 200px; font-weight: bold; border-right: 1px solid #eeeeee;}
 table.tableForm tr td.left .note {font-weight: normal; color: #555555;}
 
+.showHidden {cursor: pointer;}
 table.tableEntry {width: 100%; border: 1px solid #cccccc; border-collapse: collapse;}
 table.tableEntry tr.head td {background: #999999; color: #ffffff; font-weight: bold; font-size: 14px; border-bottom: 0px; padding-top: 5px; padding-bottom: 5px;}
-table.tableEntry tr td {border-bottom: 1px dotted #888888; font-weight: normal;}
+table.tableEntry tr.hidden {display: none;}
+table.tableEntry tr.hidden td {background: #eeeeee; color: #222222; border-bottom: 1px dotted #888888;}
+table.tableEntry tr td {border-bottom: 1px dotted #888888; font-weight: normal; transition: 0.5s; -moz-transition: 0.5s; -webkit-transition: 0.5s; -o-transition: 0.5s;}
+table.tableEntry tr:not(.head):not(.hidden):hover td {background: #fffcd8; transition: 0.5s; -moz-transition: 0.5s; -webkit-transition: 0.5s; -o-transition: 0.5s;}
 table.tableEntry tr td.number {font-style: italic}
 table.tableEntry tr td.strong {font-weight: bold}
 table.tableEntry tr td.noresult {font-weight: bold; text-align: center;}
-table.tableEntry tr.odd td {background: #ffffff;}
-table.tableEntry tr.even td {background: #f5f5f5;}
 
 ul.rowMenu {margin: 0; padding: 0; list-style-type: none; float: right;}
 ul.rowMenu li {float: left; background: #ffffff; color: #000000; margin: 0 0 0 5px; padding: 0 4px 0 0; border: 1px solid #dddddd}
@@ -33,18 +34,8 @@ ul.rowMenu li span {float: left;}
 ul.rowMenu li span.text {padding-top: 1px; line-height: 1.5; font-weight: bold; font-size: 11px; cursor: default;}
 ul.rowMenu li a span.text {cursor: pointer;}
 
-form {
-    padding: 5px;
-    margin: 0;
-    width: auto;
-}
-
-form fieldset {
-    border: 1px solid #555555;
-    padding: 10px;
-    margin: 0;
-}
-
+form {padding: 5px; margin: 0; width: auto;}
+form fieldset {border: 1px solid #555555; padding: 10px; margin: 0;}
 form input.text {
     border: 1px solid #999999;
     width: 300px;
@@ -58,9 +49,7 @@ form input.text {
     -webkit-border-radius: 2px 8px 2px 8px;
     border-radius: 2px 8px 2px 8px;
 }
-
 form input.text:hover {border: 1px solid #666666;}
-
 form textarea {
     margin: 2px 0 2px 0;
     padding: 4px;
@@ -72,7 +61,6 @@ form textarea {
     -webkit-border-radius: 2px 8px 2px 8px;
     border-radius: 2px 8px 2px 8px;
 }
-
 form select {
     margin: 2px 0 2px 0;
     padding: 4px;
@@ -83,7 +71,6 @@ form select {
     -moz-border-radius: 2px 2px 2px 8px;
     border-radius: 2px 2px 2px 8px;
 }
-
 form select:hover {border: 1px solid #666666;}
 
 .formError {color: #ff0000; font-weight: bold; margin-left: 10px;}

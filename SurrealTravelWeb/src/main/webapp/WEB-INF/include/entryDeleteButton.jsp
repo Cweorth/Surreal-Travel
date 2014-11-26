@@ -2,7 +2,7 @@
 <%@ taglib prefix="f" uri="http://java.sun.com/jsp/jstl/fmt" %>
 
 <li class="ui-corner-all" id="${param.id}">
-    <a href="${param.url}" class="dialogDeletePrompt">
+    <a href="${param.url}" class="dialogDeletePrompt noPropagation">
         <span class="ui-icon ui-icon-trash"></span><span class="text"><f:message key="basic.delete" /></span>
     </a>
     <div class="dialogDelete" id="dialogDelete_${param.id}" title="<f:message key="basic.delete" />?">

@@ -87,6 +87,18 @@ $(document).on("click", ".dialogDeletePrompt", function(e){
 
 });
 
+$(document).on("click", ".showHidden", function(e) {
+    elem = $(this).closest("tr");
+    while(elem.next("tr").attr("class") === "hidden") {
+        elem = elem.next("tr");
+        elem.toggle();
+    }
+});
+
+$(document).on("click", ".noPropagation", function(e) {
+    e.stopPropagation();
+});
+
 (function($){
     $.getQuery = function( query ) {
         query = query.replace(/[\[]/,"\\\[").replace(/[\]]/,"\\\]");

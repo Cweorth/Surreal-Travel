@@ -2,7 +2,7 @@
 <%@ taglib prefix="f" uri="http://java.sun.com/jsp/jstl/fmt" %>
 
 <li class="ui-corner-all">
-    <a href="${param.url}">
+    <a href="${param.url}" class="noPropagation">
         <span class="ui-icon ui-icon-pencil"></span><span class="text"><f:message key="basic.edit" /></span>
     </a>
 </li>
