@@ -3,7 +3,6 @@ package cz.muni.pa165.surrealtravel.dao;
 import cz.muni.pa165.surrealtravel.entity.Customer;
 import cz.muni.pa165.surrealtravel.entity.Excursion;
 import cz.muni.pa165.surrealtravel.entity.Reservation;
-
 import java.math.BigDecimal;
 import java.util.List;
 import javax.persistence.EntityManager;
@@ -37,8 +36,6 @@ public class JPAReservationDAO implements ReservationDAO {
         if(reservation.getCustomer().getClass() != Customer.class ) throw new IllegalArgumentException("customer is not customer is empty string.");
         if(reservation.getTrip()==null) throw new NullPointerException("trip in reservatio doesnt exist.");
         
-        entityManager.persist(reservation.getTrip());
-        entityManager.persist(reservation.getCustomer());
         entityManager.persist(reservation);
         
     }

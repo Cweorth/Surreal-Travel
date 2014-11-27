@@ -54,6 +54,7 @@ public class DefaultReservationService implements ReservationService {
    * return list of al reservation 
    * @return list of reservation
    */
+  @Transactional(readOnly = true)
     @Override
   public List<ReservationDTO> getAllReservations(){
       List<ReservationDTO> result = new ArrayList<>();
