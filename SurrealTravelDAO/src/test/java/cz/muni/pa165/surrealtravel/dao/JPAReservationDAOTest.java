@@ -24,6 +24,9 @@ public class JPAReservationDAOTest extends AbstractPersistenceTest {
     @Autowired
     private ReservationDAO dao;
     
+    @Autowired
+    private ExcursionDAO excursionDao;
+    
     @Test(expected = NullPointerException.class)
     @Transactional
     public void testNullExcursion() {
@@ -349,8 +352,11 @@ public class JPAReservationDAOTest extends AbstractPersistenceTest {
      * @param res 
      */
     private void storeReservations(List<Reservation> res) {
-        for(Reservation r : res)
+        for(Reservation r : res) {
+            for(Excursion e : r.getExcursions())
+                excursionDao.addExcursion(e);
             dao.addReservation(r);
+        }
     }
     
     /**
