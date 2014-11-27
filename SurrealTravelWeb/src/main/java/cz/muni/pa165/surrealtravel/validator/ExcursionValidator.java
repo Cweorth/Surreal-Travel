@@ -26,15 +26,15 @@ public class ExcursionValidator implements Validator {
         ValidationUtils.rejectIfEmptyOrWhitespace(errors, "description", "excursion.validator.description");
         ValidationUtils.rejectIfEmptyOrWhitespace(errors, "excursionDate", "excursion.validator.date");
         
-        if (excursionDTO.getPrice() == null){ errors.rejectValue("price", "excursion.validator.price");return; } 
-        if (excursionDTO.getPrice().compareTo(BigDecimal.ZERO) <= 0) {
+        if (excursionDTO.getPrice() == null)
+            errors.rejectValue("price", "excursion.validator.price");
+        else if (excursionDTO.getPrice().compareTo(BigDecimal.ZERO) <= 0)
             errors.rejectValue("price", "excursion.validator.pricezero");
-        }
-        
-        if (excursionDTO.getDuration() == null){ errors.rejectValue("duration", "excursion.validator.duration");return; } 
-        if (excursionDTO.getDuration() < 0) {
+
+        if (excursionDTO.getDuration() == null)
+            errors.rejectValue("duration", "excursion.validator.duration");
+        else if (excursionDTO.getDuration() < 0)
             errors.rejectValue("duration", "excursion.validator.durationzero");
-        }
 
         
     }
