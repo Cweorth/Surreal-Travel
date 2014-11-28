@@ -87,6 +87,7 @@ public class ReservationController {
         model.addAttribute("reservationDTO", new ReservationDTO());
         model.addAttribute("customers", customerService.getAllCustomers());
         model.addAttribute("trips", tripService.getAllTrips());
+        model.addAttribute("excursions", excursionService.getAllExcursions());
         return "reservation/new";
     }
     

@@ -8,22 +8,23 @@
         <td class="left">* <f:message key="customer.name"/>:</td>
         <td class="left">* <f:message key="trip.destination"/>:</td>
         <td><tr>
-            <select name="custom" path="customer" >
+            <form:select  name="custom" path="customer" >
             <c:forEach items="${customers}" var="customer" varStatus="state">
                                                                                             
                                     <option value="${customer}">${customer.name}</option>                                    
                                        
-                        </c:forEach></tr></select></td>
+                        </c:forEach></form:select></tr></select></td>
     </tr>
     <td></td>
     <tr>
-        <select name="trp" path="trip">
+        <form:select name="trp" path="trip">
             <c:forEach items="${trips}" var="trip" varStatus="state">
                                                                                             
                                     <option value="${trips}">${trip.destination}</option>                                    
                                        
-                        </c:forEach></tr></select></td>
+                        </c:forEach></form:select></tr></select></td>
     </tr>
+    
     
 </table>
 
