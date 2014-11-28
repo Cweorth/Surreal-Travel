@@ -6,6 +6,7 @@ import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
 import java.util.Objects;
+import javax.persistence.CascadeType;
 import javax.persistence.Column;
 import javax.persistence.Entity;
 import javax.persistence.GeneratedValue;
@@ -48,7 +49,7 @@ public class Trip implements Serializable {
     @Column
     private BigDecimal basePrice;
     
-    @ManyToMany
+    @ManyToMany(cascade = CascadeType.ALL)
     private List<Excursion> excursions;
     
     //--[  Constructors  ]------------------------------------------------------
