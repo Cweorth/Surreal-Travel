@@ -173,23 +173,26 @@ public class ExcursionController {
      */
     @RequestMapping(value = "/delete/{id}", method = RequestMethod.GET)
     public String deleteExcursion(@PathVariable long id, RedirectAttributes redirectAttributes, UriComponentsBuilder uriBuilder, Locale locale) {
+        String resultStatus = "success";
         String description = null;
         
         try {
+            
             ExcursionDTO excursion = excursionService.getExcursionById(id);
             description = excursion.getDescription();
             excursionService.deleteExcursionById(id);
+            
+            // add to the view message about successfull result
+            redirectAttributes.addFlashAttribute("successMessage", messageSource.getMessage("excursion.message.delete", new Object[]{description}, locale));
+            
         } catch(Exception e) {
             logger.error(e.getMessage());
+            redirectAttributes.addFlashAttribute("failureMessage", messageSource.getMessage("excursion.message.delete.error", new Object[]{description}, locale));
+            resultStatus = "failure";
         }
         
-        if(description == null) return "excursion/list";
-        
-        // add to the view message about successfull result
-        redirectAttributes.addFlashAttribute("successMessage", messageSource.getMessage("excursion.message.delete", new Object[]{description}, locale));
-        
         // get back to excursion list, add the notification par to the url
-        return "redirect:" + uriBuilder.path("/excursions").queryParam("notification", "success").build();
+        return "redirect:" + uriBuilder.path("/excursions").queryParam("notification", resultStatus).build();
     }
  
     /**
