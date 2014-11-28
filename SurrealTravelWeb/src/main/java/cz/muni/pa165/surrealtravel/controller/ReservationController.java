@@ -214,20 +214,31 @@ public class ReservationController {
      */
     @RequestMapping(value = "/delete/{id}", method = RequestMethod.GET)
     public String deleteReservation(@PathVariable long id, RedirectAttributes redirectAttributes, UriComponentsBuilder uriBuilder, Locale locale) {
-        TripDTO name = null;
+        CustomerDTO name = null;
         
         try {
             ReservationDTO reservation = reservationService.getReservationById(id);
-            name = reservation.getTrip();
+            name = reservation.getCustomer();
             reservationService.deleteReservation(reservation);
         } catch(Exception e) {
             logger.error(e.getMessage());
         }
         
+        //bipas
+        ReservationDTO reservation=null;
+        List<ReservationDTO> l= reservationService.getAllReservations();
+        for(ReservationDTO reservat :l){
+            if(reservat.getId()==id && reservation==null){
+                reservation=reservat;
+            }
+        }
+        //end of bipas
+        name = reservation.getCustomer();
+        reservationService.deleteReservationById(id);
         if(name == null) return "reservation/list";
         
         // add to the view message about successfull result
-        redirectAttributes.addFlashAttribute("successMessage", messageSource.getMessage("customer.message.delete", new Object[]{name}, locale));
+        redirectAttributes.addFlashAttribute("successMessage", messageSource.getMessage("reservation.message.delete", new Object[]{name.getName()}, locale));
         
         // get back to customer list, add the notification par to the url
         return "redirect:" + uriBuilder.path("/reservations").queryParam("notification", "success").build();

@@ -90,5 +90,9 @@ public interface ReservationService {
      * @param reservationDTO the reservation with data to update
      */
     void updateReservation(ReservationDTO reservationDTO);
-    
+    /**
+     * 
+     * @param id 
+     */
+    void deleteReservationById(long id);
 }

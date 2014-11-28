@@ -172,4 +172,13 @@ public class DefaultReservationService implements ReservationService {
         this.mapper = mapper;
     }
     
+    /**
+     * Delete reservation entry for the given id.
+     * @param id 
+     */
+    @Transactional
+    public void deleteReservationById(long id){
+        reservationDAO.deleteReservationById(id);
+    }
+    
 }

@@ -69,4 +69,10 @@ public interface ReservationDAO {
      * @param excursion 
      */
     public void removeExcursionFromAllReservations(Excursion excursion);
+    
+    /**
+     *
+     * @param id
+     */
+    public void deleteReservationById(long id);
 }

@@ -128,4 +128,13 @@ public class JPAReservationDAO implements ReservationDAO {
         }
     }
     
+    @Override
+    public void deleteReservationById(long id){
+        if (id < 0) throw new IllegalArgumentException("The id has a negative value");
+        
+        entityManager.createQuery("DELETE FROM Reservation e WHERE e.id = :id")
+             .setParameter("id", id)
+             .executeUpdate();
+    }
+    
 }
