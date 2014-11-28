@@ -150,10 +150,10 @@ public class CustomerController {
         }
         
         // add to the view message about successfull result
-        redirectAttributes.addFlashAttribute("failureMessage", messageSource.getMessage("customer.message.edit", new Object[]{customerDTO.getName(), customerDTO.getId()}, locale));
+        redirectAttributes.addFlashAttribute("successMessage", messageSource.getMessage("customer.message.edit", new Object[]{customerDTO.getName(), customerDTO.getId()}, locale));
         
         // get back to customer list, add the notification par to the url
-        return "redirect:" + uriBuilder.path("/customers").queryParam("notification", "failure").build();
+        return "redirect:" + uriBuilder.path("/customers").queryParam("notification", "success").build();
     }
     
     /**
