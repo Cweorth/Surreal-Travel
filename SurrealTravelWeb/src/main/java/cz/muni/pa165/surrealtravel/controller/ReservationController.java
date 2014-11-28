@@ -154,7 +154,14 @@ public class ReservationController {
         } catch(Exception e) {
             logger.error(e.getMessage());
         }
-        
+        //bipas
+        List<ReservationDTO> l= reservationService.getAllReservations();
+        for(ReservationDTO reservat :l){
+            if(reservat.getId()==id && reservation==null){
+                reservation=reservat;
+            }
+        }
+        //end of bipas
         if(reservation == null) return "reservation/list";
         
         model.addAttribute("reservationDTO", reservation);
