@@ -81,23 +81,23 @@ public class CustomerController {
         
         // check the form validator output
         if(bindingResult.hasErrors()) {
-            String error = checkFormErrors(bindingResult, "customer/new");
-            if(error != null) return error;
+            logFormErrors(bindingResult);
+            return "customer/new";
         }
 
+        String resultStatus = "success";
+        
         // so far so good, try to save customer
         try {
             customerService.addCustomer(customerDTO);
         } catch(NullPointerException | IllegalArgumentException e) {
             logger.error(e.getMessage());
-            return "customer/new";
+            resultStatus = "failure";
         }
         
-        // add to the view message about successfull result
-        redirectAttributes.addFlashAttribute("successMessage", messageSource.getMessage("customer.message.new", new Object[]{customerDTO.getName()}, locale));
-        
-        // get back to customer list, add the notification par to the url
-        return "redirect:" + uriBuilder.path("/customers").queryParam("notification", "success").build();
+        String messageKey = "customer.message.new" + (resultStatus.equals("success") ? "" : ".error");
+        redirectAttributes.addFlashAttribute(resultStatus + "Message", messageSource.getMessage(messageKey, new Object[]{customerDTO.getName()}, locale));
+        return "redirect:" + uriBuilder.path("/customers").queryParam("notification", resultStatus).build();
     }
     
     /**
@@ -133,27 +133,29 @@ public class CustomerController {
      */
     @RequestMapping(value = "/edit", method = RequestMethod.POST)
     public String editCustomer(@Validated @ModelAttribute CustomerDTO customerDTO, BindingResult bindingResult, RedirectAttributes redirectAttributes, UriComponentsBuilder uriBuilder, Locale locale) {       
+        String resultStatus = "success";
         
         // check the form validator output
         if(bindingResult.hasErrors()) {
-            String error = checkFormErrors(bindingResult, "customer/edit");
-            if(error != null) return error;
-            
+            logFormErrors(bindingResult);
+            return "customer/edit";
         }
 
         // so far so good, try to save customer
         try {
             customerDTO = customerService.updateCustomer(customerDTO);
         } catch(NullPointerException | IllegalArgumentException e) {
-            logger.error(e.getMessage());
-            return "customer/edit";
+            logger.error(e.getMessage());            
+            resultStatus = "failure";
         }
         
+        String messageKey = "customer.message.edit" + (resultStatus.equals("success") ? "" : ".error");
+        
         // add to the view message about successfull result
-        redirectAttributes.addFlashAttribute("successMessage", messageSource.getMessage("customer.message.edit", new Object[]{customerDTO.getName(), customerDTO.getId()}, locale));
+        redirectAttributes.addFlashAttribute(resultStatus + "Message", messageSource.getMessage(messageKey, new Object[]{customerDTO.getName()}, locale));
         
         // get back to customer list, add the notification par to the url
-        return "redirect:" + uriBuilder.path("/customers").queryParam("notification", "success").build();
+        return "redirect:" + uriBuilder.path("/customers").queryParam("notification", resultStatus).build();
     }
     
     /**
@@ -170,20 +172,19 @@ public class CustomerController {
         String name = null;
         
         try {
-            
             CustomerDTO customer = customerService.getCustomerById(id);
             name = customer.getName();
             customerService.deleteCustomerById(id);
-            
-            // add to the view message about successfull result
-            redirectAttributes.addFlashAttribute("successMessage", messageSource.getMessage("customer.message.delete", new Object[]{name}, locale));
-            
         } catch(Exception e) {
             logger.error(e.getMessage());
-            redirectAttributes.addFlashAttribute("failureMessage", messageSource.getMessage("customer.message.delete.error", new Object[]{name}, locale));
             resultStatus = "failure";
         }
 
+        String messageKey = "customer.message.delete" + (resultStatus.equals("success") ? "" : ".error");
+        
+        // add to the view message about successfull result
+        redirectAttributes.addFlashAttribute(resultStatus + "Message", messageSource.getMessage(messageKey, new Object[]{name}, locale));
+        
         // get back to customer list, add the notification to the url
         return "redirect:" + uriBuilder.path("/customers").queryParam("notification", resultStatus).build();
     }
@@ -194,7 +195,7 @@ public class CustomerController {
      * @param viewName
      * @return 
      */
-    private String checkFormErrors(BindingResult bindingResult, String viewName) {
+    private void logFormErrors(BindingResult bindingResult) {
         logger.debug("Encountered following errors when validating form.");
         for(ObjectError ge : bindingResult.getGlobalErrors()) {
             logger.debug("ObjectError: {}", ge);
@@ -202,7 +203,6 @@ public class CustomerController {
         for(FieldError fe : bindingResult.getFieldErrors()) {
             logger.debug("FieldError: {}", fe);
         }
-        return viewName;
     }
     
     @PostConstruct

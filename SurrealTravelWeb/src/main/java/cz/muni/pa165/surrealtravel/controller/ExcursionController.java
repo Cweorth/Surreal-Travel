@@ -1,11 +1,15 @@
 package cz.muni.pa165.surrealtravel.controller;
 
 import cz.muni.pa165.surrealtravel.dto.ExcursionDTO;
+import cz.muni.pa165.surrealtravel.dto.TripDTO;
 import cz.muni.pa165.surrealtravel.service.ExcursionService;
+import cz.muni.pa165.surrealtravel.service.TripService;
 import cz.muni.pa165.surrealtravel.validator.ExcursionValidator;
 import java.math.BigDecimal;
 import java.text.SimpleDateFormat;
+import java.util.Calendar;
 import java.util.Date;
+import java.util.List;
 import java.util.Locale;
 import javax.annotation.PostConstruct;
 import org.slf4j.Logger;
@@ -41,6 +45,9 @@ public class ExcursionController {
     @Autowired
     private ExcursionService excursionService;
 
+    @Autowired
+    private TripService tripService;
+    
     @Autowired
     private MessageSource messageSource;
       
@@ -88,23 +95,22 @@ public class ExcursionController {
         
         // check the form validator output
         if(bindingResult.hasErrors()) {
-            String error = checkFormErrors(bindingResult, "excursion/new");
-            if(error != null) return error;
+            logFormErrors(bindingResult);
+            return "excursion/new";
         }
 
+        String resultStatus = "success";
         // so far so good, try to save excursion
         try {
             excursionService.addExcursion(excursionDTO);
         } catch(NullPointerException | IllegalArgumentException e) {
             logger.error(e.getMessage());
-            return "excursion/new";
+            resultStatus = "failure";
         }
         
-        // add to the view message about successfull result
-        redirectAttributes.addFlashAttribute("successMessage", messageSource.getMessage("excursion.message.add", new Object[]{excursionDTO.getDescription()}, locale));
-        
-        // get back to excursion list, add the notification par to the url
-        return "redirect:" + uriBuilder.path("/excursions").queryParam("notification", "success").build();
+        String messageKey = "excursion.message.add" + (resultStatus.equals("success") ? "" : ".error");
+        redirectAttributes.addFlashAttribute(resultStatus + "Message", messageSource.getMessage(messageKey, new Object[]{excursionDTO.getDestination()}, locale));
+        return "redirect:" + uriBuilder.path("/excursions").queryParam("notification", resultStatus).build();
     }
     
     /**
@@ -140,27 +146,29 @@ public class ExcursionController {
      */
     @RequestMapping(value = "/edit", method = RequestMethod.POST)
     public String editExcursion(@Validated @ModelAttribute ExcursionDTO excursionDTO, BindingResult bindingResult, RedirectAttributes redirectAttributes, UriComponentsBuilder uriBuilder, Locale locale) {       
+        String resultStatus = "success";
         
         // check the form validator output
         if(bindingResult.hasErrors()) {
-            String error = checkFormErrors(bindingResult, "excursion/edit");
-            if(error != null) return error;
-            
+            logFormErrors(bindingResult);
+            return "excursion/edit";
         }
-
+        
         // so far so good, try to save excursion
         try {
             excursionService.updateExcursion(excursionDTO);
         } catch(NullPointerException | IllegalArgumentException e) {
             logger.error(e.getMessage());
-            return "excursion/edit";
+            resultStatus = "failure";
         }
         
+        String messageKey = "excursion.message.edit" + (resultStatus.equals("success") ? "" : ".error");
+        
         // add to the view message about successfull result
-        redirectAttributes.addFlashAttribute("successMessage", messageSource.getMessage("excursion.message.edit", new Object[]{excursionDTO.getDescription()}, locale));
+        redirectAttributes.addFlashAttribute(resultStatus + "Message", messageSource.getMessage(messageKey, new Object[]{excursionDTO.getDestination()}, locale));
         
         // get back to excursion list, add the notification par to the url
-        return "redirect:" + uriBuilder.path("/excursions").queryParam("notification", "success").build();
+        return "redirect:" + uriBuilder.path("/excursions").queryParam("notification", resultStatus).build();
     }
     
     /**
@@ -174,23 +182,23 @@ public class ExcursionController {
     @RequestMapping(value = "/delete/{id}", method = RequestMethod.GET)
     public String deleteExcursion(@PathVariable long id, RedirectAttributes redirectAttributes, UriComponentsBuilder uriBuilder, Locale locale) {
         String resultStatus = "success";
-        String description = null;
+        String destination  = null;
         
         try {
-            
             ExcursionDTO excursion = excursionService.getExcursionById(id);
-            description = excursion.getDescription();
+            destination = excursion.getDestination();
+            
             excursionService.deleteExcursionById(id);
-            
-            // add to the view message about successfull result
-            redirectAttributes.addFlashAttribute("successMessage", messageSource.getMessage("excursion.message.delete", new Object[]{description}, locale));
-            
         } catch(Exception e) {
             logger.error(e.getMessage());
-            redirectAttributes.addFlashAttribute("failureMessage", messageSource.getMessage("excursion.message.delete.error", new Object[]{description}, locale));
             resultStatus = "failure";
         }
         
+        String messageKey = "excursion.message.delete" + (resultStatus.equals("success") ? "" : ".error");
+        
+        // add to the view message about successfull result
+        redirectAttributes.addFlashAttribute(resultStatus + "Message", messageSource.getMessage(messageKey, new Object[]{ destination }, locale));
+
         // get back to excursion list, add the notification par to the url
         return "redirect:" + uriBuilder.path("/excursions").queryParam("notification", resultStatus).build();
     }
@@ -201,7 +209,7 @@ public class ExcursionController {
      * @param viewName
      * @return 
      */
-    private String checkFormErrors(BindingResult bindingResult, String viewName) {
+    private void logFormErrors(BindingResult bindingResult) {
         logger.debug("Encountered following errors when validating form.");
         for(ObjectError ge : bindingResult.getGlobalErrors()) {
             logger.debug("ObjectError: {}", ge);
@@ -209,7 +217,6 @@ public class ExcursionController {
         for(FieldError fe : bindingResult.getFieldErrors()) {
             logger.debug("FieldError: {}", fe);
         }
-        return viewName;
     }
     
     @PostConstruct

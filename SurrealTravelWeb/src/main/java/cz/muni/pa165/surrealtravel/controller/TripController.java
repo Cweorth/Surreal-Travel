@@ -27,6 +27,7 @@ import org.springframework.stereotype.Controller;
 import org.springframework.ui.ModelMap;
 import org.springframework.validation.BindingResult;
 import org.springframework.validation.FieldError;
+import org.springframework.validation.ObjectError;
 import org.springframework.validation.annotation.Validated;
 import org.springframework.web.bind.WebDataBinder;
 import org.springframework.web.bind.annotation.InitBinder;
@@ -105,56 +106,23 @@ public class TripController {
         List<ExcursionDTO> excursions = excursionService.getAllExcursions();
         data.setAllExcursions(excursions);
         
-        if (bindingResult.hasErrors()) {
+        if (bindingResult.hasErrors() || !checkExcursions(data, excursions, bindingResult, locale)) {
+            logFormErrors(bindingResult);
             return "trip/new";
         }
         
+        String resultStatus = "success";
+        
         try {
-            TripDTO trip = data.unwrap();
-            
-            if ((data.getExcursionIDs() != null) && !data.getExcursionIDs().isEmpty()) {
-                Map<Long, ExcursionDTO> exmap = new HashMap<>(excursions.size());
-                for(ExcursionDTO ex : excursions) {
-                    exmap.put(ex.getId(), ex);
-                }
-                
-                for(long id : data.getExcursionIDs()) {
-                    ExcursionDTO ex = exmap.get(id);
-                    exmap.remove(id);
-                    
-                    Date     exStart  = ex.getExcursionDate();
-                    Calendar calendar = Calendar.getInstance();
-            
-                    calendar.setTime(exStart);
-                    calendar.add(Calendar.DATE, ex.getDuration());
-            
-                    Date exEnd = calendar.getTime();                    
-                    
-                    if (exEnd.after(trip.getDateTo()) || exStart.before(trip.getDateFrom())) {
-                        String message = messageSource.getMessage("trip.validator.invalidExcursion", 
-                                                       new Object[]{ ex.getDestination() }, locale);
-                        bindingResult.addError(new FieldError("data", "excursions", message));
-                        break;
-                    }
-                    
-                    trip.addExcursion(ex);
-                }
-            }
-            
-            if (bindingResult.hasErrors()) {
-                logger.error(bindingResult.getAllErrors().toString());
-                return "trip/new";
-            }
-                        
-            tripService.addTrip(trip);
+            tripService.addTrip(data.unwrap());
         } catch(NullPointerException | IllegalArgumentException e) {
             logger.error(e.getMessage());
-            redirectAttributes.addFlashAttribute("failureMessage", messageSource.getMessage("trip.message.new.error", new Object[]{ data.getDestination(), e.getMessage() }, locale));
-            return "redirect:" + uriBuilder.path("/trips").queryParam("notification", "failure").build();
+            resultStatus = "failure";
         }
-        
-        redirectAttributes.addFlashAttribute("successMessage", messageSource.getMessage("trip.message.add", new Object[]{data.getDestination()}, locale));
-        return "redirect:" + uriBuilder.path("/trips").queryParam("notification", "success").build();
+
+        String messageKey = "trip.message.add" + (resultStatus.equals("success") ? "" : ".error");
+        redirectAttributes.addFlashAttribute(resultStatus + "Message", messageSource.getMessage(messageKey, new Object[]{data.getDestination()}, locale));
+        return "redirect:" + uriBuilder.path("/trips").queryParam("notification", resultStatus).build();
     }
     
     /**
@@ -174,8 +142,6 @@ public class TripController {
             trip = tripService.getTripById(id);
         } catch(Exception e) {
             logger.error(e.getMessage());
-            redirectAttributes.addFlashAttribute("failureMessage", messageSource.getMessage("trip.message.edit.errorGet", new Object[]{ e.getMessage() }, locale));
-            return "redirect:" + uriBuilder.path("/trips").queryParam("notification", "failure").build();
         }
         
         if(trip == null) {
@@ -206,57 +172,23 @@ public class TripController {
         List<ExcursionDTO> excursions = excursionService.getAllExcursions();
         data.setAllExcursions(excursions);
         
-        if (bindingResult.hasErrors()) {
+        if (bindingResult.hasErrors() || !checkExcursions(data, excursions, bindingResult, locale)) {
+            logFormErrors(bindingResult);
             return "trip/edit";
         }
         
-        try {
-            TripDTO trip = data.unwrap();
-            trip.setExcursions(new ArrayList<ExcursionDTO>());
-            
-            if ((data.getExcursionIDs() != null) && !data.getExcursionIDs().isEmpty()) {
-                Map<Long, ExcursionDTO> exmap = new HashMap<>(excursions.size());
-                for(ExcursionDTO ex : excursions) {
-                    exmap.put(ex.getId(), ex);
-                }
-                
-                for(long id : data.getExcursionIDs()) {
-                    ExcursionDTO ex = exmap.get(id);
-                    exmap.remove(id);
-                    
-                    Date     exStart  = ex.getExcursionDate();
-                    Calendar calendar = Calendar.getInstance();
-            
-                    calendar.setTime(exStart);
-                    calendar.add(Calendar.DATE, ex.getDuration());
-            
-                    Date exEnd = calendar.getTime();                    
-                    
-                    if (exEnd.after(trip.getDateTo()) || exStart.before(trip.getDateFrom())) {
-                        String message = messageSource.getMessage("trip.validator.invalidExcursion", 
-                                                       new Object[]{ ex.getDestination() }, locale);
-                        bindingResult.addError(new FieldError("data", "excursions", message));
-                        break;
-                    }
-                    
-                    trip.addExcursion(ex);
-                }
-            }
-            
-            if (bindingResult.hasErrors()) {
-                logger.error(bindingResult.getAllErrors().toString());
-                return "trip/edit";
-            }
-                        
-            tripService.updateTrip(trip);
+        String resultStatus = "success";
+        
+        try {           
+            tripService.updateTrip(data.unwrap());
         } catch(NullPointerException | IllegalArgumentException e) {
             logger.error(e.getMessage());
-            redirectAttributes.addFlashAttribute("failureMessage", messageSource.getMessage("trip.message.edit.error", new Object[]{ data.getDestination(), e.getMessage() }, locale));
-            return "redirect:" + uriBuilder.path("/trips").queryParam("notification", "failure").build();
+            resultStatus = "failure";
         }
         
-        redirectAttributes.addFlashAttribute("successMessage", messageSource.getMessage("trip.message.edit", new Object[]{data.getDestination()}, locale));
-        return "redirect:" + uriBuilder.path("/trips").queryParam("notification", "success").build();
+        String messageKey = "trip.message.edit" + (resultStatus.equals("success") ? "" : ".error");
+        redirectAttributes.addFlashAttribute(resultStatus + "Message", messageSource.getMessage(messageKey, new Object[]{data.getDestination()}, locale));
+        return "redirect:" + uriBuilder.path("/trips").queryParam("notification", resultStatus).build();
     }    
     
     /**
@@ -269,7 +201,8 @@ public class TripController {
      */
     @RequestMapping(value = "/delete/{id}", method = RequestMethod.GET)
     public String deleteTrip(@PathVariable long id, RedirectAttributes redirectAttributes, UriComponentsBuilder uriBuilder, Locale locale) {
-        String destination = null;
+        String destination  = null;
+        String resultStatus = "success";
         
         try {
             TripDTO trip = tripService.getTripById(id);
@@ -277,19 +210,58 @@ public class TripController {
             tripService.deleteTripById(id);
         } catch(Exception e) {
             logger.error(e.getClass().getName() + " :: " + e.getMessage());
-            redirectAttributes.addFlashAttribute("failureMessage", messageSource.getMessage("trip.message.delete.error", new Object[]{ destination, e.getMessage() }, locale));
-            return "redirect:" + uriBuilder.path("/trips").queryParam("notification", "failure").build();
-        }
-
-        if(destination == null) {
-            return "trip/list";
+            resultStatus = "failure";
         }
         
-        redirectAttributes.addFlashAttribute("successMessage", messageSource.getMessage("trip.message.delete", new Object[]{destination}, locale));
-        return "redirect:" + uriBuilder.path("/trips").queryParam("notification", "success").build();
+        String messageKey = "trip.message.delete" + (resultStatus.equals("success") ? "" : ".error");
+        redirectAttributes.addFlashAttribute(resultStatus + "Message", messageSource.getMessage(messageKey, new Object[]{ destination }, locale));
+        return "redirect:" + uriBuilder.path("/trips").queryParam("notification", resultStatus).build();
     }    
     
-    //--[  Convenience methods for Init  ]--------------------------------------
+    //--[  Excursion date constraint check  ]-----------------------------------
+    
+    private boolean checkExcursions(TripModelData data, List<ExcursionDTO> excursions, 
+            BindingResult bindingResult, Locale locale) {
+        if ((data.getExcursionIDs() != null) && !data.getExcursionIDs().isEmpty()) {
+            Map<Long, ExcursionDTO> exmap = new HashMap<>(excursions.size());
+            for(ExcursionDTO ex : excursions) {
+                exmap.put(ex.getId(), ex);
+            }
+
+            for(long id : data.getExcursionIDs()) {
+                ExcursionDTO ex = exmap.get(id);
+                exmap.remove(id);
+
+                Calendar calendar = Calendar.getInstance();
+                calendar.setTime(ex.getExcursionDate());
+                calendar.add(Calendar.DATE, ex.getDuration());
+
+                Date start = ex.getExcursionDate();
+                Date end   = calendar.getTime();                    
+
+                if (start.before(data.getDateFrom()) || end.after(data.getDateTo())) {
+                    String message = messageSource.getMessage("trip.validator.invalidExcursion", new Object[]{ ex.getDestination() }, locale);
+                    bindingResult.addError(new FieldError("data", "excursions", message));
+                }
+
+                data.addExcursion(ex);
+            }
+        }
+        
+        return !bindingResult.hasErrors();
+    }
+    
+    private void logFormErrors(BindingResult bindingResult) {
+        logger.debug("Encountered following errors when validating form.");
+        for(ObjectError ge : bindingResult.getGlobalErrors()) {
+            logger.debug("ObjectError: {}", ge);
+        }
+        for(FieldError fe : bindingResult.getFieldErrors()) {
+            logger.debug("FieldError: {}", fe);
+        }
+    }
+    
+    //--[  Convenience methods for Init  ]--------------------------------------    
     
     private Date mkdate(int day, int month, int year) {
         Calendar calendar = new GregorianCalendar();

@@ -137,23 +137,23 @@ public class ReservationController {
     public String newReservation(@ModelAttribute ReservationDTO reservationDTO, BindingResult bindingResult, RedirectAttributes redirectAttributes, UriComponentsBuilder uriBuilder, Locale locale) {       
         // check the form validator output
         if(bindingResult.hasErrors()) {
-            String error = checkFormErrors(bindingResult, "reservation/new");
-            if(error != null) return error;
+            logFormErrors(bindingResult);
+            return "reservation/new";
         }
+        
+        String resultStatus = "success";
 
         // so far so good, try to save reservation
         try {
             reservationService.addReservation(reservationDTO);
         } catch(NullPointerException | IllegalArgumentException e) {
             logger.error(e.getMessage());
-            return "reservation/new";
+            resultStatus = "failure";
         }
         
-        // add to the view message about successfull result
-        redirectAttributes.addFlashAttribute("successMessage", messageSource.getMessage("reservation.message.new", new Object[]{reservationDTO.getCustomer().getName()}, locale));
-        
-        // get back to customer list, add the notification par to the url
-        return "redirect:" + uriBuilder.path("/reservations").queryParam("notification", "success").build();
+        String messageKey = "reservation.message.new" + (resultStatus.equals("success") ? "" : ".error");
+        redirectAttributes.addFlashAttribute(resultStatus + "Message", messageSource.getMessage(messageKey, new Object[]{reservationDTO.getCustomer().getName()}, locale));
+        return "redirect:" + uriBuilder.path("/reservations").queryParam("notification", resultStatus).build();
     }
     
     /**
@@ -195,23 +195,22 @@ public class ReservationController {
         
         // check the form validator output
         if(bindingResult.hasErrors()) {
-            String error = checkFormErrors(bindingResult, "reservation/edit");
-            if(error != null) return error;
+            logFormErrors(bindingResult);
+            return "reservation/edit";
         }
 
+        String resultStatus = "success";
         // so far so good, try to save customer
         try {
             reservationService.updateReservation(reservationDTO);
         } catch(NullPointerException | IllegalArgumentException e) {
             logger.error(e.getMessage());
-            return "reservation/edit";
+            resultStatus = "failure";
         }
         
-        // add to the view message about successfull result
-        redirectAttributes.addFlashAttribute("successMessage", messageSource.getMessage("reservation.message.edit", new Object[]{reservationDTO.getId()}, locale));
-        
-        // get back to customer list, add the notification par to the url
-        return "redirect:" + uriBuilder.path("/reservations").queryParam("notification", "success").build();
+        String messageKey = "reservation.message.edit" + (resultStatus.equals("success") ? "" : ".error");
+        redirectAttributes.addFlashAttribute(resultStatus + "Message", messageSource.getMessage(messageKey, new Object[]{reservationDTO.getCustomer().getName()}, locale));
+        return "redirect:" + uriBuilder.path("/reservations").queryParam("notification", resultStatus).build();
     }
     
     /**
@@ -224,34 +223,21 @@ public class ReservationController {
      */
     @RequestMapping(value = "/delete/{id}", method = RequestMethod.GET)
     public String deleteReservation(@PathVariable long id, RedirectAttributes redirectAttributes, UriComponentsBuilder uriBuilder, Locale locale) {
-        CustomerDTO name = null;
+        String name         = null;
+        String resultStatus = "success";
         
         try {
             ReservationDTO reservation = reservationService.getReservationById(id);
-            name = reservation.getCustomer();
-            reservationService.deleteReservation(reservation);
+            name = reservation.getCustomer().getName();
+            reservationService.deleteReservationById(id);
         } catch(Exception e) {
             logger.error(e.getMessage());
+            resultStatus = "failure";
         }
         
-        //bipas
-        ReservationDTO reservation=null;
-        List<ReservationDTO> l= reservationService.getAllReservations();
-        for(ReservationDTO reservat :l){
-            if(reservat.getId()==id && reservation==null){
-                reservation=reservat;
-            }
-        }
-        //end of bipas
-        name = reservation.getCustomer();
-        reservationService.deleteReservationById(id);
-        if(name == null) return "reservation/list";
-        
-        // add to the view message about successfull result
-        redirectAttributes.addFlashAttribute("successMessage", messageSource.getMessage("reservation.message.delete", new Object[]{name.getName()}, locale));
-        
-        // get back to customer list, add the notification par to the url
-        return "redirect:" + uriBuilder.path("/reservations").queryParam("notification", "success").build();
+        String messageKey = "reservation.message.delete" + (resultStatus.equals("success") ? "" : ".error");
+        redirectAttributes.addFlashAttribute(resultStatus + "Message", messageSource.getMessage(messageKey, new Object[]{ name }, locale));
+        return "redirect:" + uriBuilder.path("/reservations").queryParam("notification", resultStatus).build();
     }
     
     /**
@@ -260,7 +246,7 @@ public class ReservationController {
      * @param viewName
      * @return 
      */
-    private String checkFormErrors(BindingResult bindingResult, String viewName) {
+    private void logFormErrors(BindingResult bindingResult) {
         logger.debug("Encountered following errors when validating form.");
         for(ObjectError ge : bindingResult.getGlobalErrors()) {
             logger.debug("ObjectError: {}", ge);
@@ -268,7 +254,6 @@ public class ReservationController {
         for(FieldError fe : bindingResult.getFieldErrors()) {
             logger.debug("FieldError: {}", fe);
         }
-        return viewName;
     }
 
     @PostConstruct

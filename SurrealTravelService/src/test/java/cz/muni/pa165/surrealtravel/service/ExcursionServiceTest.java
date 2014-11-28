@@ -2,8 +2,10 @@ package cz.muni.pa165.surrealtravel.service;
 
 import cz.muni.pa165.surrealtravel.AbstractServiceTest;
 import cz.muni.pa165.surrealtravel.dao.ExcursionDAO;
+import cz.muni.pa165.surrealtravel.dao.TripDAO;
 import cz.muni.pa165.surrealtravel.dto.ExcursionDTO;
 import cz.muni.pa165.surrealtravel.entity.Excursion;
+import cz.muni.pa165.surrealtravel.entity.Trip;
 import java.math.BigDecimal;
 import java.util.ArrayList;
 import java.util.Arrays;
@@ -30,6 +32,9 @@ public class ExcursionServiceTest extends AbstractServiceTest {
     
     @Mock
     private ExcursionDAO dao;
+    
+    @Mock
+    private TripDAO tripDao;
     
     @InjectMocks
     private DefaultExcursionService service;
@@ -124,9 +129,11 @@ public class ExcursionServiceTest extends AbstractServiceTest {
     }
     
     @Test
-    public void testUpdateExcursion() {       
+    public void testUpdateExcursion() {
         ExcursionDTO toUpdate = prepareDummyExcursion();
         Excursion entity = mapper.map(toUpdate, Excursion.class);
+        when(tripDao.getTripsWithExcursion(entity)).thenReturn(new ArrayList<Trip>());
+        
         service.updateExcursion(toUpdate);
         verify(dao, times(1)).updateExcursion(entity);
     }

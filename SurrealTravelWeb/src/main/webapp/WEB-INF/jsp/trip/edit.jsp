@@ -11,6 +11,7 @@
 <jsp:attribute name="content">
     
     <jsp:include page="/WEB-INF/include/requiredNotification.jsp" />
+    <jsp:include page="/WEB-INF/include/dateFormatNotification.jsp" />
 
     <form:form action="${pageContext.request.contextPath}/trips/edit" modelAttribute="tripdata">
         <form:hidden path="id"/>
