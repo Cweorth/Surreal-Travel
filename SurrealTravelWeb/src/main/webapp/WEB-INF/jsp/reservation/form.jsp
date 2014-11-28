@@ -15,9 +15,15 @@
     <tr>
         <td class="left">* <f:message key="reservation.trip"/>:</td>
         <td>
-            <form:select path="trip">
+            <form:select path="trip" cssClass="selectAjax">
                 <form:options items="${trips}" itemValue="id" itemLabel="destination"/>
             </form:select>
+        </td>
+    </tr>
+    <tr>
+        <td class="left"><f:message key="trip.excursions"/>:</td>
+        <td id="excursionsAjaxContainer">
+            <jsp:include page="excursionsAjax.jsp" />
         </td>
     </tr>
 </table>

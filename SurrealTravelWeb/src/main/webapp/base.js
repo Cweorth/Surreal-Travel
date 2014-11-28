@@ -48,6 +48,18 @@ $(document).ready(function() {
     
 });
 
+$(document).on("change", "form .selectAjax", function(e){ 
+    $.ajax({
+        type: "GET",
+        url: "/pa165/reservations/ajaxGetExcursions/"  + $(this).val(),
+        data: "",
+        async: true,
+        success: function (data) {
+            $("#excursionsAjaxContainer").html(data);
+        }
+    });
+});
+
 $(document).on("click", ".dialogDeletePrompt", function(e){ 
 
     e.preventDefault();

@@ -1,20 +1,15 @@
-/*
- * To change this license header, choose License Headers in Project Properties.
- * To change this template file, choose Tools | Templates
- * and open the template in the editor.
- */
 package cz.muni.pa165.surrealtravel.controller;
 
 import cz.muni.pa165.surrealtravel.dto.CustomerDTO;
 import cz.muni.pa165.surrealtravel.dto.ExcursionDTO;
 import cz.muni.pa165.surrealtravel.dto.ReservationDTO;
 import cz.muni.pa165.surrealtravel.dto.TripDTO;
-import cz.muni.pa165.surrealtravel.entity.Trip;
 import cz.muni.pa165.surrealtravel.service.CustomerService;
 import cz.muni.pa165.surrealtravel.service.ExcursionService;
 import cz.muni.pa165.surrealtravel.service.ReservationService;
 import cz.muni.pa165.surrealtravel.service.TripService;
 import cz.muni.pa165.surrealtravel.validator.ReservationValidator;
+import java.beans.PropertyEditorSupport;
 import java.math.BigDecimal;
 import java.util.ArrayList;
 import java.util.Calendar;
@@ -26,6 +21,7 @@ import javax.annotation.PostConstruct;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.beans.propertyeditors.CustomCollectionEditor;
 import org.springframework.context.MessageSource;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.ModelMap;
@@ -49,30 +45,70 @@ import org.springframework.web.util.UriComponentsBuilder;
 @Controller
 @RequestMapping("/reservations")
 public class ReservationController {
-     final static Logger logger = LoggerFactory.getLogger(ReservationController.class);
+    final static Logger logger = LoggerFactory.getLogger(ReservationController.class);
      
-     @Autowired
-     private ReservationService reservationService;
+    @Autowired
+    private ReservationService reservationService;
      
-     @Autowired
-     private TripService tripService;
+    @Autowired
+    private TripService tripService;
      
-     @Autowired
-     private CustomerService customerService;
-          
-     @Autowired
-     private MessageSource messageSource;
-     
-      @Autowired
+    @Autowired
+    private CustomerService customerService;
+    
+    @Autowired
     private ExcursionService excursionService;
-     
-      @InitBinder
+          
+    @Autowired
+    private MessageSource messageSource;
+
+    @InitBinder
     protected void initBinder(WebDataBinder binder) {
         binder.setValidator(new ReservationValidator());
+        
+        binder.registerCustomEditor(CustomerDTO.class, "customer", new PropertyEditorSupport() {
+            @Override
+            public void setAsText(String text) {
+                CustomerDTO type = customerService.getCustomerById(Long.valueOf(text));
+                setValue(type);
+            }
+        });
+        
+        binder.registerCustomEditor(TripDTO.class, "trip", new PropertyEditorSupport() {
+            @Override
+            public void setAsText(String text) {
+                TripDTO type = tripService.getTripById(Long.valueOf(text));
+                setValue(type);
+            }
+        });
+        
+        binder.registerCustomEditor(List.class, "excursions", new CustomCollectionEditor(List.class) {
+            @Override
+            protected Object convertElement(Object element) {
+                long id = -1;
+                if(element instanceof String) {
+                    try {
+                        id = Long.parseLong((String) element);
+                    } catch (NumberFormatException e) {
+                        logger.debug("Element was " + ((String) element));
+                        e.printStackTrace();
+                    }
+                    return excursionService.getExcursionById(id);
+                }
+                return null;
+            }
+          });
     }
     
-     @RequestMapping(method = RequestMethod.GET)
-    public String listCustomers(ModelMap model) {
+    @RequestMapping(value = "/ajaxGetExcursions/{id}", method = RequestMethod.GET)
+    public String listExcursionsAjax(@PathVariable long id, ModelMap model) {
+        TripDTO trip = tripService.getTripById(id);
+        model.addAttribute("excursions", trip.getExcursions());
+        return "reservation/excursionsAjax";
+    }
+    
+    @RequestMapping(method = RequestMethod.GET)
+    public String listReservations(ModelMap model) {
         model.addAttribute("reservations", reservationService.getAllReservations());
         return "reservation/list";
     }
@@ -83,11 +119,12 @@ public class ReservationController {
      * @return 
      */
     @RequestMapping(value = "/new", method = RequestMethod.GET)
-    public String newCustomerForm(ModelMap model) {
+    public String newReservationForm(ModelMap model) {
+        List<TripDTO> allTrips = tripService.getAllTrips();
         model.addAttribute("reservationDTO", new ReservationDTO());
         model.addAttribute("customers", customerService.getAllCustomers());
-        model.addAttribute("trips", tripService.getAllTrips());
-        model.addAttribute("excursions", excursionService.getAllExcursions());
+        model.addAttribute("trips", allTrips);
+        if(!allTrips.isEmpty()) model.addAttribute("excursions", allTrips.get(0).getExcursions());
         return "reservation/new";
     }
     
@@ -102,7 +139,6 @@ public class ReservationController {
      */
     @RequestMapping(value = "/new", method = RequestMethod.POST)
     public String newReservation(@Validated @ModelAttribute ReservationDTO reservationDTO, BindingResult bindingResult, RedirectAttributes redirectAttributes, UriComponentsBuilder uriBuilder, Locale locale) {       
-        
         // check the form validator output
         if(bindingResult.hasErrors()) {
             String error = checkFormErrors(bindingResult, "reservation/new");
@@ -118,7 +154,7 @@ public class ReservationController {
         }
         
         // add to the view message about successfull result
-        redirectAttributes.addFlashAttribute("successMessage", messageSource.getMessage("reservation.message.new", new Object[]{reservationDTO.toString()}, locale));
+        redirectAttributes.addFlashAttribute("successMessage", messageSource.getMessage("reservation.message.new", new Object[]{reservationDTO.getCustomer().getName()}, locale));
         
         // get back to customer list, add the notification par to the url
         return "redirect:" + uriBuilder.path("/reservations").queryParam("notification", "success").build();
