@@ -94,8 +94,9 @@ public class ReservationController {
                         e.printStackTrace();
                     }
                     return excursionService.getExcursionById(id);
+                } else {
+                    return String.valueOf(((CustomerDTO)element).getId());
                 }
-                return null;
             }
           });
     }
@@ -161,23 +162,6 @@ public class ReservationController {
     }
     
     /**
-     * Check BindingResult of a request for errors found by a validator.
-     * @param bindingResult
-     * @param viewName
-     * @return 
-     */
-    private String checkFormErrors(BindingResult bindingResult, String viewName) {
-        logger.debug("Encountered following errors when validating form.");
-        for(ObjectError ge : bindingResult.getGlobalErrors()) {
-            logger.debug("ObjectError: {}", ge);
-        }
-        for(FieldError fe : bindingResult.getFieldErrors()) {
-            logger.debug("FieldError: {}", fe);
-        }
-        return viewName;
-    }
-    
-    /**
      * Display a form for editing of a reservation.
      * @param id
      * @param model
@@ -192,17 +176,13 @@ public class ReservationController {
         } catch(Exception e) {
             logger.error(e.getMessage());
         }
-        //bipas
-        List<ReservationDTO> l= reservationService.getAllReservations();
-        for(ReservationDTO reservat :l){
-            if(reservat.getId()==id && reservation==null){
-                reservation=reservat;
-            }
-        }
-        //end of bipas
+
         if(reservation == null) return "reservation/list";
         
         model.addAttribute("reservationDTO", reservation);
+        model.addAttribute("customers", customerService.getAllCustomers());
+        model.addAttribute("trips", tripService.getAllTrips());
+        model.addAttribute("excursions", reservation.getTrip().getExcursions());
         return "reservation/edit";
     }
     
@@ -222,7 +202,6 @@ public class ReservationController {
         if(bindingResult.hasErrors()) {
             String error = checkFormErrors(bindingResult, "reservation/edit");
             if(error != null) return error;
-            
         }
 
         // so far so good, try to save customer
@@ -234,7 +213,7 @@ public class ReservationController {
         }
         
         // add to the view message about successfull result
-        redirectAttributes.addFlashAttribute("successMessage", messageSource.getMessage("reservation.message.edit", new Object[]{reservationDTO.toString(), reservationDTO.getId()}, locale));
+        redirectAttributes.addFlashAttribute("successMessage", messageSource.getMessage("reservation.message.edit", new Object[]{reservationDTO.getId()}, locale));
         
         // get back to customer list, add the notification par to the url
         return "redirect:" + uriBuilder.path("/reservations").queryParam("notification", "success").build();
@@ -280,6 +259,23 @@ public class ReservationController {
         return "redirect:" + uriBuilder.path("/reservations").queryParam("notification", "success").build();
     }
     
+    /**
+     * Check BindingResult of a request for errors found by a validator.
+     * @param bindingResult
+     * @param viewName
+     * @return 
+     */
+    private String checkFormErrors(BindingResult bindingResult, String viewName) {
+        logger.debug("Encountered following errors when validating form.");
+        for(ObjectError ge : bindingResult.getGlobalErrors()) {
+            logger.debug("ObjectError: {}", ge);
+        }
+        for(FieldError fe : bindingResult.getFieldErrors()) {
+            logger.debug("FieldError: {}", fe);
+        }
+        return viewName;
+    }
+
     @PostConstruct
     public void init() {
         

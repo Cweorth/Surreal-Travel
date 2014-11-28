@@ -44,6 +44,7 @@ public class DefaultReservationService implements ReservationService {
    * @param id the id of reservation
    * @return result reservation with selected id
    */
+  @Transactional(readOnly = true)
     @Override
   public ReservationDTO getReservationById(long id){
       Reservation reservation = reservationDAO.getReservationById(id);
@@ -69,6 +70,7 @@ public class DefaultReservationService implements ReservationService {
    * @param customerDTO the customer for we need the reservations
    * @return 
    */
+  @Transactional(readOnly = true)
     @Override
   public List<ReservationDTO> getAllReservationsByCustomer(CustomerDTO customerDTO){
       Objects.requireNonNull(customerDTO);
@@ -86,6 +88,7 @@ public class DefaultReservationService implements ReservationService {
    * @param excursionDTO the selected excursion we want all reservation from there
    * @return 
    */
+  @Transactional(readOnly = true)
     @Override
   public List<ReservationDTO> getAllReservationsByExcursion(ExcursionDTO excursionDTO){
       Objects.requireNonNull(excursionDTO);
