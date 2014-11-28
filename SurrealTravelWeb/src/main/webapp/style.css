@@ -87,11 +87,15 @@ ul#navigation li {float: left; margin: 0 20px 0 0;}
 #status div {padding: 4px; float: left;}
 #status p {float: left; margin: 0; padding: 17px 0 0 5px; color: #eeeeee; font-weight: bold;}
 
-#successMessage {display: none; width: 400px; position: fixed; top: 25px; left: 50%; margin-left: -200px; z-index: 10;
-    color: #ffffff;
-    background: #1ab500;
-    border: 0;
+.resultMessage {display: none; width: 400px; position: fixed; top: 25px; left: 50%; margin-left: -200px; z-index: 10; color: #ffffff; border: 0;}
+.resultMessage p {margin: 0; padding: 17px 10px 17px 10px; color: #ffffff;}
+
+#successMessage {background: #1ab500;
     filter: progid:DXImageTransform.Microsoft.gradient(startColorstr='#37bc18', endColorstr='#1ab500');
     background: -webkit-gradient(linear, left top, left bottom, from(#37bc18), to(#1ab500));
-    background: -moz-linear-gradient(top,  #37bc18,  #1ab500); }
-#successMessage p {margin: 0; padding: 17px 10px 17px 10px; color: #ffffff;}
+    background: -moz-linear-gradient(top,  #37bc18,  #1ab500);}
+
+#failureMessage {background: #b50000;
+    filter: progid:DXImageTransform.Microsoft.gradient(startColorstr='#bc1818', endColorstr='#b50000');
+    background: -webkit-gradient(linear, left top, left bottom, from(#bc1818), to(#b50000));
+    background: -moz-linear-gradient(top,  #bc1818,  #b50000);}

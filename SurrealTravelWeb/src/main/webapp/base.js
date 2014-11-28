@@ -3,6 +3,8 @@ $(document).ready(function() {
     var notification = $.getQuery('notification');
     if(notification === "success") {
         showSuccessMessage();
+    } else if(notification === "failure") {
+        showFailureMessage();
     }
 
     $( "button.new" ).button({
@@ -128,6 +130,10 @@ function hideStatus() {
 
 function showSuccessMessage() {
     $('#successMessage').fadeIn('slow').delay(4000).fadeOut('slow');
+}
+
+function showFailureMessage() {
+    $('#failureMessage').fadeIn('slow').delay(4000).fadeOut('slow');
 }
 
 function redirect(url) {

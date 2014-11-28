@@ -150,10 +150,10 @@ public class CustomerController {
         }
         
         // add to the view message about successfull result
-        redirectAttributes.addFlashAttribute("successMessage", messageSource.getMessage("customer.message.edit", new Object[]{customerDTO.getName(), customerDTO.getId()}, locale));
+        redirectAttributes.addFlashAttribute("failureMessage", messageSource.getMessage("customer.message.edit", new Object[]{customerDTO.getName(), customerDTO.getId()}, locale));
         
         // get back to customer list, add the notification par to the url
-        return "redirect:" + uriBuilder.path("/customers").queryParam("notification", "success").build();
+        return "redirect:" + uriBuilder.path("/customers").queryParam("notification", "failure").build();
     }
     
     /**
@@ -166,23 +166,26 @@ public class CustomerController {
      */
     @RequestMapping(value = "/delete/{id}", method = RequestMethod.GET)
     public String deleteCustomer(@PathVariable long id, RedirectAttributes redirectAttributes, UriComponentsBuilder uriBuilder, Locale locale) {
+        String resultStatus = "success";
         String name = null;
         
         try {
+            
             CustomerDTO customer = customerService.getCustomerById(id);
             name = customer.getName();
             customerService.deleteCustomerById(id);
+            
+            // add to the view message about successfull result
+            redirectAttributes.addFlashAttribute("successMessage", messageSource.getMessage("customer.message.delete", new Object[]{name}, locale));
+            
         } catch(Exception e) {
             logger.error(e.getMessage());
+            redirectAttributes.addFlashAttribute("failureMessage", messageSource.getMessage("customer.message.delete.error", new Object[]{name}, locale));
+            resultStatus = "failure";
         }
-        
-        if(name == null) return "customer/list";
-        
-        // add to the view message about successfull result
-        redirectAttributes.addFlashAttribute("successMessage", messageSource.getMessage("customer.message.delete", new Object[]{name}, locale));
-        
-        // get back to customer list, add the notification par to the url
-        return "redirect:" + uriBuilder.path("/customers").queryParam("notification", "success").build();
+
+        // get back to customer list, add the notification to the url
+        return "redirect:" + uriBuilder.path("/customers").queryParam("notification", resultStatus).build();
     }
  
     /**

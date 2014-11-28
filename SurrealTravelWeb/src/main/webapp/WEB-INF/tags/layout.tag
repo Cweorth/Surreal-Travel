@@ -34,6 +34,10 @@
     <jsp:include page="/WEB-INF/include/successMessage.jsp" />
 </c:if>
 
+<c:if test="${not empty failureMessage}">
+    <jsp:include page="/WEB-INF/include/failureMessage.jsp" />
+</c:if>
+
 <ul id="navigation">
     <li><a href="${pageContext.request.contextPath}/"><f:message key="index.title" /></a></li>
     <li><a href="${pageContext.request.contextPath}/trips"><f:message key="trip.title" /></a></li>
