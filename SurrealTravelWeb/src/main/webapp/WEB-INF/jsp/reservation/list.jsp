@@ -18,28 +18,67 @@
         <tr class="head">
             <td width="25">#</td>
             <td><f:message key="reservation.name"/></td>
-            <td><f:message key="reservation.address"/></td>
+            <td><f:message key="reservation.destination"/></td>
+            <td><f:message key="reservation.excursion"/></td>
+            <td><f:message key="reservation.price"/></td>
+            <td><f:message key="reservation.start"/></td>
             <td width="200" align="right"><f:message key="basic.action"/></td>
         </tr>
         <c:choose>
             <c:when test="${not empty reservations}">
                 <c:forEach items="${reservations}" var="reservation" varStatus="count">
-                    <tr>
+                    <tr class="showHidden">
                         <td class="number">${count.index + 1}</td>
-                        <td><c:out value="${reservation.customer}"/></td>
-                        <td><c:out value="${customer.trip}"/></td>
+                        
+                            <td><c:out value="${reservation.customer.name}"/></td>
+                            
+                            <td><c:out value="${reservation.trip.destination}"/></td>
+                           <c:choose>
+                                    <c:when test="${not empty reservation.excursions}">
+                                        <td><c:out value="${reservation.excursions.size()}"/></td>
+                                    </c:when>
+                                    <c:otherwise>
+                                        <td><i>none</i></td>
+                                    </c:otherwise>
+                                </c:choose>
+                                        <td><c:out value="${reservation.getTotalPrice()}"/> </td>
+                                        <c:choose>
+                                            <c:when test="${not empty reservation.trip.dateFrom}">
+                                        <td><f:formatDate value="${reservation.trip.dateFrom}" type="date"/> </td>
+                                        </c:when>
+                                        </c:choose>
                         <td>
                             <ul class="rowMenu">
                                 <jsp:include page="/WEB-INF/include/entryEditButton.jsp">
-                                    <jsp:param name="url" value="${pageContext.request.contextPath}/customers/edit/${reservation.id}" />
+                                    <jsp:param name="url" value="${pageContext.request.contextPath}/reservations/edit/${reservation.id}" />
                                 </jsp:include>
                                 <jsp:include page="/WEB-INF/include/entryDeleteButton.jsp">
                                     <jsp:param name="id" value="${customer.id}" />
-                                    <jsp:param name="url" value="${pageContext.request.contextPath}/customers/delete/${reservation.id}" />
+                                    <jsp:param name="url" value="${pageContext.request.contextPath}/reservations/delete/${reservation.id}" />
                                 </jsp:include>
                             </ul>
                         </td>
                     </tr>
+                    <c:choose>
+                            <c:when test="${reservation.excursions.isEmpty()}"/>
+                            <c:otherwise>
+                                <c:forEach items="${reservation.excursions}" var="excursion">
+                                    <tr class="hidden">
+                                        <td/>
+                                        <td><c:out value="${excursion.destination}"/></td>
+                                        <td></td>
+                                        <td></td>
+                                        
+                                        
+                                        <td><c:out value="${excursion.price}"/></td>
+                                        <td colspan="2"><f:formatDate value="${excursion.excursionDate}" type="date"/></td>
+                                        <td/>
+                                        
+                                        
+                                    </tr> 
+                                </c:forEach>
+                            </c:otherwise>
+                        </c:choose>
                 </c:forEach>
             </c:when>
             <c:otherwise>

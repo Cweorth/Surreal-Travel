@@ -229,12 +229,12 @@ public class ReservationController {
         CustomerDTO c1 = new CustomerDTO();
         c1.setName("Honza");
         c1.setAddress("Olomouc");
-        
-        CustomerDTO c2 = new CustomerDTO();
-        c2.setName("Eva");
-        c2.setAddress("Olomouc");
         customerService.addCustomer(c1);
-        customerService.addCustomer(c2);
+        //CustomerDTO c2 = new CustomerDTO();
+        //c2.setName("Eva");
+        //c2.setAddress("Olomouc");
+        //customerService.addCustomer(c1);
+        //customerService.addCustomer(c2);
         TripDTO trip= new TripDTO();
         
         Calendar calendar = new GregorianCalendar();
@@ -257,32 +257,35 @@ public class ReservationController {
         e1.setExcursionDate(from);
         e1.setPrice(new BigDecimal(0));
         
-        ExcursionDTO e2 = new ExcursionDTO();
-        e2.setDestination("Afgánistán");
-        e2.setDescription("Best of army stock");
-        e2.setDuration(5);
-        e2.setExcursionDate(from);
-        e2.setPrice(new BigDecimal(10));
+        //ExcursionDTO e2 = new ExcursionDTO();
+        //e2.setDestination("Afgánistán");
+        //e2.setDescription("Best of army stock");
+        //e2.setDuration(5);
+        //e2.setExcursionDate(from);
+        //e2.setPrice(new BigDecimal(10));
         excursionService.addExcursion(e1);
-        excursionService.addExcursion(e2);
+        //excursionService.addExcursion(e2);
         List<ExcursionDTO> excursions= new ArrayList<>();
         excursions.add(e1);
-        excursions.add(e2);
+        
+        //excursions.add(e2);
         
         trip.setExcursions(excursions);
         tripService.addTrip(trip);
         
+        //customerService.addCustomer(c2);
         ReservationDTO res1 = new ReservationDTO();
-        res1.setExcursions(excursions);
-        res1.setCustomer(c2);
         res1.setTrip(trip);
+        res1.addExcursion(e1);
+        res1.setCustomer(c1);
+       
         
-        ReservationDTO res2= new ReservationDTO();
-        res2.setExcursions(excursions);
-        res2.setTrip(trip);
-        res2.setCustomer(c1);
+        //ReservationDTO res2= new ReservationDTO();
+        //res2.setExcursions(excursions);
+        //res2.setTrip(trip);
+        //res2.setCustomer(c1);
         
-        //reservationService.addReservation(res1);
+        reservationService.addReservation(res1);
         //reservationService.addReservation(res2);
        
                 
