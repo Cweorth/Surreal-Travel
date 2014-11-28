@@ -21,15 +21,15 @@
             <tr class="head">
                 <td width="25">#</td>
                 <td><f:message key="trip.destination"/></td>
-                <td><f:message key="trip.datefrom"/></td>
-                <td><f:message key="trip.dateto"/></td>
-                <td><f:message key="trip.capacity"/></td>
-                <td><f:message key="trip.baseprice"/></td>
-                <td><f:message key="trip.fullprice"/></td>
-                <td><f:message key="trip.excursions"/></td>
+                <td width="10%"><f:message key="trip.dateFrom"/></td>
+                <td width="10%"><f:message key="trip.dateTo"/></td>
+                <td width="10%"><f:message key="trip.capacity"/></td>
+                <td width="10%"><f:message key="trip.basePrice"/></td>
+                <td width="10%"><f:message key="trip.fullPrice"/></td>
+                <td width="10%"><f:message key="trip.excursions"/></td>
                 <td width="200" align="right"><f:message key="basic.action"/></td>
             </tr>
-            
+
             <c:choose>
                 <c:when test="${not empty trips}">
                     <c:forEach items="${trips}" var="trip" varStatus="count">
@@ -44,10 +44,11 @@
                             <td>
                                 <c:choose>
                                     <c:when test="${not empty trip.excursions}">
-                                        <c:out value="${trip.excursions.size()}"/>
+                                        <c:out value="${trip.excursions.size()}"/>&nbsp;
+                                        (<b><f:message key="trip.showexcursions"/></b>)
                                     </c:when>
                                     <c:otherwise>
-                                        <i>none</i>
+                                        <i><f:message key="trip.noexcursions"/></i>
                                     </c:otherwise>
                                 </c:choose>
                             </td>

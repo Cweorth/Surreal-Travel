@@ -67,8 +67,8 @@ public class DefaultTripService implements TripService {
      * Saves the {@code trip}.
      * @param trip           The trip to save.
      */
-    @Transactional
     @Override
+    @Transactional
     public void addTrip(TripDTO trip) {
         Objects.requireNonNull(trip, "trip");
         Trip entity = toEntity.apply(trip);
@@ -82,6 +82,7 @@ public class DefaultTripService implements TripService {
      * @return               A trip.
      */
     @Override
+    @Transactional(readOnly = true)
     public TripDTO getTripById(long id) {
         return toDTO.apply(tripDao.getTripById(id));
     }
@@ -92,6 +93,7 @@ public class DefaultTripService implements TripService {
      * @return               A list of matching trips.
      */
     @Override
+    @Transactional(readOnly = true)
     public List<TripDTO> getTripsByDestination(String destination) {
         Objects.requireNonNull(destination, "destination");
         return map(toDTO, tripDao.getTripsByDestination(destination));
@@ -103,6 +105,7 @@ public class DefaultTripService implements TripService {
      * @return               A list of matching trips.
      */
     @Override
+    @Transactional(readOnly = true)
     public List<TripDTO> getTripsWithExcursion(ExcursionDTO excursion) {
         Objects.requireNonNull(excursion, "exucrsion");
         return map(toDTO, tripDao.getTripsWithExcursion(excToEntity.apply(excursion)));
@@ -112,8 +115,8 @@ public class DefaultTripService implements TripService {
      * Yields a list of all trips.
      * @return               A list of all trips.
      */
-    @Transactional(readOnly = true)
     @Override
+    @Transactional(readOnly = true)
     public List<TripDTO> getAllTrips() {
         return map(toDTO, tripDao.getAllTrips());
     }
@@ -122,8 +125,8 @@ public class DefaultTripService implements TripService {
      * Updates the {@code trip}.
      * @param trip           The trip to update.
      */
-    @Transactional
     @Override
+    @Transactional
     public void updateTrip(TripDTO trip) {
         Objects.requireNonNull(trip, "trip");
         tripDao.updateTrip(toEntity.apply(trip));
@@ -133,8 +136,8 @@ public class DefaultTripService implements TripService {
      * Removes the given {@code trip}.
      * @param trip           The trip to remove.
      */
-    @Transactional
     @Override
+    @Transactional
     public void deleteTrip(TripDTO trip) {
         Objects.requireNonNull(trip);
         tripDao.deleteTrip(toEntity.apply(trip));
@@ -144,8 +147,8 @@ public class DefaultTripService implements TripService {
      * Removes a trip by its {@code id}.
      * @param id             The id of a trip to remove.
      */
-    @Transactional
     @Override
+    @Transactional
     public void deleteTripById(long id) {
         tripDao.deleteTripById(id);
     }
