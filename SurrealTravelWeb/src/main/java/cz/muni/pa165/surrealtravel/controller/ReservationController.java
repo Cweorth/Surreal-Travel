@@ -85,6 +85,7 @@ public class ReservationController {
     @RequestMapping(value = "/new", method = RequestMethod.GET)
     public String newCustomerForm(ModelMap model) {
         model.addAttribute("reservationDTO", new ReservationDTO());
+        model.addAttribute("customers", customerService.getAllCustomers());
         return "reservation/new";
     }
     
