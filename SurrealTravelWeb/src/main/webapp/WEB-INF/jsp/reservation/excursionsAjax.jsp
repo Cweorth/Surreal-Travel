@@ -3,7 +3,6 @@
 <%@ taglib prefix="f" uri="http://java.sun.com/jsp/jstl/fmt" %>
 <%@ taglib prefix="form" uri="http://www.springframework.org/tags/form" %>
 
-<form:errors path="excursions" cssClass="formError" element="p"/>
 <c:choose>
     <c:when test="${excursions.isEmpty()}">
         <b><f:message key="trip.noexcursions"/></b>
@@ -20,8 +19,20 @@
             </tr>
             <c:forEach items="${excursions}" var="excursion" varStatus="state">
                 <tr>
-                    <!--<td><form:checkbox value="${excursion.id}"  path="excursions"/></td>-->
-                    <td><input type="checkbox" value="${excursion.id}" name="excursions"></td>
+                    <td>
+                        <!--
+                            Loading spring form element via ajax breaks their connection with spring,
+                            it needs to have plain old HTML "backup" version.
+                        --> 
+                        <c:choose>
+                            <c:when test="${ajaxReload}">
+                                <input type="checkbox" value="${excursion.id}" name="excursions">
+                            </c:when>
+                            <c:otherwise>
+                                <form:checkbox value="${excursion.id}" path="excursions"/>
+                            </c:otherwise>
+                        </c:choose>
+                    </td>
                     <td><c:out value="${excursion.destination}"/></td>
                     <td><c:out value="${excursion.description}"/></td>
                     <td><f:formatDate value="${excursion.excursionDate}" type="date"/></td>

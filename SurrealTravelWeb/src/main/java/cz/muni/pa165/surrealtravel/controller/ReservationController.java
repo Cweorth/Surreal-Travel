@@ -8,7 +8,6 @@ import cz.muni.pa165.surrealtravel.service.CustomerService;
 import cz.muni.pa165.surrealtravel.service.ExcursionService;
 import cz.muni.pa165.surrealtravel.service.ReservationService;
 import cz.muni.pa165.surrealtravel.service.TripService;
-import cz.muni.pa165.surrealtravel.validator.ReservationValidator;
 import java.beans.PropertyEditorSupport;
 import java.math.BigDecimal;
 import java.util.ArrayList;
@@ -28,7 +27,6 @@ import org.springframework.ui.ModelMap;
 import org.springframework.validation.BindingResult;
 import org.springframework.validation.FieldError;
 import org.springframework.validation.ObjectError;
-import org.springframework.validation.annotation.Validated;
 import org.springframework.web.bind.WebDataBinder;
 import org.springframework.web.bind.annotation.InitBinder;
 import org.springframework.web.bind.annotation.ModelAttribute;
@@ -63,9 +61,7 @@ public class ReservationController {
     private MessageSource messageSource;
 
     @InitBinder
-    protected void initBinder(WebDataBinder binder) {
-        binder.setValidator(new ReservationValidator());
-        
+    protected void initBinder(WebDataBinder binder) {        
         binder.registerCustomEditor(CustomerDTO.class, "customer", new PropertyEditorSupport() {
             @Override
             public void setAsText(String text) {
@@ -89,14 +85,12 @@ public class ReservationController {
                 if(element instanceof String) {
                     try {
                         id = Long.parseLong((String) element);
-                    } catch (NumberFormatException e) {
-                        logger.debug("Element was " + ((String) element));
-                        e.printStackTrace();
+                    } catch(NumberFormatException e) {
+                        logger.debug(e.toString());
                     }
                     return excursionService.getExcursionById(id);
-                } else {
-                    return String.valueOf(((CustomerDTO)element).getId());
                 }
+                return null;
             }
           });
     }
@@ -105,6 +99,7 @@ public class ReservationController {
     public String listExcursionsAjax(@PathVariable long id, ModelMap model) {
         TripDTO trip = tripService.getTripById(id);
         model.addAttribute("excursions", trip.getExcursions());
+        model.addAttribute("ajaxReload", true);
         return "reservation/excursionsAjax";
     }
     
@@ -139,7 +134,7 @@ public class ReservationController {
      * @return 
      */
     @RequestMapping(value = "/new", method = RequestMethod.POST)
-    public String newReservation(@Validated @ModelAttribute ReservationDTO reservationDTO, BindingResult bindingResult, RedirectAttributes redirectAttributes, UriComponentsBuilder uriBuilder, Locale locale) {       
+    public String newReservation(@ModelAttribute ReservationDTO reservationDTO, BindingResult bindingResult, RedirectAttributes redirectAttributes, UriComponentsBuilder uriBuilder, Locale locale) {       
         // check the form validator output
         if(bindingResult.hasErrors()) {
             String error = checkFormErrors(bindingResult, "reservation/new");
@@ -196,7 +191,7 @@ public class ReservationController {
      * @return 
      */
     @RequestMapping(value = "/edit", method = RequestMethod.POST)
-    public String editReservation(@Validated @ModelAttribute ReservationDTO reservationDTO, BindingResult bindingResult, RedirectAttributes redirectAttributes, UriComponentsBuilder uriBuilder, Locale locale) {       
+    public String editReservation(@ModelAttribute ReservationDTO reservationDTO, BindingResult bindingResult, RedirectAttributes redirectAttributes, UriComponentsBuilder uriBuilder, Locale locale) {       
         
         // check the form validator output
         if(bindingResult.hasErrors()) {

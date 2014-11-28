@@ -89,7 +89,6 @@ public class ExcursionDTO implements Serializable{
 
     @Override
     public String toString() {
-        return "ExcursionDTO [id=" + id + ", date=" + excursionDate + ", duration="+ duration+", description="+description+", destination"+destination+", price="+price;
-
+        return String.valueOf(id); // needs to be just ID in order to be reconginzed by spring for selecting of active items in forms
     }
 }
