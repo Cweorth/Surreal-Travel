@@ -1,7 +1,5 @@
 package cz.muni.pa165.surrealtravel.controller;
 
-import static cz.muni.pa165.surrealtravel.controller.CustomerController.logger;
-import cz.muni.pa165.surrealtravel.dto.CustomerDTO;
 import cz.muni.pa165.surrealtravel.dto.ExcursionDTO;
 import cz.muni.pa165.surrealtravel.dto.TripDTO;
 import cz.muni.pa165.surrealtravel.service.ExcursionService;
@@ -10,7 +8,6 @@ import cz.muni.pa165.surrealtravel.utils.TripModelData;
 import cz.muni.pa165.surrealtravel.validator.TripValidator;
 import java.math.BigDecimal;
 import java.text.SimpleDateFormat;
-import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.Calendar;
 import java.util.Date;
@@ -148,17 +145,16 @@ public class TripController {
         try {
             TripDTO trip = tripService.getTripById(id);
             destination  = trip.getDestination();
-            
-            // to avoid Constraint Violation Exception
-            // trip.setExcursions(new ArrayList<ExcursionDTO>());
-            // tripService.updateTrip(trip);
-            
             tripService.deleteTripById(id);
         } catch(Exception e) {
-            logger.error(e.getMessage());
+            logger.error(e.getClass().getName() + " :: " + e.getMessage());
+            redirectAttributes.addFlashAttribute("failureMessage", messageSource.getMessage("trip.message.delete.error", new Object[]{ destination, e.getMessage() }, locale));
+            return "redirect:" + uriBuilder.path("/trips").queryParam("notification", "failure").build();
         }
-        
-        if(destination == null) return "trip/list";
+
+        if(destination == null) {
+            return "trip/list";
+        }
         
         redirectAttributes.addFlashAttribute("successMessage", messageSource.getMessage("trip.message.delete", new Object[]{destination}, locale));
         return "redirect:" + uriBuilder.path("/trips").queryParam("notification", "success").build();

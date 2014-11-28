@@ -29,7 +29,7 @@ public class TripValidator implements Validator {
             return;
         }
         
-        TripDTO       trip = (TripDTO) o;
+        TripDTO trip = (TripDTO) o;
          
         if (trip.getDateFrom().after(trip.getDateTo())) {
             errors.rejectValue("dateTo", "trip.validator.timemachine");

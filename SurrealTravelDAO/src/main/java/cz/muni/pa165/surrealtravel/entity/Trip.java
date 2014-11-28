@@ -6,13 +6,10 @@ import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
 import java.util.Objects;
-import javax.persistence.CascadeType;
 import javax.persistence.Column;
 import javax.persistence.Entity;
 import javax.persistence.GeneratedValue;
 import javax.persistence.Id;
-import javax.persistence.JoinColumn;
-import javax.persistence.JoinTable;
 import javax.persistence.ManyToMany;
 import javax.persistence.NamedQueries;
 import javax.persistence.NamedQuery;
@@ -51,10 +48,7 @@ public class Trip implements Serializable {
     @Column
     private BigDecimal basePrice;
     
-    @ManyToMany(cascade = { CascadeType.MERGE, CascadeType.REFRESH, CascadeType.REMOVE })
-    @JoinTable(name = "TRIP_EXCURSION", 
-            joinColumns        = {@JoinColumn(name = "TRIP_ID",      referencedColumnName = "ID")},
-            inverseJoinColumns = {@JoinColumn(name = "EXCURSION_ID", referencedColumnName = "ID")})
+    @ManyToMany
     private List<Excursion> excursions;
     
     //--[  Constructors  ]------------------------------------------------------
@@ -70,7 +64,7 @@ public class Trip implements Serializable {
      * @param  excursion     The excursion to add.
      */
     public void addExcursion(Excursion excursion) {
-        excursions.add(excursion);
+        excursions.add(Objects.requireNonNull(excursion, "excursion"));
     }
     
     /**
@@ -78,7 +72,7 @@ public class Trip implements Serializable {
      * @param  excursion     The excursion to remove.
      */
     public void removeExcursion(Excursion excursion) {
-        excursions.remove(excursion);
+        excursions.remove(Objects.requireNonNull(excursion, "excursion"));
     }
     
     /**

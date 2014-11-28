@@ -1,3 +1,7 @@
 /SurrealTravelDAO/target/
 /SurrealTravelService/target/
 /SurrealTravelWeb/target/
+/SurrealTravelWeb/nb-configuration.xml
+/SurrealTravelService/nb-configuration.xml
+/SurrealTravelDAO/nb-configuration.xml
+/nb-configuration.xml

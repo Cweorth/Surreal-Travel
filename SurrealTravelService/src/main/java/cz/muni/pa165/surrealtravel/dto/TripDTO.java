@@ -42,7 +42,7 @@ public class TripDTO implements Serializable {
      * @param  excursion     The excursion to add.
      */
     public void addExcursion(ExcursionDTO excursion) {
-        excursions.add(excursion);
+        excursions.add(Objects.requireNonNull(excursion, "excursion"));
     }
     
     /**
@@ -50,7 +50,7 @@ public class TripDTO implements Serializable {
      * @param  excursion     The excursion to remove.
      */
     public void removeExcursion(ExcursionDTO excursion) {
-        excursions.remove(excursion);
+        excursions.remove(Objects.requireNonNull(excursion, "excursion"));
     }
     
     /**
