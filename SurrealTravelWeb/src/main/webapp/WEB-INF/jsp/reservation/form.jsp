@@ -5,27 +5,21 @@
 
 <table border="0" cellpadding="0" cellspacing="0" class="tableForm">
     <tr>
-        <td class="left">* <f:message key="customer.name"/>:</td>
-        <td class="left">* <f:message key="trip.destination"/>:</td>
-        <td><tr>
-            <form:select  name="custom" path="customer" >
-            <c:forEach items="${customers}" var="customer" varStatus="state">
-                                                                                            
-                                    <option value="${customer}">${customer.name}</option>                                    
-                                       
-                        </c:forEach></form:select></tr></select></td>
+        <td class="left">* <f:message key="reservation.customer"/>:</td>
+        <td>
+            <form:select path="customer">
+                <form:options items="${customers}" itemValue="id" itemLabel="name"/>
+            </form:select>
+        </td>
     </tr>
-    <td></td>
     <tr>
-        <form:select name="trp" path="trip">
-            <c:forEach items="${trips}" var="trip" varStatus="state">
-                                                                                            
-                                    <option value="${trips}">${trip.destination}</option>                                    
-                                       
-                        </c:forEach></form:select></tr></select></td>
+        <td class="left">* <f:message key="reservation.trip"/>:</td>
+        <td>
+            <form:select path="trip">
+                <form:options items="${trips}" itemValue="id" itemLabel="destination"/>
+            </form:select>
+        </td>
     </tr>
-    
-    
 </table>
 
 <br>
