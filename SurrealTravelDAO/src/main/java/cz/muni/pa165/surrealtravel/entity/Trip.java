@@ -49,7 +49,7 @@ public class Trip implements Serializable {
     @Column
     private BigDecimal basePrice;
     
-    @ManyToMany(cascade = CascadeType.ALL)
+    @ManyToMany
     private List<Excursion> excursions;
     
     //--[  Constructors  ]------------------------------------------------------
