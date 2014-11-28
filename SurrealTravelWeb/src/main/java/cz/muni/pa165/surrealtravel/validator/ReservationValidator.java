@@ -22,7 +22,7 @@ public class ReservationValidator implements Validator {
     }
     @Override
     public void validate(Object o, Errors errors) {
-        ValidationUtils.rejectIfEmptyOrWhitespace(errors, "name", "reservation.validator.name");
+        //ValidationUtils.rejectIfEmptyOrWhitespace(errors, "name", "reservation.validator.name");
     }
     
 }

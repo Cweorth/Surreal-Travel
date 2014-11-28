@@ -24,6 +24,15 @@ public class JPAReservationDAOTest extends AbstractPersistenceTest {
     @Autowired
     private ReservationDAO dao;
     
+    @Autowired
+    private ExcursionDAO excursionDao;
+    
+    @Autowired
+    private CustomerDAO customerDao;
+    
+    @Autowired
+    private TripDAO tripDao;
+    
     @Test(expected = NullPointerException.class)
     @Transactional
     public void testNullExcursion() {
@@ -251,8 +260,17 @@ public class JPAReservationDAOTest extends AbstractPersistenceTest {
         
         BigDecimal expected = sumReservation(reservation1);
         expected = expected.add(sumReservation(reservation2));
-
+       
+        customerDao.addCustomer(reservation1.getCustomer());
+        for(Excursion e : reservation1.getExcursions())
+            excursionDao.addExcursion(e);
+        tripDao.addTrip(reservation1.getTrip());
         dao.addReservation(reservation1);
+        
+        customerDao.addCustomer(reservation2.getCustomer());
+        for(Excursion e : reservation2.getExcursions())
+            excursionDao.addExcursion(e);
+        tripDao.addTrip(reservation2.getTrip());
         dao.addReservation(reservation2);
         
         BigDecimal retrieved = dao.getFullPriceByCustomer(customer);
@@ -298,10 +316,10 @@ public class JPAReservationDAOTest extends AbstractPersistenceTest {
         };
 
         Trip[] trips = {
-            mktrip(mkdate(1, 11, 2014), mkdate(8, 11, 2014), "Iraq", 500, new BigDecimal(99)),
-            mktrip(mkdate(1, 12, 2014), mkdate(8, 12, 2014), "Someplace no one will find you", 1, new BigDecimal(199)),
-            mktrip(mkdate(5, 11, 2014), mkdate(7, 11, 2014), "wherever", 60, new BigDecimal(1500)),
-            mktrip(mkdate(8, 11, 2014), mkdate(15, 11, 2014), "No man's land", 120, new BigDecimal(9999))
+            mktrip(mkdate(1, 11, 2010), mkdate(8, 11, 2015), "Iraq", 500, new BigDecimal(99)),
+            mktrip(mkdate(1, 12, 2010), mkdate(8, 12, 2015), "Someplace no one will find you", 1, new BigDecimal(199)),
+            mktrip(mkdate(5, 11, 2010), mkdate(7, 11, 2015), "wherever", 60, new BigDecimal(1500)),
+            mktrip(mkdate(8, 11, 2010), mkdate(15, 11, 2015), "No man's land", 120, new BigDecimal(9999))
         };
         
         Excursion[] excursions = {
@@ -349,8 +367,13 @@ public class JPAReservationDAOTest extends AbstractPersistenceTest {
      * @param res 
      */
     private void storeReservations(List<Reservation> res) {
-        for(Reservation r : res)
+        for(Reservation r : res) {
+            customerDao.addCustomer(r.getCustomer());
+            for(Excursion e : r.getExcursions())
+                excursionDao.addExcursion(e);
+            tripDao.addTrip(r.getTrip());
             dao.addReservation(r);
+        }
     }
     
     /**

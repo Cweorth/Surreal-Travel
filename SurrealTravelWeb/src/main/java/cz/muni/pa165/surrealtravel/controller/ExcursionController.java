@@ -216,7 +216,7 @@ public class ExcursionController {
         e1.setDescription("Best of war");
         e1.setDuration(2);
         e1.setExcursionDate(new Date());
-        e1.setPrice(new BigDecimal(0));
+        e1.setPrice(new BigDecimal(150));
         
         ExcursionDTO e2 = new ExcursionDTO();
         e2.setDestination("Afgánistán");

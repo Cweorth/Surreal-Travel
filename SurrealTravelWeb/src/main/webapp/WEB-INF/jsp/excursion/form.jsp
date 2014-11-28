@@ -6,23 +6,23 @@
 <table border="0" cellpadding="0" cellspacing="0" class="tableForm">
     <tr>
         <td class="left">* <f:message key="excursion.description"/>:</td>
-        <td><form:input path="description" cssClass="text" /><form:errors path="description" cssClass="formError" /></td>
+        <td><form:input path="description" cssClass="text" /><form:errors path="description" cssClass="formError" delimiter=" " /></td>
     </tr>
     <tr>
-        <td class="left"><f:message key="excursion.destination"/>:</td>
-        <td><form:input path="destination" cssClass="text" /><form:errors path="destination" cssClass="formError" /></td>
+        <td class="left">* <f:message key="excursion.destination"/>:</td>
+        <td><form:input path="destination" cssClass="text" /><form:errors path="destination" cssClass="formError" delimiter=" " /></td>
     </tr>
     <tr>
-        <td class="left"><f:message key="excursion.excursionDate"/>:</td>
-        <td><form:input path="excursionDate" cssClass="text datepicker" /><form:errors path="excursionDate" cssClass="formError" /></td></td>
+        <td class="left">* <f:message key="excursion.excursionDate"/>:</td>
+        <td><form:input path="excursionDate" cssClass="text datepicker" /><form:errors path="excursionDate" cssClass="formError" delimiter=" " /></td></td>
     </tr>
     <tr>
-        <td class="left"><f:message key="excursion.duration"/>:</td>
-        <td><form:input path="duration" cssClass="text" /></td>
+        <td class="left">* <f:message key="excursion.duration"/>:</td>
+        <td><form:input path="duration" cssClass="text" /><form:errors path="duration" cssClass="formError" delimiter=" " /></td>
     </tr>
         <tr>
-        <td class="left"><f:message key="excursion.price"/>:</td>
-        <td><form:input path="price" cssClass="text" /><form:errors path="price" cssClass="formError" /></td></td>
+        <td class="left">* <f:message key="excursion.price"/>:</td>
+        <td><form:input path="price" cssClass="text" /><form:errors path="price" cssClass="formError" delimiter=" " /></td></td>
     </tr>
 </table>
 
