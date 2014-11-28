@@ -133,7 +133,7 @@ public class JPATripDAO implements TripDAO {
             throw new IllegalArgumentException("The id has a negative value");
         }
         
-        entityManager.createNamedQuery("Trip.removeById", Trip.class)
+        entityManager.createNamedQuery("Trip.removeById")
             .setParameter("id", id)
             .executeUpdate();
     }

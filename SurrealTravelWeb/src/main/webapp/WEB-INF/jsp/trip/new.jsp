@@ -1,3 +1,8 @@
+<%-- 
+    Document   : new
+    Created on : Nov 26, 2014, 4:09:14 PM
+    Author     : Roman Lacko [396157]
+--%>
 <%@ page contentType="text/html;charset=UTF-8" pageEncoding="utf-8" trimDirectiveWhitespaces="true" session="false" %>
 <%@ taglib prefix="t" tagdir="/WEB-INF/tags" %>
 <%@ taglib prefix="c" uri="http://java.sun.com/jsp/jstl/core" %>

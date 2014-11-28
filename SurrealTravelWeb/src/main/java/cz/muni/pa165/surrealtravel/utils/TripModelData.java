@@ -7,7 +7,6 @@ import java.util.List;
 import java.util.Objects;
 
 /**
- *
  * @author Roman Lacko [396157]
  */
 public class TripModelData extends TripDTO {

@@ -11,6 +11,8 @@ import javax.persistence.Column;
 import javax.persistence.Entity;
 import javax.persistence.GeneratedValue;
 import javax.persistence.Id;
+import javax.persistence.JoinColumn;
+import javax.persistence.JoinTable;
 import javax.persistence.ManyToMany;
 import javax.persistence.NamedQueries;
 import javax.persistence.NamedQuery;
@@ -49,7 +51,10 @@ public class Trip implements Serializable {
     @Column
     private BigDecimal basePrice;
     
-    @ManyToMany
+    @ManyToMany(cascade = { CascadeType.MERGE, CascadeType.REFRESH, CascadeType.REMOVE })
+    @JoinTable(name = "TRIP_EXCURSION", 
+            joinColumns        = {@JoinColumn(name = "TRIP_ID",      referencedColumnName = "ID")},
+            inverseJoinColumns = {@JoinColumn(name = "EXCURSION_ID", referencedColumnName = "ID")})
     private List<Excursion> excursions;
     
     //--[  Constructors  ]------------------------------------------------------
