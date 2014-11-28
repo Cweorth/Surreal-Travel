@@ -86,6 +86,7 @@ public class ReservationController {
     public String newCustomerForm(ModelMap model) {
         model.addAttribute("reservationDTO", new ReservationDTO());
         model.addAttribute("customers", customerService.getAllCustomers());
+        model.addAttribute("trips", tripService.getAllTrips());
         return "reservation/new";
     }
     

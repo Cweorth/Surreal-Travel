@@ -6,22 +6,25 @@
 <table border="0" cellpadding="0" cellspacing="0" class="tableForm">
     <tr>
         <td class="left">* <f:message key="customer.name"/>:</td>
-        <td><c:forEach items="${customers}" var="customer" varStatus="state">
-                            <tr>
-                                <td><form:select path="customer" items="${customers}"/>
-                                    <option value="volvo">Volvo</option>
-                                    </select>
-
-                                    
-                                </td>
-                                
-                            </tr>
-                        </c:forEach></td>
+        <td class="left">* <f:message key="trip.destination"/>:</td>
+        <td><tr>
+            <select name="custom" path="customer" >
+            <c:forEach items="${customers}" var="customer" varStatus="state">
+                                                                                            
+                                    <option value="${customer}">${customer.name}</option>                                    
+                                       
+                        </c:forEach></tr></select></td>
     </tr>
+    <td></td>
     <tr>
-        <td class="left"><f:message key="trip.name"/>:</td>
-        <td><form:input path="trip" cssClass="text" /></td>
+        <select name="trp" path="trip">
+            <c:forEach items="${trips}" var="trip" varStatus="state">
+                                                                                            
+                                    <option value="${trips}">${trip.destination}</option>                                    
+                                       
+                        </c:forEach></tr></select></td>
     </tr>
+    
 </table>
 
 <br>
