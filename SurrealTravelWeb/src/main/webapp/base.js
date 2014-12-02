@@ -35,7 +35,9 @@ $(document).ready(function() {
         changeYear: true
     });
     
-    $( ".datepicker" ).datepicker( $.datepicker.regional[ "cs" ] );
+    // localize datepicker
+    if((window.navigator.userLanguage || window.navigator.language) === "cs")
+        $( ".datepicker" ).datepicker($.datepicker.regional[ "cs" ]);
     
     $( ".dialogDelete" ).dialog({
         height: 200,

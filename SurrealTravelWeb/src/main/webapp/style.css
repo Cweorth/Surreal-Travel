@@ -1,4 +1,4 @@
-html {height: 100%; margin: 0; padding: 10px;}
+html {height: 100%; margin: 0; padding: 0;}
 body {height: 100%; color: #000000; font: 12px Arial, sans-serif; text-align: left; background: #ffffff; padding: 0; margin: 0;}
 
 a {color: #000000; text-decoration: underline;}
@@ -75,8 +75,16 @@ form select:hover {border: 1px solid #666666;}
 
 .formError {color: #ff0000; font-weight: bold; margin-left: 10px;}
 
-ul#navigation {margin: 0; padding: 0; list-style: none; display: inline;}
-ul#navigation li {float: left; margin: 0 20px 0 0;}
+div.navigation {padding: 0; background: #ffffff;
+    filter: progid:DXImageTransform.Microsoft.gradient(startColorstr='#dddddd', endColorstr='#ffffff');
+    background: -webkit-gradient(linear, left top, left bottom, from(#dddddd), to(#ffffff));
+    background: -moz-linear-gradient(top, #dddddd, #ffffff);}
+div.navigation ul {margin: 0; padding: 0; list-style: none; display: inline;}
+div.navigation ul li {float: left; margin: 0 30px 0 0;}
+div.navigation ul li a {font-size: 14px; text-decoration: none; color: #000000; padding: 15px; display: block;}
+div.navigation ul li a:hover {color: #cae2f5; background: #4e88b7}
+
+div.body {padding: 10px;}
 
 #status {display: none; width: 250px; position: fixed; top: 25px; left: 50%; margin-left: -125px; z-index: 10;
     color: #ffffff;

@@ -21,6 +21,7 @@
     <link rel="stylesheet" href="//ajax.googleapis.com/ajax/libs/jqueryui/1.11.2/themes/smoothness/jquery-ui.css" />
     <script src="//ajax.googleapis.com/ajax/libs/jquery/2.1.1/jquery.min.js"></script>
     <script src="//ajax.googleapis.com/ajax/libs/jqueryui/1.11.2/jquery-ui.min.js"></script>
+    <script src="${pageContext.request.contextPath}/jquery.ui.datepicker-cs.js"></script>
     <script src="${pageContext.request.contextPath}/base.js"></script>
 </head>
 <body>
@@ -38,21 +39,26 @@
     <jsp:include page="/WEB-INF/include/failureMessage.jsp" />
 </c:if>
 
-<ul id="navigation">
-    <li><a href="${pageContext.request.contextPath}/"><f:message key="index.title" /></a></li>
-    <li><a href="${pageContext.request.contextPath}/trips"><f:message key="trip.title" /></a></li>
-    <li><a href="${pageContext.request.contextPath}/excursions"><f:message key="excursion.title" /></a></li>
-    <li><a href="${pageContext.request.contextPath}/reservations"><f:message key="reservation.title" /></a></li>
-    <li><a href="${pageContext.request.contextPath}/customers"><f:message key="customer.title" /></a></li>
-    <li><a href="${pageContext.request.contextPath}/about"><f:message key="about.title" /></a></li>
-</ul>
+<div class="navigation">
+    <ul>
+        <li><a href="${pageContext.request.contextPath}/"><f:message key="index.title" /></a></li>
+        <li><a href="${pageContext.request.contextPath}/trips"><f:message key="trip.title" /></a></li>
+        <li><a href="${pageContext.request.contextPath}/excursions"><f:message key="excursion.title" /></a></li>
+        <li><a href="${pageContext.request.contextPath}/reservations"><f:message key="reservation.title" /></a></li>
+        <li><a href="${pageContext.request.contextPath}/customers"><f:message key="customer.title" /></a></li>
+        <li><a href="${pageContext.request.contextPath}/about"><f:message key="about.title" /></a></li>
+    </ul>
+    <br style="clear: both;"> 
+</div>
+    
+<div class="body">
+    
+    <h1><c:out value="${title}"/></h1>
 
-<br style="clear: both;"> 
-    
-<h1><c:out value="${title}"/></h1>
-    
-<div id="content">
-    <jsp:invoke fragment="content" />
+    <div id="content">
+        <jsp:invoke fragment="content" />
+    </div>
+
 </div>
 
 </body>
