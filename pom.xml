@@ -11,7 +11,8 @@
         <module>SurrealTravelDAO</module>
         <module>SurrealTravelService</module>
         <module>SurrealTravelWeb</module>
-  </modules>
+        <module>SurrealTravelAPI</module>
+    </modules>
     
     <properties>
         <project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>

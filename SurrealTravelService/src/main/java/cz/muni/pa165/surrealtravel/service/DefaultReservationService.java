@@ -162,7 +162,6 @@ public class DefaultReservationService implements ReservationService {
  * setter for reservation dato
  * @param reservationDAO to set
  */
-    @Override
     public void setReservationDAO(ReservationDAO reservationDAO) {
         this.reservationDAO = reservationDAO;
     }
@@ -170,7 +169,6 @@ public class DefaultReservationService implements ReservationService {
  * seter to maper
  * @param mapper to set
  */
-    @Override
     public void setMapper(DozerBeanMapper mapper) {
         this.mapper = mapper;
     }

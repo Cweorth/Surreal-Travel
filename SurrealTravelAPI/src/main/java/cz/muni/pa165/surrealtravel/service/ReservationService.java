@@ -1,17 +1,10 @@
-/*
- * To change this license header, choose License Headers in Project Properties.
- * To change this template file, choose Tools | Templates
- * and open the template in the editor.
- */
 package cz.muni.pa165.surrealtravel.service;
 
-import cz.muni.pa165.surrealtravel.dao.ReservationDAO;
 import cz.muni.pa165.surrealtravel.dto.CustomerDTO;
 import cz.muni.pa165.surrealtravel.dto.ExcursionDTO;
 import cz.muni.pa165.surrealtravel.dto.ReservationDTO;
 import java.math.BigDecimal;
 import java.util.List;
-import org.dozer.DozerBeanMapper;
 
 /**
  *
@@ -72,18 +65,6 @@ public interface ReservationService {
      * @param excursionDTO the reservation which must be remove
      */
     void removeExcursionFromAllReservations(ExcursionDTO excursionDTO);
-
-    /**
-     * seter to maper
-     * @param mapper to set
-     */
-    void setMapper(DozerBeanMapper mapper);
-
-    /**
-     * setter for reservation dato
-     * @param reservationDAO to set
-     */
-    void setReservationDAO(ReservationDAO reservationDAO);
 
     /**
      * update reservation data

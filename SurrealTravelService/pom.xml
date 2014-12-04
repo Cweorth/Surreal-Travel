@@ -64,6 +64,10 @@
             <artifactId>mockito-all</artifactId>
             <version>1.10.8</version>
         </dependency>
-
+        <dependency>
+            <groupId>${project.groupId}</groupId>
+            <artifactId>SurrealTravelAPI</artifactId>
+            <version>${project.version}</version>
+        </dependency>
     </dependencies>
 </project>
