@@ -16,6 +16,7 @@
     <context:component-scan base-package="cz.muni.pa165.surrealtravel.dao"/>
     <context:component-scan base-package="cz.muni.pa165.surrealtravel.service"/>
     <context:component-scan base-package="cz.muni.pa165.surrealtravel.controller"/>
+    <context:component-scan base-package="cz.muni.pa165.surrealtravel.rest"/>
     
     <mvc:annotation-driven />
     <mvc:view-controller path="/" view-name="index"/>
@@ -66,6 +67,17 @@
                 <value>dozer/dto-mappings.xml</value>
             </list>
         </property>
+    </bean>
+    
+    <bean class="org.springframework.web.servlet.handler.BeanNameUrlHandlerMapping">
+	<property name="interceptors">
+		<list>
+			<ref bean="interceptor" />
+		</list>
+	</property>
+    </bean>
+
+    <bean id="interceptor" class="cz.muni.pa165.surrealtravel.utils.SasAllowOriginInterceptor">
     </bean>
 
 </beans>

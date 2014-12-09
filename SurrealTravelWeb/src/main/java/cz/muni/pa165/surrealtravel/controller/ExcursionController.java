@@ -1,15 +1,11 @@
 package cz.muni.pa165.surrealtravel.controller;
 
 import cz.muni.pa165.surrealtravel.dto.ExcursionDTO;
-import cz.muni.pa165.surrealtravel.dto.TripDTO;
 import cz.muni.pa165.surrealtravel.service.ExcursionService;
-import cz.muni.pa165.surrealtravel.service.TripService;
 import cz.muni.pa165.surrealtravel.validator.ExcursionValidator;
 import java.math.BigDecimal;
 import java.text.SimpleDateFormat;
-import java.util.Calendar;
 import java.util.Date;
-import java.util.List;
 import java.util.Locale;
 import javax.annotation.PostConstruct;
 import org.slf4j.Logger;
@@ -44,9 +40,6 @@ public class ExcursionController {
     
     @Autowired
     private ExcursionService excursionService;
-
-    @Autowired
-    private TripService tripService;
     
     @Autowired
     private MessageSource messageSource;
