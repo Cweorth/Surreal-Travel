@@ -22,6 +22,12 @@
     <mvc:view-controller path="/" view-name="index"/>
     <mvc:view-controller path="/about" view-name="about"/>
     <mvc:default-servlet-handler/>
+    <mvc:interceptors>
+        <mvc:interceptor>
+            <mvc:mapping path="/rest/*"/>
+            <bean class="cz.muni.pa165.surrealtravel.utils.SasAllowOriginInterceptor" />
+        </mvc:interceptor>
+    </mvc:interceptors>
     
     <bean class="org.springframework.beans.factory.config.PropertyPlaceholderConfigurer">
         <property name="location">
@@ -67,17 +73,6 @@
                 <value>dozer/dto-mappings.xml</value>
             </list>
         </property>
-    </bean>
-    
-    <bean class="org.springframework.web.servlet.handler.BeanNameUrlHandlerMapping">
-	<property name="interceptors">
-		<list>
-			<ref bean="interceptor" />
-		</list>
-	</property>
-    </bean>
-
-    <bean id="interceptor" class="cz.muni.pa165.surrealtravel.utils.SasAllowOriginInterceptor">
     </bean>
 
 </beans>

@@ -8,8 +8,16 @@ import org.springframework.web.servlet.handler.HandlerInterceptorAdapter;
  *
  * @author Petr Dvořák [359819]
  */
-public class SasAllowOriginInterceptor extends HandlerInterceptorAdapter{
+public class SasAllowOriginInterceptor extends HandlerInterceptorAdapter {
 
+    /**
+     *
+     * @param request
+     * @param response
+     * @param handler
+     * @return
+     * @throws Exception
+     */
     @Override
     public boolean preHandle(HttpServletRequest request, HttpServletResponse response, Object handler) throws Exception {
         response.setHeader("Access-Control-Allow-Origin", "*");
