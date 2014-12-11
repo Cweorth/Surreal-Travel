@@ -1,13 +1,21 @@
 package cz.muni.pa165.surrealtravel;
 
-/**
- * Hello world!
- *
- */
-public class Program 
-{
-    public static void main( String[] args )
-    {
-        System.out.println( "Hello World!" );
+import cz.muni.pa165.surrealtravel.cli.rest.RestExcursionClient;
+import cz.muni.pa165.surrealtravel.dto.ExcursionDTO;
+import org.slf4j.LoggerFactory;
+import org.springframework.context.ApplicationContext;
+import org.springframework.context.support.ClassPathXmlApplicationContext;
+
+public class Program {
+    
+    private final static org.slf4j.Logger logger = LoggerFactory.getLogger(RestExcursionClient.class);
+    
+    public static void main(String[] args) {
+        ApplicationContext context = new ClassPathXmlApplicationContext("surrealtravel.xml");
+        RestExcursionClient excursionClient = context.getBean(RestExcursionClient.class);
+        
+        for (ExcursionDTO excursion : excursionClient.getAllExcursions()) {
+            System.out.println(excursion.toString());
+        }
     }
 }
