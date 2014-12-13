@@ -58,6 +58,7 @@ public class ExcursionRestController {
     @RequestMapping(value="/new", method=RequestMethod.POST, consumes = MediaType.APPLICATION_JSON_VALUE)
     @ResponseStatus(value = HttpStatus.CREATED)
     public @ResponseBody ExcursionDTO addExcursion(@RequestBody ExcursionDTO excursion){
+        logger.info("Creating a new excursion");
         excursionService.addExcursion(excursion);
         return excursion;
     }
@@ -71,6 +72,7 @@ public class ExcursionRestController {
     @RequestMapping(value = "/edit/{id}", method = RequestMethod.PUT,  consumes = MediaType.APPLICATION_JSON_VALUE)
     @ResponseStatus(value = HttpStatus.ACCEPTED)
     public @ResponseBody ExcursionDTO updateExcursion(@PathVariable long id, @RequestBody ExcursionDTO excursion) {
+        logger.info("Updating a new excursion");
         excursionService.updateExcursion(excursion);
         return excursion;
     }
@@ -83,6 +85,7 @@ public class ExcursionRestController {
      */
     @RequestMapping(value = "/delete/{id}", method = RequestMethod.DELETE)
     public @ResponseBody ExcursionDTO deleteExcursion(@PathVariable long id) throws ObjectNotFoundException {
+        logger.info("Deleting a new excursion");
         ExcursionDTO excursion = excursionService.getExcursionById(id);
         if(excursion == null) throw new ObjectNotFoundException("Excursion not found.");
         excursionService.deleteExcursionById(id);
