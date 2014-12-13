@@ -11,6 +11,10 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.ResponseBody;
 import org.springframework.web.bind.annotation.RestController;
+import org.springframework.http.HttpStatus;
+import org.springframework.http.MediaType;
+import org.springframework.web.bind.annotation.ResponseStatus;
+import javassist.tools.rmi.ObjectNotFoundException;
 
 
 /**
@@ -45,4 +49,38 @@ public class ExcursionRestController {
         return excursionService.getExcursionById(id);
     }
     
+    /**
+     * Create new excursion
+     * @param excursion
+     */
+    @RequestMapping(value="/create", method=RequestMethod.POST, consumes = MediaType.APPLICATION_JSON_VALUE)
+    @ResponseStatus(value = HttpStatus.CREATED)
+    public @ResponseBody void addExcursion(ExcursionDTO excursion){
+        excursionService.addExcursion(excursion);
+    }
+    
+    /**
+     * Get excursion by id.
+     * @param excursion
+     * @param id
+     */
+    @RequestMapping(value = "/{id}", method = RequestMethod.PUT,  consumes = MediaType.APPLICATION_JSON_VALUE)
+    @ResponseStatus(value = HttpStatus.ACCEPTED)
+    public @ResponseBody void updateExcursion(@PathVariable("id") Long id, ExcursionDTO excursion) {
+        excursionService.updateExcursion(excursion);
+    }
+    
+    /**
+     * Delete excursion by id.
+     * @param id
+     */
+    @RequestMapping(value = "/{id}", method = RequestMethod.DELETE)
+    @ResponseStatus(value = HttpStatus.NO_CONTENT)
+    public void deleteExcursion(@PathVariable("id") Long id) throws ObjectNotFoundException {
+         ExcursionDTO excursion = excursionService.getExcursionById(id);
+           if (excursion == null) {
+                throw new ObjectNotFoundException("Excursion not found.");
+           }
+         excursionService.deleteExcursion(excursion);
+    }
 }
