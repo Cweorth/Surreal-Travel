@@ -1,7 +1,8 @@
 package cz.muni.pa165.surrealtravel.cli.rest;
 
 import cz.muni.pa165.surrealtravel.dto.ExcursionDTO;
-import java.net.URI;
+import java.net.MalformedURLException;
+import java.net.URL;
 import java.util.Arrays;
 import java.util.List;
 import org.slf4j.Logger;
@@ -20,13 +21,20 @@ public class RestExcursionClient {
     private RestTemplate template;
     
     @Autowired
-    private URI          prefix;
+    private URL          prefix;
     
     public RestExcursionClient()
     { }
     
     public List<ExcursionDTO> getAllExcursions() {
-        URI address = prefix.resolve("excursions");
+        URL address;
+        try {
+            address = new URL(prefix, "excursions");
+        } catch (MalformedURLException ex) {
+            logger.error("URL format exception", ex);
+            throw new RESTAccessException("Malformed URL", ex);
+        }
+        
         logger.info("retrieving from " + address.toString());
         
         ResponseEntity<ExcursionDTO[]> response = template.getForEntity(address.toString(), ExcursionDTO[].class);
