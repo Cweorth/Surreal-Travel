@@ -105,6 +105,7 @@ public class TripRestController {
             logger.error("the trip have got reservation canot delete");
             throw new IllegalArgumentException("this trip is part of reservation can be deleted");
         }
+        
         return trip;
     }
     
