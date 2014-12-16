@@ -4,16 +4,14 @@
 
 my $quiet  = 1;
 my $args   = "";
-my $class  = "cz.muni.pa165.surrealtravel.Program";
 
 ##--[  Run  ]------------------------------------------------------------------
 
 # Compile source if there is no "./target" directory
 system("mvn compile") unless (-d "./target/");
 
-my $command = "mvn";
-my $q       = $quiet ? "--quiet" : "";
+my $q       = $quiet ? "--quiet -e" : "";
 my $xargs   = $args . " " . join(" ", @ARGV);
 
-system("mvn $q exec:java -Dexec.mainClass=\"$class\" -Dexec.args=\"$xargs\"");
+system("mvn $q exec:java -Dexec.args=\"$xargs\"");
 

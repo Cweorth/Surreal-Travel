@@ -1,9 +1,9 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <beans xmlns="http://www.springframework.org/schema/beans"
-    xmlns:context="http://www.springframework.org/schema/context"
-    xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
-    xsi:schemaLocation="http://www.springframework.org/schema/context http://www.springframework.org/schema/context/spring-context.xsd
-                        http://www.springframework.org/schema/beans   http://www.springframework.org/schema/beans/spring-beans.xsd">
+       xmlns:context="http://www.springframework.org/schema/context"
+       xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+       xsi:schemaLocation="http://www.springframework.org/schema/context http://www.springframework.org/schema/context/spring-context.xsd
+                        http://www.springframework.org/schema/beans   http://www.springframework.org/schema/beans/spring-beans.xsd" xmlns:util="http://www.springframework.org/schema/util">
     
     <context:annotation-config/>
     <context:component-scan base-package="cz.muni.pa165.surrealtravel.cli"/>
@@ -23,5 +23,14 @@
             </list>
         </property>
     </bean>
-    
+
+    <bean name="handlers" class="java.util.EnumMap">
+        <constructor-arg>
+            <map key-type="cz.muni.pa165.surrealtravel.Command" value-type="cz.muni.pa165.surrealtravel.cli.handlers.CommandHandler">
+                <entry key="EXCURSIONS_LIST" value-ref="excursionsListHandler" />
+                <entry key="TRIPS_LIST"      value-ref="tripsListHandler" />
+            </map>
+        </constructor-arg>
+    </bean>
+            
 </beans>

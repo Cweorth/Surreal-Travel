@@ -7,6 +7,10 @@ import org.slf4j.LoggerFactory;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 
+/**
+ * Application configuration (things that can't be in Spring XML config)
+ * @author Roman Lacko [396157]
+ */
 @Configuration
 public class AppConfig {
     
@@ -20,12 +24,9 @@ public class AppConfig {
         }
     }
     
-    @Bean(name = "urlBase")
-    public static URL getBase() {
-        return base;
-    }
-
-    public static void setBase(URL base) {
-        AppConfig.base = Objects.requireNonNull(base, "base");
-    }
+    //--[  Methods  ]-----------------------------------------------------------
+    
+    public static URL  getBase()         { return base;                                           }
+    public static void setBase(URL base) { AppConfig.base = Objects.requireNonNull(base, "base"); }
+    
 }
