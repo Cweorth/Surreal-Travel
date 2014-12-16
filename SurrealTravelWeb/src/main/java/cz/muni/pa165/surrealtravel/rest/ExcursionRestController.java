@@ -46,8 +46,10 @@ public class ExcursionRestController {
      * @return
      */
     @RequestMapping(value = "/get/{id}", method = RequestMethod.GET)
-    public @ResponseBody ExcursionDTO getExcursion(@PathVariable long id) {
-        return excursionService.getExcursionById(id);
+    public @ResponseBody ExcursionDTO getExcursion(@PathVariable long id) throws ObjectNotFoundException {
+        ExcursionDTO excursion = excursionService.getExcursionById(id);
+        if(excursion == null) throw new ObjectNotFoundException("Excursion not found.");
+        return excursion;
     }
     
     /**
