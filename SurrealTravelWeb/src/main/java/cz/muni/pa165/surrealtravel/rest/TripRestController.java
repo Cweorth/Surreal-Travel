@@ -5,7 +5,9 @@
  */
 package cz.muni.pa165.surrealtravel.rest;
 
+import cz.muni.pa165.surrealtravel.dto.ExcursionDTO;
 import cz.muni.pa165.surrealtravel.dto.TripDTO;
+import cz.muni.pa165.surrealtravel.service.ExcursionService;
 import cz.muni.pa165.surrealtravel.service.TripService;
 import java.util.List;
 import javassist.tools.rmi.ObjectNotFoundException;
@@ -34,7 +36,7 @@ public class TripRestController {
     
     @Autowired
     private TripService tripService;
-    
+    private ExcursionService excursionService;
     
     /**
      * Default page - list all trips.
@@ -68,6 +70,13 @@ public class TripRestController {
     @ResponseStatus(value = HttpStatus.CREATED)
     public @ResponseBody TripDTO newTrip(TripDTO trip){
         logger.info("making new trip");
+        
+        for(ExcursionDTO e : trip.getExcursions()) {
+            if (!excursionService.getExcursionById(e.getId()).equals(e)) {
+                throw new IllegalArgumentException("Excursion " + e.getId() + " is not valid");
+            }
+        }
+        
         tripService.addTrip(trip);
         return trip;
     
@@ -83,6 +92,11 @@ public class TripRestController {
     @ResponseStatus(value = HttpStatus.ACCEPTED)
     public @ResponseBody TripDTO updateTrip(@PathVariable long id, @RequestBody TripDTO trip) {
         logger.info("Updating trip");
+        for(ExcursionDTO e : trip.getExcursions()) {
+            if (!excursionService.getExcursionById(e.getId()).equals(e)) {
+                throw new IllegalArgumentException("Excursion " + e.getId() + " is not valid");
+            }
+        }
         tripService.updateTrip(trip);
         return trip;
     }
