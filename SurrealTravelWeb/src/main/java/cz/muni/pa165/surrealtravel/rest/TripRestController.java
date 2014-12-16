@@ -96,9 +96,15 @@ public class TripRestController {
     @RequestMapping(value = "/delete/{id}", method = RequestMethod.DELETE)
     public @ResponseBody TripDTO deleteExcursion(@PathVariable long id) throws ObjectNotFoundException {
         logger.info("Deleting trip");
-        TripDTO trip = tripService.getTripById(id);
+        TripDTO trip=new TripDTO();
+        try {
+        trip = tripService.getTripById(id);
         if(trip == null) throw new ObjectNotFoundException("no trip.");
         tripService.deleteTripById(id);
+        }catch(Exception e){
+            logger.error("the trip have got reservation canot delete");
+            throw new IllegalArgumentException("this trip is part of reservation can be deleted");
+        }
         return trip;
     }
     
