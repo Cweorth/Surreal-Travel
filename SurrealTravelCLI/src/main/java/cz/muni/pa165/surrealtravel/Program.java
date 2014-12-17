@@ -132,10 +132,8 @@ public class Program {
                 throw new RuntimeException("No handler for command " + options.getCommand());
             }
         
-            CommandHandler handler = handlers.get(options.getCommand());        
-
             logger.debug("Running command handler");
-            handler.run(options);
+            options.getCmd().run(options);
 
             logger.debug("Done");
         } catch (CmdLineException ex) {
