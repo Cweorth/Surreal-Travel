@@ -2,6 +2,7 @@ package cz.muni.pa165.surrealtravel;
 
 import cz.muni.pa165.surrealtravel.cli.AppConfig;
 import cz.muni.pa165.surrealtravel.cli.handlers.CommandHandler;
+import cz.muni.pa165.surrealtravel.cli.handlers.ExcursionsGetHandler;
 import cz.muni.pa165.surrealtravel.cli.handlers.ExcursionsListHandler;
 import cz.muni.pa165.surrealtravel.cli.handlers.TripsListHandler;
 import java.net.URL;
@@ -46,6 +47,7 @@ public class MainOptions {
             usage = "main command")
     @SubCommands({
         @SubCommand(name = "excursions-list", impl = ExcursionsListHandler.class),
+        @SubCommand(name = "excursions-get",  impl = ExcursionsGetHandler.class),
         @SubCommand(name = "trips-list",      impl = TripsListHandler.class)
     })   
     private CommandHandler cmd;

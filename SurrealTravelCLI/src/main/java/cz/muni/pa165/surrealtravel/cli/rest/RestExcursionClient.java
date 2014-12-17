@@ -16,7 +16,7 @@ import org.springframework.web.client.RestTemplate;
 
 /**
  * The REST client providing operations for {@link cz.muni.pa165.surrealtravel.dto.ExcursionDTO}.
- * @author Jan Klimeš []
+ * @author Jan Klimeš [374259]
  */
 @Component
 public class RestExcursionClient {
@@ -59,6 +59,39 @@ public class RestExcursionClient {
         }
         
         return Arrays.asList(response.getBody());
+    }
+    
+    /**
+     * Get a single excursion by the id.
+     * @param id
+     * @return 
+     */
+    public ExcursionDTO getExcursion(long id) {
+        URL address;
+        
+        try {
+            address = new URL(AppConfig.getBase(), "excursions/get/" + id);
+        } catch (MalformedURLException ex) {
+            logger.error("URL format exception", ex);
+            throw new RESTAccessException("Malformed URL", ex);
+        }
+        
+        logger.info("Retrieving from " + address.toString());
+        
+        ResponseEntity<ExcursionDTO> response;
+        try {
+            response = template.getForEntity(address.toString(), ExcursionDTO.class);
+        } catch (RestClientException ex) {
+            throw new RESTAccessException(ex.getMessage(), ex);
+        }
+        
+        logger.info(response.toString());
+        
+        if (!response.hasBody()) {
+            throw new RESTAccessException(response.getStatusCode().toString());
+        }
+        
+        return response.getBody();
     }
         
 }
