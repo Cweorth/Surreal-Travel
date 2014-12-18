@@ -9,6 +9,7 @@ import java.util.Objects;
 public enum Command {
     EXCURSIONS_LIST("excursions-list"),
     EXCURSIONS_GET("excursions-get"),
+    EXCURSIONS_ADD("excursions-add"),
     TRIPS_LIST("trips-list");
     
     private final String cmd;

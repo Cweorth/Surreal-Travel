@@ -1,7 +1,9 @@
 package cz.muni.pa165.surrealtravel;
 
+import cz.muni.pa165.surrealtravel.cli.AppConfig;
 import cz.muni.pa165.surrealtravel.cli.handlers.CommandHandler;
 import cz.muni.pa165.surrealtravel.cli.rest.RESTAccessException;
+import cz.muni.pa165.surrealtravel.cli.rest.RestExcursionClient;
 import java.io.PrintStream;
 import java.util.Map;
 import java.util.Set;
@@ -65,6 +67,9 @@ public class Program {
         try {
             logger.debug("About to load application context");
             ApplicationContext context = new ClassPathXmlApplicationContext("surrealtravel.xml");
+            
+            // temp
+            AppConfig.excursionClient = context.getBean(RestExcursionClient.class);
         
             logger.debug("Context loaded, parsing command-line arguments");
             MainOptions   options = new MainOptions();

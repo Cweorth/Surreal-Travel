@@ -1,7 +1,9 @@
 package cz.muni.pa165.surrealtravel.cli.handlers;
 
+import cz.muni.pa165.surrealtravel.cli.utils.CLITableExcursion;
 import cz.muni.pa165.surrealtravel.Command;
 import cz.muni.pa165.surrealtravel.MainOptions;
+import cz.muni.pa165.surrealtravel.cli.AppConfig;
 import cz.muni.pa165.surrealtravel.cli.rest.RestExcursionClient;
 import cz.muni.pa165.surrealtravel.dto.ExcursionDTO;
 import org.kohsuke.args4j.Option;
@@ -10,13 +12,14 @@ import org.springframework.stereotype.Component;
 
 /**
  *
- * @author Jan Klimeš
+ * @author Jan Klimeš [374259]
  */
 @Component
 public class ExcursionsGetHandler implements CommandHandler {
 
-    @Autowired(required = true)
-    private RestExcursionClient client;
+//    @Autowired(required = true)
+//    private RestExcursionClient client;
+    private RestExcursionClient client = AppConfig.excursionClient;
     
     @Option(name = "--id", metaVar = "id", usage = "specify the excursion id", required = true)
     private long id;
@@ -40,8 +43,10 @@ public class ExcursionsGetHandler implements CommandHandler {
             return;
         }
         
-        System.out.println("banzaaaaj!");
-        System.out.println(excursion.getDestination()); // just testing
+        System.out.println("The following excursion was found:");
+        System.out.println();
+        
+        CLITableExcursion.createTable(excursion);
     }
 
     public long getId() {
@@ -50,6 +55,14 @@ public class ExcursionsGetHandler implements CommandHandler {
 
     public void setId(long id) {
         this.id = id;
+    }
+
+    public RestExcursionClient getClient() {
+        return client;
+    }
+
+    public void setClient(RestExcursionClient client) {
+        this.client = client;
     }
     
 }

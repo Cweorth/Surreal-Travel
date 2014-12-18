@@ -29,6 +29,7 @@
             <map key-type="cz.muni.pa165.surrealtravel.Command" value-type="cz.muni.pa165.surrealtravel.cli.handlers.CommandHandler">
                 <entry key="EXCURSIONS_LIST" value-ref="excursionsListHandler" />
                 <entry key="EXCURSIONS_GET"  value-ref="excursionsGetHandler" />
+                <entry key="EXCURSIONS_ADD"  value-ref="excursionsAddHandler" />
                 <entry key="TRIPS_LIST"      value-ref="tripsListHandler" />
             </map>
         </constructor-arg>

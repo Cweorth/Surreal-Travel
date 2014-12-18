@@ -1,5 +1,6 @@
 package cz.muni.pa165.surrealtravel.cli;
 
+import cz.muni.pa165.surrealtravel.cli.rest.RestExcursionClient;
 import java.net.MalformedURLException;
 import java.net.URL;
 import java.util.Objects;
@@ -13,6 +14,9 @@ import org.springframework.context.annotation.Configuration;
  */
 @Configuration
 public class AppConfig {
+    
+    // temp
+    public static RestExcursionClient excursionClient;
     
     private static URL base;
 

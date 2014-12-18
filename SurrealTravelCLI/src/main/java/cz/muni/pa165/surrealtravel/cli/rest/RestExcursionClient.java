@@ -93,5 +93,46 @@ public class RestExcursionClient {
         
         return response.getBody();
     }
+    
+    /**
+     * Create new excursion.
+     * @param excursion
+     * @return 
+     */
+    public ExcursionDTO addExcursion(ExcursionDTO excursion) {
+        URL address;
         
+        try {
+            address = new URL(AppConfig.getBase(), "excursions/add");
+        } catch (MalformedURLException ex) {
+            logger.error("URL format exception", ex);
+            throw new RESTAccessException("Malformed URL", ex);
+        }
+        
+        logger.info("Adding excursion via " + address.toString());
+        
+        ResponseEntity<ExcursionDTO> response;
+        try {
+            response = template.postForEntity(address.toString(), excursion, ExcursionDTO.class);
+        } catch (RestClientException ex) {
+            throw new RESTAccessException(ex.getMessage(), ex);
+        }
+        
+        logger.info(response.toString());
+        
+        if (!response.hasBody()) {
+            throw new RESTAccessException(response.getStatusCode().toString());
+        }
+        
+        return response.getBody();
+    }
+
+    public RestTemplate getTemplate() {
+        return template;
+    }
+
+    public void setTemplate(RestTemplate template) {
+        this.template = template;
+    }
+     
 }

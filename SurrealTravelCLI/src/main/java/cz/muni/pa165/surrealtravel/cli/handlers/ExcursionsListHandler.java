@@ -2,6 +2,7 @@ package cz.muni.pa165.surrealtravel.cli.handlers;
 
 import cz.muni.pa165.surrealtravel.Command;
 import cz.muni.pa165.surrealtravel.MainOptions;
+import cz.muni.pa165.surrealtravel.cli.AppConfig;
 import cz.muni.pa165.surrealtravel.cli.rest.RestExcursionClient;
 import cz.muni.pa165.surrealtravel.dto.ExcursionDTO;
 import java.text.DateFormat;
@@ -18,8 +19,9 @@ import org.springframework.stereotype.Component;
 @Component
 public class ExcursionsListHandler implements CommandHandler {
     
-    @Autowired(required = true)
-    private RestExcursionClient client;
+//    @Autowired(required = true)
+//    private RestExcursionClient client;
+    private RestExcursionClient client = AppConfig.excursionClient;
     
     private final DateFormat df = new SimpleDateFormat("dd-MM-yyyy");
     
