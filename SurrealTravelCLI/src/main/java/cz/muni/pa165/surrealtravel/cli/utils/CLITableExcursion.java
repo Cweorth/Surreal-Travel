@@ -23,11 +23,11 @@ public class CLITableExcursion {
         w[ix] = Math.max(w[ix], obj.toString().length());
     }
     
-    public static void createTable(ExcursionDTO excursion) {
-        CLITableExcursion.createTable(Arrays.asList(new ExcursionDTO[] {excursion}));
+    public static void print(ExcursionDTO excursion) {
+        CLITableExcursion.print(Arrays.asList(new ExcursionDTO[] {excursion}));
     }
     
-    public static void createTable(List<ExcursionDTO> excursions) {
+    public static void print(List<ExcursionDTO> excursions) {
         // array of column widths
         int[] w = new int[CLITableExcursion.titles.length];
         

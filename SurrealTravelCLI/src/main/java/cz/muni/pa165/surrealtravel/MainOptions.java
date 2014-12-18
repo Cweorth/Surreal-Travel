@@ -3,6 +3,8 @@ package cz.muni.pa165.surrealtravel;
 import cz.muni.pa165.surrealtravel.cli.AppConfig;
 import cz.muni.pa165.surrealtravel.cli.handlers.CommandHandler;
 import cz.muni.pa165.surrealtravel.cli.handlers.ExcursionsAddHandler;
+import cz.muni.pa165.surrealtravel.cli.handlers.ExcursionsDeleteHandler;
+import cz.muni.pa165.surrealtravel.cli.handlers.ExcursionsEditHandler;
 import cz.muni.pa165.surrealtravel.cli.handlers.ExcursionsGetHandler;
 import cz.muni.pa165.surrealtravel.cli.handlers.ExcursionsListHandler;
 import cz.muni.pa165.surrealtravel.cli.handlers.TripsListHandler;
@@ -47,10 +49,12 @@ public class MainOptions {
     @Argument(index = 0, required = true, metaVar = "command", handler = SubCommandHandler.class,
             usage = "main command")
     @SubCommands({
-        @SubCommand(name = "excursions-list", impl = ExcursionsListHandler.class),
-        @SubCommand(name = "excursions-get",  impl = ExcursionsGetHandler.class),
-        @SubCommand(name = "excursions-add",  impl = ExcursionsAddHandler.class),
-        @SubCommand(name = "trips-list",      impl = TripsListHandler.class)
+        @SubCommand(name = "excursions-list",   impl = ExcursionsListHandler.class),
+        @SubCommand(name = "excursions-get",    impl = ExcursionsGetHandler.class),
+        @SubCommand(name = "excursions-add",    impl = ExcursionsAddHandler.class),
+        @SubCommand(name = "excursions-edit",   impl = ExcursionsEditHandler.class),
+        @SubCommand(name = "excursions-delete", impl = ExcursionsDeleteHandler.class),
+        @SubCommand(name = "trips-list",        impl = TripsListHandler.class)
     })   
     private CommandHandler cmd;
     

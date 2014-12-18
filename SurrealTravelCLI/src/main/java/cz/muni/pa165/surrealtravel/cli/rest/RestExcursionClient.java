@@ -9,6 +9,11 @@ import java.util.List;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.http.HttpEntity;
+import org.springframework.http.HttpHeaders;
+import org.springframework.http.HttpMethod;
+import org.springframework.http.MediaType;
+import org.springframework.http.RequestEntity;
 import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Component;
 import org.springframework.web.client.RestClientException;
@@ -103,7 +108,7 @@ public class RestExcursionClient {
         URL address;
         
         try {
-            address = new URL(AppConfig.getBase(), "excursions/add");
+            address = new URL(AppConfig.getBase(), "excursions/new");
         } catch (MalformedURLException ex) {
             logger.error("URL format exception", ex);
             throw new RESTAccessException("Malformed URL", ex);
@@ -117,7 +122,7 @@ public class RestExcursionClient {
         } catch (RestClientException ex) {
             throw new RESTAccessException(ex.getMessage(), ex);
         }
-        
+
         logger.info(response.toString());
         
         if (!response.hasBody()) {
@@ -125,6 +130,77 @@ public class RestExcursionClient {
         }
         
         return response.getBody();
+    }
+    
+    /**
+     * Modify existing excursion.
+     * @param excursion
+     * @return 
+     */
+    public ExcursionDTO editExcursion(ExcursionDTO excursion) {
+        URL address;
+        
+        try {
+            address = new URL(AppConfig.getBase(), "excursions/edit/" + excursion.getId());
+        } catch (MalformedURLException ex) {
+            logger.error("URL format exception", ex);
+            throw new RESTAccessException("Malformed URL", ex);
+        }
+        
+        logger.info("Modifying excursion via " + address.toString());
+        
+        final HttpEntity<ExcursionDTO> request = new HttpEntity<>(excursion, new HttpHeaders());
+        
+        ResponseEntity<ExcursionDTO> response;
+        try {
+            response = template.exchange(address.toString(), HttpMethod.PUT, request, ExcursionDTO.class);
+        } catch (RestClientException ex) {
+            throw new RESTAccessException(ex.getMessage(), ex);
+        }
+        
+        logger.info(response.toString());
+        
+        if(!response.hasBody()) {
+            throw new RESTAccessException(response.getStatusCode().toString());
+        }
+        
+        return response.getBody();
+        
+    }
+    
+    /**
+     * Delete excursion by id.
+     * @param id
+     * @return 
+     */
+    public ExcursionDTO deleteExcursion(long id) {
+        URL address;
+        
+        try {
+            address = new URL(AppConfig.getBase(), "excursions/delete/" + id);
+        } catch (MalformedURLException ex) {
+            logger.error("URL format exception", ex);
+            throw new RESTAccessException("Malformed URL", ex);
+        }
+        
+        logger.info("Deleting by calling " + address.toString());
+               
+        // TODO tomorow
+//        ResponseEntity<ExcursionDTO> response;
+//        try {
+////            response = template.
+//        } catch (RestClientException ex) {
+//            throw new RESTAccessException(ex.getMessage(), ex);
+//        }
+//        
+//        logger.info(response.toString());
+//        
+//        if (!response.hasBody()) {
+//            throw new RESTAccessException(response.getStatusCode().toString());
+//        }
+//        
+//        return response.getBody();
+        return null;
     }
 
     public RestTemplate getTemplate() {

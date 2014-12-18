@@ -10,6 +10,8 @@ public enum Command {
     EXCURSIONS_LIST("excursions-list"),
     EXCURSIONS_GET("excursions-get"),
     EXCURSIONS_ADD("excursions-add"),
+    EXCURSIONS_EDIT("excursions-edit"),
+    EXCURSIONS_DELETE("excursions-delete"),
     TRIPS_LIST("trips-list");
     
     private final String cmd;

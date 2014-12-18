@@ -11,7 +11,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
 
 /**
- *
+ * Handler for excursions-get command.
  * @author Jan Klimeš [374259]
  */
 @Component
@@ -43,10 +43,9 @@ public class ExcursionsGetHandler implements CommandHandler {
             return;
         }
         
-        System.out.println("The following excursion was found:");
-        System.out.println();
+        System.out.println("- The following excursion was found >>");
         
-        CLITableExcursion.createTable(excursion);
+        CLITableExcursion.print(excursion);
     }
 
     public long getId() {
