@@ -197,18 +197,7 @@ public class ReservationServiceTest extends AbstractServiceTest {
         service.updateReservation(reservations.get(0));
         verify(dao, times(1)).updateReservation(any(Reservation.class));
     }
-    
-    @Test(expected = NullPointerException.class)
-    public void deleteReservationNullTest() {
-        service.deleteReservation(null);
-    }
-    
-    @Test
-    public void deleteReservationTest() {
-        service.deleteReservation(reservations.get(0));
-        verify(dao, times(1)).deleteReservation(any(Reservation.class));
-    }
-    
+       
     @Test(expected = NullPointerException.class)
     public void getFullPriceNullTest() {
         service.getFullPriceByCustomer(null);

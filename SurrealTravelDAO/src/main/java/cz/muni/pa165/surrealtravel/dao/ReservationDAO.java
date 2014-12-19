@@ -1,7 +1,6 @@
 package cz.muni.pa165.surrealtravel.dao;
 
 import cz.muni.pa165.surrealtravel.entity.Customer;
-import cz.muni.pa165.surrealtravel.entity.Excursion;
 import cz.muni.pa165.surrealtravel.entity.Reservation;
 import java.math.BigDecimal;
 import java.util.List;
@@ -45,11 +44,6 @@ public interface ReservationDAO {
      */
     public Reservation updateReservation(Reservation reservation);
     
-    /**
-     * Deletereservation from databaze
-     * @param reservation 
-     */
-    public void deleteReservation(Reservation reservation);
     
     /**
      * get end price from all ereservation by one customer

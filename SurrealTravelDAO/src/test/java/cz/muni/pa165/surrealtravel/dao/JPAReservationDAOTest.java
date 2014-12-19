@@ -9,7 +9,6 @@ import java.math.BigDecimal;
 import java.util.ArrayList;
 import java.util.List;
 import static org.junit.Assert.assertEquals;
-import static org.junit.Assert.assertFalse;
 import static org.junit.Assert.assertTrue;
 import org.junit.Test;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -189,25 +188,6 @@ public class JPAReservationDAOTest extends AbstractPersistenceTest {
         Reservation retrieved = em.find(Reservation.class, reservation.getId());
 
         assertEquals(retrieved, reservation);
-    }
-    
-    @Test(expected = NullPointerException.class)
-    @Transactional
-    public void testDeleteReservationNull() {
-        dao.deleteReservation(null);
-    }
-    
-    @Test
-    @Transactional
-    public void testDeleteReservation() {
-        List<Reservation> res = prepareReservationBatch();
-        storeReservations(res);
-        Reservation chosenReservation = res.get(0);
-        
-        dao.deleteReservation(chosenReservation);
-        
-        List<Reservation> all = em.createQuery("SELECT r FROM Reservation r").getResultList();
-        assertFalse(all.contains(chosenReservation));
     }
     
     @Test(expected = NullPointerException.class)

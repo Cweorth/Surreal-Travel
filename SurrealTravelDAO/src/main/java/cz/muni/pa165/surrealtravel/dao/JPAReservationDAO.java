@@ -1,7 +1,6 @@
 package cz.muni.pa165.surrealtravel.dao;
 
 import cz.muni.pa165.surrealtravel.entity.Customer;
-import cz.muni.pa165.surrealtravel.entity.Excursion;
 import cz.muni.pa165.surrealtravel.entity.Reservation;
 import java.math.BigDecimal;
 import java.util.List;
@@ -79,15 +78,7 @@ public class JPAReservationDAO implements ReservationDAO {
         return merge;
         
     }
-    
-    @Override
-    public void deleteReservation(Reservation reservation) {
-        if(reservation == null) throw new NullPointerException("reservation doesnt exist.");
-        
-        entityManager.remove(reservation);
-        
-    }
-    
+     
     @Override
     public BigDecimal getFullPriceByCustomer(Customer customer) {
       if(customer==null) throw new NullPointerException("customer doesnt exist.");

@@ -2,10 +2,8 @@ package cz.muni.pa165.surrealtravel.service;
 
 import cz.muni.pa165.surrealtravel.dao.ReservationDAO;
 import cz.muni.pa165.surrealtravel.dto.CustomerDTO;
-import cz.muni.pa165.surrealtravel.dto.ExcursionDTO;
 import cz.muni.pa165.surrealtravel.dto.ReservationDTO;
 import cz.muni.pa165.surrealtravel.entity.Customer;
-import cz.muni.pa165.surrealtravel.entity.Excursion;
 import cz.muni.pa165.surrealtravel.entity.Reservation;
 import java.math.BigDecimal;
 import java.util.ArrayList;
@@ -95,17 +93,7 @@ public class DefaultReservationService implements ReservationService {
      reservationDAO.updateReservation(reservation);
       
   }
-  /**
-   * delete reservation from databaze
-   * @param reservationDTO the reservation to delete
-   */
-  @Transactional
-    @Override
-  public void deleteReservation(ReservationDTO reservationDTO){
-      Objects.requireNonNull(reservationDTO);
-      Reservation reservation=mapper.map(reservationDTO, Reservation.class);
-      reservationDAO.deleteReservation(reservation);
-  }
+  
   /**
    * get full price to pay for one customer
    * @param customerDTO the customer, for him we calculate the price

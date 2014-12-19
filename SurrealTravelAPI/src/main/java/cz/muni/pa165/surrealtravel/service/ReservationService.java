@@ -1,7 +1,6 @@
 package cz.muni.pa165.surrealtravel.service;
 
 import cz.muni.pa165.surrealtravel.dto.CustomerDTO;
-import cz.muni.pa165.surrealtravel.dto.ExcursionDTO;
 import cz.muni.pa165.surrealtravel.dto.ReservationDTO;
 import java.math.BigDecimal;
 import java.util.List;
@@ -18,13 +17,6 @@ public interface ReservationService {
      */
     
     void addReservation(ReservationDTO reservationDTO);
-
-    /**
-     * Delete the reservation from the database.
-     * @param reservationDTO the reservation to delete
-     */
-    
-    void deleteReservation(ReservationDTO reservationDTO);
 
     /**
      * Get a list of all reservations.
