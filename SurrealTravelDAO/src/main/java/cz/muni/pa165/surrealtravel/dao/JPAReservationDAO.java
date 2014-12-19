@@ -10,7 +10,7 @@ import org.springframework.stereotype.Repository;
 
 
 /**
- * Implementacion of DAO for Reservation entity
+ * Implementation of DAO for Reservation entity
  * @author Tomáš Kácel [359965]
  */
 @Repository(value = "reservationDao")
