@@ -29,7 +29,7 @@ import org.springframework.web.bind.annotation.RestController;
 @RequestMapping("/rest/trips")
 public class TripRestController {
 
-    final static Logger logger = LoggerFactory.getLogger(cz.muni.pa165.surrealtravel.rest.TripRestController.class);
+    private final static Logger logger = LoggerFactory.getLogger(cz.muni.pa165.surrealtravel.rest.TripRestController.class);
 
     @Autowired
     private TripService tripService;

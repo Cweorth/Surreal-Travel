@@ -8,7 +8,6 @@ import cz.muni.pa165.surrealtravel.utils.TripModelData;
 import cz.muni.pa165.surrealtravel.validator.TripValidator;
 import java.math.BigDecimal;
 import java.text.SimpleDateFormat;
-import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.Calendar;
 import java.util.Date;

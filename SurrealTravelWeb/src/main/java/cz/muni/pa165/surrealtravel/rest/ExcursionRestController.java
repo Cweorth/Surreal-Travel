@@ -4,7 +4,6 @@ import cz.muni.pa165.surrealtravel.rest.exceptions.EntityNotFoundException;
 import cz.muni.pa165.surrealtravel.rest.exceptions.EntityNotDeletedException;
 import cz.muni.pa165.surrealtravel.rest.exceptions.InvalidEntityException;
 import cz.muni.pa165.surrealtravel.dto.ExcursionDTO;
-import static cz.muni.pa165.surrealtravel.rest.TripRestController.logger;
 import cz.muni.pa165.surrealtravel.service.ExcursionService;
 import java.util.List;
 import org.slf4j.Logger;
@@ -29,7 +28,7 @@ import org.springframework.web.bind.annotation.RestController;
 @RequestMapping("/rest/excursions")
 public class ExcursionRestController {
     
-    final static Logger logger = LoggerFactory.getLogger(cz.muni.pa165.surrealtravel.rest.ExcursionRestController.class);
+    private final static Logger logger = LoggerFactory.getLogger(cz.muni.pa165.surrealtravel.rest.ExcursionRestController.class);
     
     @Autowired
     private ExcursionService excursionService;
