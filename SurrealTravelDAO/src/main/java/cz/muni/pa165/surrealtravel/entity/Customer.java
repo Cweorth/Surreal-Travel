@@ -14,7 +14,6 @@ import javax.persistence.NamedQuery;
  */
 @NamedQueries({
     @NamedQuery(name="Customer.getAll",query="SELECT c FROM Customer c"),
-    @NamedQuery(name="Customer.getByName",query="SELECT c FROM Customer c WHERE c.name = :name"),
     @NamedQuery(name="Customer.removeById",query="DELETE FROM Customer c WHERE c.id = :id"),
 })
 @Entity

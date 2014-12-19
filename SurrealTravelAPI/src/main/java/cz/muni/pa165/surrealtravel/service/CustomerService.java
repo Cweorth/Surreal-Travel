@@ -23,13 +23,6 @@ public interface CustomerService {
     public CustomerDTO getCustomerById(long id);
     
     /**
-     * Get list of customer DTOs with the given name.
-     * @param name
-     * @return 
-     */
-    public List<CustomerDTO> getCustomerByName(String name);
-    
-    /**
      * Get list of all customer DTOs.
      * @return 
      */
@@ -41,12 +34,6 @@ public interface CustomerService {
      * @return 
      */
     public CustomerDTO updateCustomer(CustomerDTO customer);
-    
-    /**
-     * Delete customer entry for the given id.
-     * @param customer 
-     */
-    public void deleteCustomer(CustomerDTO customer);
     
     /**
      * Delete customer entry for the given DTO.

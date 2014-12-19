@@ -40,14 +40,6 @@ public class DefaultCustomerService implements CustomerService {
     }
     
     @Override
-    public List<CustomerDTO> getCustomerByName(String name) {
-        List<CustomerDTO> customersDTO = new ArrayList<>();
-        for(Customer c : customerDao.getCustomerByName(name))
-            customersDTO.add(mapper.map(c, CustomerDTO.class));
-        return customersDTO;
-    }
-    
-    @Override
     public List<CustomerDTO> getAllCustomers() {
         List<CustomerDTO> customersDTO = new ArrayList<>();
         for(Customer c : customerDao.getAllCustomers())
@@ -62,14 +54,7 @@ public class DefaultCustomerService implements CustomerService {
         Customer updated = customerDao.updateCustomer(mapper.map(customer, Customer.class));
         return mapper.map(updated, CustomerDTO.class);
     }
-    
-    @Transactional
-    @Override
-    public void deleteCustomer(CustomerDTO customer) {
-        Objects.requireNonNull(customer, "Customer data transfer object is null.");
-        customerDao.deleteCustomer(mapper.map(customer, Customer.class));
-    }
-    
+
     @Transactional
     @Override
     public void deleteCustomerById(long id) {

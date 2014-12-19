@@ -21,14 +21,7 @@ public interface CustomerDAO {
      * @return 
      */
     public Customer getCustomerById(long id);
-    
-    /**
-     * Get the customer with the given name. All customers with the given name are returned.
-     * @param name
-     * @return 
-     */
-    public List<Customer> getCustomerByName(String name);
-    
+
     /**
      * Get all customers.
      * @return 
@@ -41,12 +34,6 @@ public interface CustomerDAO {
      * @return  
      */
     public Customer updateCustomer(Customer customer);
-    
-    /**
-     * Remove customer.
-     * @param customer 
-     */
-    public void deleteCustomer(Customer customer);
     
     /**
      * Remove customer by id.

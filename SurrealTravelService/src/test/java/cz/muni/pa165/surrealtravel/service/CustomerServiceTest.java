@@ -5,7 +5,6 @@ import cz.muni.pa165.surrealtravel.dao.CustomerDAO;
 import cz.muni.pa165.surrealtravel.dto.CustomerDTO;
 import cz.muni.pa165.surrealtravel.entity.Customer;
 import java.util.ArrayList;
-import java.util.Arrays;
 import java.util.List;
 import org.junit.Assert;
 import org.junit.Test;
@@ -26,8 +25,10 @@ import org.mockito.runners.MockitoJUnitRunner;
  */
 @RunWith(MockitoJUnitRunner.class)
 public class CustomerServiceTest extends AbstractServiceTest {
+    
     @Mock
     private CustomerDAO dao;
+    
     @InjectMocks
     private DefaultCustomerService service;
     
@@ -67,20 +68,6 @@ public class CustomerServiceTest extends AbstractServiceTest {
         assertEquals(1L, ret.getId());
         assertEquals(exp, ret);
     }
-    @Test
-    public void getCustomerByName(){
-        Customer cus= makeCustomer();
-        cus.setId(1L);
-        List<CustomerDTO> customers = makeCustomerDTO();
-        CustomerDTO exp= customers.get(0);
-        List<CustomerDTO> expected = Arrays.asList(new CustomerDTO[] {exp});
-        when(dao.getCustomerByName(cus.getName())).thenReturn(Arrays.asList(new Customer[] {cus})); 
-        List<CustomerDTO> retrieved = service.getCustomerByName(cus.getName());
-        verify(dao, times(1)).getCustomerByName(Matchers.eq(cus.getName()));
-        assertNotNull(retrieved);
-        for(CustomerDTO e : retrieved) assertEquals(cus.getName(), e.getName());
-        assertEquals(expected, retrieved);
-    }
     
     @Test
     public void getAllCustomers(){
@@ -105,37 +92,15 @@ public class CustomerServiceTest extends AbstractServiceTest {
         assertTrue(customers.size() == expected.size());
         assertEquals(expected, customers);
     }
-    @Test
-    public void deleteCustomerNull(){
-        CustomerDTO customerDTO = null;
-        try {
-            service.deleteCustomer(customerDTO);
-            fail();
-        } catch (NullPointerException ex) {
-            // OK
-        }
-       
-    }
-    
-    @Test
-    public void deleteCustomer(){
-        
-        List<CustomerDTO> customers = makeCustomerDTO();
-        CustomerDTO c = customers.get(0);
-        service.deleteCustomer(c);
-        Customer entity=makeCustomer();
-        entity.setId(1L);
-        verify(dao, times(1)).deleteCustomer(entity);
-       
-    }
+   
     @Test
     public void updateCustomer() {
-      List<CustomerDTO> customers = makeCustomerDTO();
+        List<CustomerDTO> customers = makeCustomerDTO();
         CustomerDTO c = customers.get(0);
-        Customer entity=makeCustomer();
+        Customer entity = makeCustomer();
         entity.setId(1L);
         when(dao.updateCustomer(entity)).thenReturn(entity);
-        CustomerDTO a= service.updateCustomer(c);
+        CustomerDTO a = service.updateCustomer(c);
         verify(dao, times(1)).updateCustomer(entity);
     }
 
@@ -149,14 +114,12 @@ public class CustomerServiceTest extends AbstractServiceTest {
      verify(dao, times(1)).deleteCustomerById(id);
     }
 
-    
-
     private List<CustomerDTO> makeCustomerDTO() {
         List<CustomerDTO> list = new ArrayList<>();
         
-        CustomerDTO a=    mkcustomer("Novak","Tramtaria 15");
-        CustomerDTO b=    mkcustomer("Novotny","Transilvania 58");
-        CustomerDTO c =    mkcustomer("polski","Budapest");
+        CustomerDTO a = mkcustomer("Novak","Tramtaria 15");
+        CustomerDTO b = mkcustomer("Novotny","Transilvania 58");
+        CustomerDTO c = mkcustomer("polski","Budapest");
         a.setId(1L);
         b.setId(2L);
         c.setId(3L);

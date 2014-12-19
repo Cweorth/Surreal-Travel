@@ -46,18 +46,6 @@ public class JPACustomerDAO implements CustomerDAO {
     }
 
     @Override
-    public List<Customer> getCustomerByName(String name) {
-        
-        if(name == null) throw new NullPointerException("Name of customer object is null.");
-        if(name.isEmpty()) throw new IllegalArgumentException("Name of customer is empty string.");
-        
-        return em.createNamedQuery("Customer.getByName", Customer.class)
-                .setParameter("name", name)
-                .getResultList();
-        
-    }
-
-    @Override
     public List<Customer> getAllCustomers() {
 
         return em.createNamedQuery("Customer.getAll", Customer.class).getResultList();
@@ -73,15 +61,6 @@ public class JPACustomerDAO implements CustomerDAO {
         if(customer.getName().isEmpty()) throw new IllegalArgumentException("Name of customer is empty string.");
         
         return em.merge(customer);
-        
-    }
-
-    @Override
-    public void deleteCustomer(Customer customer) {
-        
-        if(customer == null) throw new NullPointerException("Customer object is null.");
-        
-        em.remove(customer);
         
     }
 
