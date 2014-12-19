@@ -1,13 +1,15 @@
 package cz.muni.pa165.surrealtravel.cli.rest;
 
+import org.springframework.http.ResponseEntity;
+
 /**
  * Exception thrown in REST clients.
  * @author Roman Lacko [396157]
  */
 public class RESTAccessException extends RuntimeException {
 
-    public RESTAccessException() {
-    }
+    public RESTAccessException()
+    { }
 
     public RESTAccessException(String message) {
         super(message);

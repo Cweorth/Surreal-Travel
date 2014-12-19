@@ -1,16 +1,13 @@
-/*
- * To change this license header, choose License Headers in Project Properties.
- * To change this template file, choose Tools | Templates
- * and open the template in the editor.
- */
 package cz.muni.pa165.surrealtravel.rest;
 
+import cz.muni.pa165.surrealtravel.rest.exceptions.EntityNotFoundException;
+import cz.muni.pa165.surrealtravel.rest.exceptions.EntityNotDeletedException;
+import cz.muni.pa165.surrealtravel.rest.exceptions.InvalidEntityException;
 import cz.muni.pa165.surrealtravel.dto.ExcursionDTO;
 import cz.muni.pa165.surrealtravel.dto.TripDTO;
 import cz.muni.pa165.surrealtravel.service.ExcursionService;
 import cz.muni.pa165.surrealtravel.service.TripService;
 import java.util.List;
-import javassist.tools.rmi.ObjectNotFoundException;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -28,100 +25,126 @@ import org.springframework.web.bind.annotation.RestController;
  *
  * @author Tomáš Kácel [359965]
  */
-
 @RestController
 @RequestMapping("/rest/trips")
 public class TripRestController {
+
     final static Logger logger = LoggerFactory.getLogger(cz.muni.pa165.surrealtravel.rest.TripRestController.class);
-    
+
     @Autowired
     private TripService tripService;
+
+    @Autowired
     private ExcursionService excursionService;
-    
+
     /**
      * Default page - list all trips.
+     *
      * @return
      */
     @RequestMapping(method = RequestMethod.GET)
-    public @ResponseBody List<TripDTO> listTrips() {
-        logger.info("showing trips");
+    public @ResponseBody
+    List<TripDTO> listTrips() {
+        logger.info("Retrieving a list of trips");
         return tripService.getAllTrips();
-     }
-    
-    
-     /**
+    }
+
+    /**
      * Get trip by id.
+     *
      * @param id
      * @return
      */
     @RequestMapping(value = "/get/{id}", method = RequestMethod.GET)
-    public @ResponseBody TripDTO getTrip(@PathVariable long id) {
-        logger.info("trip by id");
-        return tripService.getTripById(id);
+    public @ResponseBody
+    TripDTO getTrip(@PathVariable long id) {
+        logger.info("Retrieving a trip with id " + id);
+        TripDTO trip = tripService.getTripById(id);
+
+        if (trip == null) {
+            throw new EntityNotFoundException("Trip", id);
+        }
+
+        return trip;
     }
-    
-    
+
     /**
      * Create new trip
+     *
      * @param trip
-     * @return 
+     * @return
      */
-    @RequestMapping(value="/new", method=RequestMethod.POST, consumes = MediaType.APPLICATION_JSON_VALUE)
+    @RequestMapping(value = "/new", method = RequestMethod.POST, consumes = MediaType.APPLICATION_JSON_VALUE)
     @ResponseStatus(value = HttpStatus.CREATED)
-    public @ResponseBody TripDTO newTrip(TripDTO trip){
-        logger.info("making new trip");
-        
-        for(ExcursionDTO e : trip.getExcursions()) {
+    public @ResponseBody
+    TripDTO newTrip(@RequestBody TripDTO trip) {
+        logger.info("Creating a new trip");
+
+        for (ExcursionDTO e : trip.getExcursions()) {
             if (!excursionService.getExcursionById(e.getId()).equals(e)) {
-                throw new IllegalArgumentException("Excursion " + e.getId() + " is not valid");
+                throw new EntityNotFoundException("Excursion", e.getId());
             }
         }
-        
-        tripService.addTrip(trip);
-        return trip;
-    
-}
-    
-/**
-     * update trip.
-     * @param trip
-     * @param id
-     * @return 
-     */
-    @RequestMapping(value = "/edit/{id}", method = RequestMethod.PUT,  consumes = MediaType.APPLICATION_JSON_VALUE)
-    @ResponseStatus(value = HttpStatus.ACCEPTED)
-    public @ResponseBody TripDTO updateTrip(@PathVariable long id, @RequestBody TripDTO trip) {
-        logger.info("Updating trip");
-        for(ExcursionDTO e : trip.getExcursions()) {
-            if (!excursionService.getExcursionById(e.getId()).equals(e)) {
-                throw new IllegalArgumentException("Excursion " + e.getId() + " is not valid");
-            }
+
+        try {
+            tripService.addTrip(trip);
+        } catch (IllegalArgumentException | NullPointerException ex) {
+            throw new InvalidEntityException("The trip is not valid", ex);
         }
-        tripService.updateTrip(trip);
+
         return trip;
     }
-    
+
+    /**
+     * update trip.
+     *
+     * @param trip
+     * @param id
+     * @return
+     */
+    @RequestMapping(value = "/edit/{id}", method = RequestMethod.PUT, consumes = MediaType.APPLICATION_JSON_VALUE)
+    @ResponseStatus(value = HttpStatus.ACCEPTED)
+    public @ResponseBody
+    TripDTO updateTrip(@PathVariable long id, @RequestBody TripDTO trip) {
+        logger.info("Updating a trip with id " + id);
+        for (ExcursionDTO e : trip.getExcursions()) {
+            if (!excursionService.getExcursionById(e.getId()).equals(e)) {
+                throw new EntityNotFoundException("Excursion", e.getId());
+            }
+        }
+
+        try {
+            tripService.updateTrip(trip);
+        } catch (NullPointerException | IllegalArgumentException ex) {
+            throw new InvalidEntityException("The trip is not valid", ex);
+        }
+
+        return trip;
+    }
+
     /**
      * Delete excursion by id.
+     *
      * @param id
-     * @return 
-     * @throws javassist.tools.rmi.ObjectNotFoundException 
+     * @return
      */
     @RequestMapping(value = "/delete/{id}", method = RequestMethod.DELETE)
-    public @ResponseBody TripDTO deleteExcursion(@PathVariable long id) throws ObjectNotFoundException {
-        logger.info("Deleting trip");
-        TripDTO trip=new TripDTO();
-        try {
-        trip = tripService.getTripById(id);
-        if(trip == null) throw new ObjectNotFoundException("no trip.");
-        tripService.deleteTripById(id);
-        }catch(Exception e){
-            logger.error("the trip have got reservation canot delete");
-            throw new IllegalArgumentException("this trip is part of reservation can be deleted");
+    public @ResponseBody TripDTO deleteExcursion(@PathVariable long id) {
+        logger.info("Deleting a trip with id " + id);
+        TripDTO trip = tripService.getTripById(id);
+
+        if (trip == null) {
+            throw new EntityNotFoundException("Trip", id);
         }
-        
+
+        try {
+            tripService.deleteTripById(id);
+        } catch (Exception ex) {
+            logger.error("The trip with id " + id + " cannot be deleted");
+            throw new EntityNotDeletedException("Trip", id, ex);
+        }
+
         return trip;
     }
-    
-    
+
 }

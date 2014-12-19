@@ -1,9 +1,12 @@
 package cz.muni.pa165.surrealtravel.rest;
 
+import cz.muni.pa165.surrealtravel.rest.exceptions.EntityNotFoundException;
+import cz.muni.pa165.surrealtravel.rest.exceptions.EntityNotDeletedException;
+import cz.muni.pa165.surrealtravel.rest.exceptions.InvalidEntityException;
 import cz.muni.pa165.surrealtravel.dto.ExcursionDTO;
+import static cz.muni.pa165.surrealtravel.rest.TripRestController.logger;
 import cz.muni.pa165.surrealtravel.service.ExcursionService;
 import java.util.List;
-import javassist.tools.rmi.ObjectNotFoundException;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -37,6 +40,7 @@ public class ExcursionRestController {
      */
     @RequestMapping(method = RequestMethod.GET)
     public @ResponseBody List<ExcursionDTO> listExcursions() {
+        logger.info("Retrieving a list of excursions");
         return excursionService.getAllExcursions();
     }
     
@@ -46,9 +50,14 @@ public class ExcursionRestController {
      * @return
      */
     @RequestMapping(value = "/get/{id}", method = RequestMethod.GET)
-    public @ResponseBody ExcursionDTO getExcursion(@PathVariable long id) throws ObjectNotFoundException {
+    public @ResponseBody ExcursionDTO getExcursion(@PathVariable long id) {
+        logger.info("Retrieving an excursion with id " + id);
         ExcursionDTO excursion = excursionService.getExcursionById(id);
-        if(excursion == null) throw new ObjectNotFoundException("Excursion not found.");
+        
+        if(excursion == null) {
+            throw new EntityNotFoundException("Excursion", id);
+        }
+        
         return excursion;
     }
     
@@ -61,7 +70,13 @@ public class ExcursionRestController {
     @ResponseStatus(value = HttpStatus.CREATED)
     public @ResponseBody ExcursionDTO addExcursion(@RequestBody ExcursionDTO excursion){
         logger.info("Creating a new excursion");
-        excursionService.addExcursion(excursion);
+        
+        try {
+            excursionService.addExcursion(excursion);
+        } catch (NullPointerException | IllegalArgumentException ex) {
+            throw new InvalidEntityException("The excursion is not valid", ex);
+        }
+        
         return excursion;
     }
     
@@ -74,8 +89,14 @@ public class ExcursionRestController {
     @RequestMapping(value = "/edit/{id}", method = RequestMethod.PUT,  consumes = MediaType.APPLICATION_JSON_VALUE)
     @ResponseStatus(value = HttpStatus.ACCEPTED)
     public @ResponseBody ExcursionDTO updateExcursion(@PathVariable long id, @RequestBody ExcursionDTO excursion) {
-        logger.info("Updating a new excursion");
-        excursionService.updateExcursion(excursion);
+        logger.info("Updating an excursion with id " + id);
+        
+        try {
+            excursionService.updateExcursion(excursion);
+        } catch (NullPointerException | IllegalArgumentException ex) {
+            throw new InvalidEntityException("The excursion is not valid", ex);
+        }
+        
         return excursion;
     }
     
@@ -83,14 +104,23 @@ public class ExcursionRestController {
      * Delete excursion by id.
      * @param id
      * @return 
-     * @throws javassist.tools.rmi.ObjectNotFoundException 
      */
     @RequestMapping(value = "/delete/{id}", method = RequestMethod.DELETE)
-    public @ResponseBody ExcursionDTO deleteExcursion(@PathVariable long id) throws ObjectNotFoundException {
-        logger.info("Deleting a new excursion");
+    public @ResponseBody ExcursionDTO deleteExcursion(@PathVariable long id) {
+        logger.info("Deleting an excursion with id " + id);
         ExcursionDTO excursion = excursionService.getExcursionById(id);
-        if(excursion == null) throw new ObjectNotFoundException("Excursion not found.");
-        excursionService.deleteExcursionById(id);
+        
+        if(excursion == null) {
+            throw new EntityNotFoundException("Excursion", id);
+        }
+        
+        try {
+            excursionService.deleteExcursionById(id);
+        } catch (Exception ex) {
+            logger.error("The excursion with id " + id + " cannot be deleted");
+            throw new EntityNotDeletedException("Excursion", id, ex);
+        }
+        
         return excursion;
     }
 }

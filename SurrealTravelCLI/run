@@ -10,6 +10,9 @@ my $args   = "";
 # Compile source if there is no "./target" directory
 system("mvn compile") unless (-d "./target/");
 
+# Quote arguments with spaces
+map { $_ = "\'$_\'" if $_ =~ /\s/ } (@ARGV);
+
 my $q       = $quiet ? "--quiet -e" : "";
 my $xargs   = $args . " " . join(" ", @ARGV);
 

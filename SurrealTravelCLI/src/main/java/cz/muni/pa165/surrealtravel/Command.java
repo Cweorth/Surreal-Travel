@@ -12,7 +12,11 @@ public enum Command {
     EXCURSIONS_ADD("excursions-add"),
     EXCURSIONS_EDIT("excursions-edit"),
     EXCURSIONS_DELETE("excursions-delete"),
-    TRIPS_LIST("trips-list");
+    TRIPS_LIST("trips-list"),
+    TRIPS_GET("trips-get"),
+    TRIPS_ADD("trips-add"),
+    TRIPS_EDIT("trips-edit"),
+    TRIPS_DELETE("trips-delete");
     
     private final String cmd;
     

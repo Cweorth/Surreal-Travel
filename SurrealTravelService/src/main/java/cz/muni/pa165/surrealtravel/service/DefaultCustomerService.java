@@ -35,7 +35,8 @@ public class DefaultCustomerService implements CustomerService {
     
     @Override
     public CustomerDTO getCustomerById(long id) {
-        return mapper.map(customerDao.getCustomerById(id), CustomerDTO.class);
+        Customer customer = customerDao.getCustomerById(id);
+        return customer == null ? null : mapper.map(customer, CustomerDTO.class);
     }
     
     @Override

@@ -48,8 +48,7 @@ public class DefaultReservationService implements ReservationService {
     @Override
   public ReservationDTO getReservationById(long id){
       Reservation reservation = reservationDAO.getReservationById(id);
-      ReservationDTO result = mapper.map(reservation,ReservationDTO.class);
-      return result;
+      return reservation == null ? null : mapper.map(reservation,ReservationDTO.class);
   }
   /**
    * return list of al reservation 

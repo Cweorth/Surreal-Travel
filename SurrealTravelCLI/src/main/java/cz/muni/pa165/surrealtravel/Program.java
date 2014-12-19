@@ -1,12 +1,6 @@
 package cz.muni.pa165.surrealtravel;
 
-import cz.muni.pa165.surrealtravel.cli.handlers.CommandHandler;
-import cz.muni.pa165.surrealtravel.cli.handlers.ExcursionsAddHandler;
-import cz.muni.pa165.surrealtravel.cli.handlers.ExcursionsDeleteHandler;
-import cz.muni.pa165.surrealtravel.cli.handlers.ExcursionsEditHandler;
-import cz.muni.pa165.surrealtravel.cli.handlers.ExcursionsGetHandler;
-import cz.muni.pa165.surrealtravel.cli.handlers.ExcursionsListHandler;
-import cz.muni.pa165.surrealtravel.cli.handlers.TripsListHandler;
+import cz.muni.pa165.surrealtravel.cli.handlers.*;
 import cz.muni.pa165.surrealtravel.cli.rest.RESTAccessException;
 import java.io.PrintStream;
 import java.util.EnumMap;
@@ -80,9 +74,12 @@ public class Program {
             handlers.put(Command.EXCURSIONS_EDIT,   new ExcursionsEditHandler());
             handlers.put(Command.EXCURSIONS_GET,    new ExcursionsGetHandler());
             handlers.put(Command.EXCURSIONS_LIST,   new ExcursionsListHandler());
+            handlers.put(Command.TRIPS_ADD,         new TripsAddHandler());
+            handlers.put(Command.TRIPS_DELETE,      new TripsDeleteHandler());
+            handlers.put(Command.TRIPS_EDIT,        new TripsEditHandler());
+            handlers.put(Command.TRIPS_GET,         new TripsGetHandler());
             handlers.put(Command.TRIPS_LIST,        new TripsListHandler());
             
-        
             //<editor-fold desc="[  Debug & Verbose handling  ]" defaultstate="collapsed">
             if (options.isVerbose() || options.isDebug()) {
                 logger.debug("entering log-verbose mode");
@@ -152,12 +149,12 @@ public class Program {
             System.exit(2);
         } catch (RESTAccessException ex) {
             logger.error("Rest access exception", ex);
-            System.err.println("An error occured while accessing REST api: " + ex.getMessage());
+            System.err.println("OPERATION FAILED: " + ex.getMessage());
             System.err.println("For the details, please see the log file.");
             System.exit(3);
         } catch (RuntimeException ex) { // this is bad, but can't be helped
             logger.error("Runtime exception", ex);
-            System.err.println("A runtime exception has been caught: " + ex.getMessage());
+            System.err.println("RUNTIME ERROR: " + ex.getMessage());
             System.err.println("For the details, please see the log file.");
             System.exit(4);
         }

@@ -84,7 +84,8 @@ public class DefaultTripService implements TripService {
     @Override
     @Transactional(readOnly = true)
     public TripDTO getTripById(long id) {
-        return toDTO.apply(tripDao.getTripById(id));
+        Trip trip = tripDao.getTripById(id);
+        return trip == null ? null : toDTO.apply(trip);
     }
     
     /**

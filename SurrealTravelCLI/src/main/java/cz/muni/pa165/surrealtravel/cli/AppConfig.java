@@ -2,13 +2,16 @@ package cz.muni.pa165.surrealtravel.cli;
 
 import cz.muni.pa165.surrealtravel.cli.rest.RestExcursionClient;
 import cz.muni.pa165.surrealtravel.cli.rest.RestTripClient;
+import java.io.IOException;
 import java.net.MalformedURLException;
 import java.net.URL;
 import java.util.Arrays;
 import java.util.Objects;
 import org.slf4j.LoggerFactory;
 import org.springframework.http.MediaType;
+import org.springframework.http.client.ClientHttpResponse;
 import org.springframework.http.converter.json.MappingJackson2HttpMessageConverter;
+import org.springframework.web.client.DefaultResponseErrorHandler;
 import org.springframework.web.client.RestTemplate;
 
 /**

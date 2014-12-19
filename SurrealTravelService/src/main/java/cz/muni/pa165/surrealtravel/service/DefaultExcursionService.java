@@ -51,8 +51,7 @@ public class DefaultExcursionService implements ExcursionService{
     @Override
     public ExcursionDTO getExcursionById(long id){
       Excursion excursion = excursionDAO.getExcursionById(id);
-      ExcursionDTO result = mapper.map(excursion,ExcursionDTO.class);
-      return result;
+      return excursion == null ? null : mapper.map(excursion,ExcursionDTO.class);
     }
  
     /**

@@ -1,13 +1,7 @@
 package cz.muni.pa165.surrealtravel;
 
 import cz.muni.pa165.surrealtravel.cli.AppConfig;
-import cz.muni.pa165.surrealtravel.cli.handlers.CommandHandler;
-import cz.muni.pa165.surrealtravel.cli.handlers.ExcursionsAddHandler;
-import cz.muni.pa165.surrealtravel.cli.handlers.ExcursionsDeleteHandler;
-import cz.muni.pa165.surrealtravel.cli.handlers.ExcursionsEditHandler;
-import cz.muni.pa165.surrealtravel.cli.handlers.ExcursionsGetHandler;
-import cz.muni.pa165.surrealtravel.cli.handlers.ExcursionsListHandler;
-import cz.muni.pa165.surrealtravel.cli.handlers.TripsListHandler;
+import cz.muni.pa165.surrealtravel.cli.handlers.*;
 import java.net.URL;
 import org.kohsuke.args4j.Argument;
 import org.kohsuke.args4j.Option;
@@ -54,7 +48,11 @@ public class MainOptions {
         @SubCommand(name = "excursions-add",    impl = ExcursionsAddHandler.class),
         @SubCommand(name = "excursions-edit",   impl = ExcursionsEditHandler.class),
         @SubCommand(name = "excursions-delete", impl = ExcursionsDeleteHandler.class),
-        @SubCommand(name = "trips-list",        impl = TripsListHandler.class)
+        @SubCommand(name = "trips-list",        impl = TripsListHandler.class),
+        @SubCommand(name = "trips-get",         impl = TripsGetHandler.class),
+        @SubCommand(name = "trips-add",         impl = TripsAddHandler.class),
+        @SubCommand(name = "trips-edit",        impl = TripsEditHandler.class),
+        @SubCommand(name = "trips-delete",      impl = TripsDeleteHandler.class)
     })   
     private CommandHandler cmd;
     
