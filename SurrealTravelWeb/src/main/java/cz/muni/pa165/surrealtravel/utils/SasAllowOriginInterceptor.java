@@ -15,7 +15,7 @@ public class SasAllowOriginInterceptor extends HandlerInterceptorAdapter {
      * @param request
      * @param response
      * @param handler
-     * @return
+     * @return true
      * @throws Exception
      */
     @Override

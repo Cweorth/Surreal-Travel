@@ -34,7 +34,7 @@ public interface ReservationDAO {
     /**
      * Get all reservations of the given customer.
      * @param customer customer to search for
-     * @return
+     * @return the list of reservations
      */
     public List<Reservation> getAllReservationsByCustomer(Customer customer);
 

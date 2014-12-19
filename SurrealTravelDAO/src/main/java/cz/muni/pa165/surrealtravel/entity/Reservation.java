@@ -121,10 +121,7 @@ public class Reservation implements Serializable {
         if (this.trip != other.trip && (this.trip == null || !this.trip.equals(other.trip))) {
             return false;
         }
-        if (this.excursions != other.excursions && (this.excursions == null || !this.excursions.equals(other.excursions))) {
-            return false;
-        }
-        return true;
+        return !(this.excursions != other.excursions && (this.excursions == null || !this.excursions.equals(other.excursions)));
     }
 
     @Override

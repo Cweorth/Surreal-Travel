@@ -18,13 +18,13 @@ public interface ExcursionService {
     /**
      * Get excursion DTO by id.
      * @param id
-     * @return 
+     * @return the excursion
      */
     ExcursionDTO getExcursionById(long id);
     
     /**
      * Get list of all excursion DTOs.
-     * @return 
+     * @return the list of excursions
      */
     List<ExcursionDTO> getAllExcursions();
     

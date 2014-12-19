@@ -48,7 +48,7 @@ public class DefaultExcursionService implements ExcursionService {
     /**
      * Get excursion DTO by id.
      * @param id
-     * @return
+     * @return the excursion
      */
     @Override
     @Transactional(readOnly = true)
@@ -59,7 +59,7 @@ public class DefaultExcursionService implements ExcursionService {
 
     /**
      * Get list of all excursion DTOs.
-     * @return
+     * @return the list of excursions
      */
     @Override
     @Transactional(readOnly = true)

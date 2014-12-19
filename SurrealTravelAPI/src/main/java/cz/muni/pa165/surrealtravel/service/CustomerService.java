@@ -18,20 +18,20 @@ public interface CustomerService {
     /**
      * Get customer DTO by id.
      * @param id
-     * @return 
+     * @return the customer
      */
     public CustomerDTO getCustomerById(long id);
     
     /**
      * Get list of all customer DTOs.
-     * @return 
+     * @return the list of customers
      */
     public List<CustomerDTO> getAllCustomers();
     
     /**
      * Update customer entry for the given DTO.
      * @param customer
-     * @return 
+     * @return the updated customer
      */
     public CustomerDTO updateCustomer(CustomerDTO customer);
     

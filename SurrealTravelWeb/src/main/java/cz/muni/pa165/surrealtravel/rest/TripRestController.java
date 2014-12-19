@@ -40,7 +40,7 @@ public class TripRestController {
     /**
      * Default page - list all trips.
      *
-     * @return
+     * @return the list of trips
      */
     @RequestMapping(method = RequestMethod.GET)
     public @ResponseBody
@@ -53,7 +53,7 @@ public class TripRestController {
      * Get trip by id.
      *
      * @param id
-     * @return
+     * @return the trip
      */
     @RequestMapping(value = "/get/{id}", method = RequestMethod.GET)
     public @ResponseBody
@@ -72,7 +72,7 @@ public class TripRestController {
      * Create new trip
      *
      * @param trip
-     * @return
+     * @return the new trip
      */
     @RequestMapping(value = "/new", method = RequestMethod.POST, consumes = MediaType.APPLICATION_JSON_VALUE)
     @ResponseStatus(value = HttpStatus.CREATED)
@@ -96,11 +96,11 @@ public class TripRestController {
     }
 
     /**
-     * update trip.
+     * Update trip.
      *
      * @param trip
      * @param id
-     * @return
+     * @return the updated trip
      */
     @RequestMapping(value = "/edit/{id}", method = RequestMethod.PUT, consumes = MediaType.APPLICATION_JSON_VALUE)
     @ResponseStatus(value = HttpStatus.ACCEPTED)
@@ -123,13 +123,13 @@ public class TripRestController {
     }
 
     /**
-     * Delete excursion by id.
+     * Delete trip by id.
      *
      * @param id
-     * @return
+     * @return the deleted trip
      */
     @RequestMapping(value = "/delete/{id}", method = RequestMethod.DELETE)
-    public @ResponseBody TripDTO deleteExcursion(@PathVariable long id) {
+    public @ResponseBody TripDTO deleteTrip(@PathVariable long id) {
         logger.info("Deleting a trip with id " + id);
         TripDTO trip = tripService.getTripById(id);
 

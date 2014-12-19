@@ -99,7 +99,7 @@ public class ReservationController {
      * List all excursions. Prepared to be called via ajax.
      * @param id
      * @param model
-     * @return 
+     * @return redirect
      */
     @RequestMapping(value = "/ajaxGetExcursions/{id}", method = RequestMethod.GET)
     public String listExcursionsAjax(@PathVariable long id, ModelMap model) {
@@ -112,7 +112,7 @@ public class ReservationController {
     /**
      * Get all reservations.
      * @param model
-     * @return 
+     * @return redirect
      */
     @RequestMapping(method = RequestMethod.GET)
     public String listReservations(ModelMap model) {
@@ -123,7 +123,7 @@ public class ReservationController {
     /**
      * Display a form for creating a new reservation.
      * @param model
-     * @return 
+     * @return redirect
      */
     @RequestMapping(value = "/new", method = RequestMethod.GET)
     public String newReservationForm(ModelMap model) {
@@ -142,7 +142,7 @@ public class ReservationController {
      * @param redirectAttributes
      * @param uriBuilder
      * @param locale
-     * @return 
+     * @return redirect
      */
     @RequestMapping(value = "/new", method = RequestMethod.POST)
     public String newReservation(@ModelAttribute ReservationDTO reservationDTO, BindingResult bindingResult, RedirectAttributes redirectAttributes, UriComponentsBuilder uriBuilder, Locale locale) {       
@@ -171,7 +171,7 @@ public class ReservationController {
      * Display a form for editing of a reservation.
      * @param id
      * @param model
-     * @return 
+     * @return redirect
      */
     @RequestMapping(value = "/edit/{id}", method = RequestMethod.GET)
     public String editReservationForm(@PathVariable long id, ModelMap model) {
@@ -199,7 +199,7 @@ public class ReservationController {
      * @param redirectAttributes
      * @param uriBuilder
      * @param locale
-     * @return 
+     * @return redirect
      */
     @RequestMapping(value = "/edit", method = RequestMethod.POST)
     public String editReservation(@ModelAttribute ReservationDTO reservationDTO, BindingResult bindingResult, RedirectAttributes redirectAttributes, UriComponentsBuilder uriBuilder, Locale locale) {       
@@ -230,7 +230,7 @@ public class ReservationController {
      * @param redirectAttributes
      * @param uriBuilder
      * @param locale
-     * @return 
+     * @return redirect
      */
     @RequestMapping(value = "/delete/{id}", method = RequestMethod.GET)
     public String deleteReservation(@PathVariable long id, RedirectAttributes redirectAttributes, UriComponentsBuilder uriBuilder, Locale locale) {
@@ -255,7 +255,7 @@ public class ReservationController {
      * Check BindingResult of a request for errors found by a validator.
      * @param bindingResult
      * @param viewName
-     * @return 
+     * @return redirect
      */
     private void logFormErrors(BindingResult bindingResult) {
         logger.debug("Encountered following errors when validating form.");

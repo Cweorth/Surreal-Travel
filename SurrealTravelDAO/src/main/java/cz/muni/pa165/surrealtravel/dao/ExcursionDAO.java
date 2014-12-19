@@ -17,13 +17,13 @@ public interface ExcursionDAO {
     /**
      * Get the excursion with the given id.
      * @param id
-     * @return 
+     * @return the excursion
      */
     public Excursion getExcursionById(long id);
     
     /**
      * Get all excursions.
-     * @return 
+     * @return the excursion
      */
     public List<Excursion> getAllExcursions();
     

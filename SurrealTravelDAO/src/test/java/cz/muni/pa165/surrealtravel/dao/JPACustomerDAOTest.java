@@ -57,7 +57,7 @@ public class JPACustomerDAOTest extends AbstractPersistenceTest {
 
         customer3.setName(name);
         customer3.setAddress(address);
-        em.persist(customer3);
+        dao.updateCustomer(customer3);
 
         assertEquals(customer3.getName(), name);
         assertEquals(customer3.getAddress(), address);

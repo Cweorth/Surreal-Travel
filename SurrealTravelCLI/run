@@ -1,20 +1,27 @@
 #!/usr/bin/perl
 
-##--[  Script config  ]--------------------------------------------------------
+##--[  Config  ]---------------------------------------------------------------
 
-my $quiet  = 1;
-my $args   = "";
+# Extra arguments for the application
+my $args  = "";
 
 ##--[  Run  ]------------------------------------------------------------------
 
+# Check whether the arguments contain "--debug" or "--verbose"
+my %hargs   = map { $_ => 1 } (@ARGV);
+my $debug   = exists ($hargs{"--debug"});
+my $verbose = exists ($hargs{"--verbose"});
+
 # Compile source if there is no "./target" directory
-system("mvn compile") unless (-d "./target/");
+system("mvn compile install") unless (-d "./target/");
 
 # Quote arguments with spaces
 map { $_ = "\'$_\'" if $_ =~ /\s/ } (@ARGV);
 
-my $q       = $quiet ? "--quiet -e" : "";
+# Quiet and application arguments
+my $q       = $debug ? "-e" : ($verbose ? "" : "--quiet");
 my $xargs   = $args . " " . join(" ", @ARGV);
 
+# Call maven
 system("mvn $q exec:java -Dexec.args=\"$xargs\"");
 

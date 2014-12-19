@@ -31,7 +31,7 @@ public class ExcursionsAddHandler implements CommandHandler {
     @Option(name = "--duration", metaVar = "duration", usage = "specify the duration of excursion [integer]")
     private int duration;
     
-    @Option(name = "--excursionDate", handler = DateOptionHandler.class, usage = "specify the excursion date [yyyy/MM/dd]", required = true)
+    @Option(name = "--excursionDate", metaVar = "date", handler = DateOptionHandler.class, usage = "specify the excursion date [yyyy/MM/dd]", required = true)
     private Date excursionDate;
     
     @Option(name = "--price", handler = BigDecimalOptionHandler.class, metaVar = "price", usage = "specify the excursion price [integer]", required = true)

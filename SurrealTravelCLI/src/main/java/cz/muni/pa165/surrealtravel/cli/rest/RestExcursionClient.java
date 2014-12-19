@@ -54,7 +54,7 @@ public class RestExcursionClient {
     /**
      * Get a single excursion by the id.
      * @param id
-     * @return 
+     * @return the excursion
      */
     public ExcursionDTO getExcursion(long id) {
         ResponseEntity<ExcursionDTO> response;
@@ -75,7 +75,7 @@ public class RestExcursionClient {
     /**
      * Create new excursion.
      * @param excursion
-     * @return 
+     * @return the new excursions
      */
     public ExcursionDTO addExcursion(ExcursionDTO excursion) {        
         ResponseEntity<ExcursionDTO> response;
@@ -96,7 +96,7 @@ public class RestExcursionClient {
     /**
      * Modify existing excursion.
      * @param excursion
-     * @return 
+     * @return the modified excursion
      */
     public ExcursionDTO editExcursion(ExcursionDTO excursion) {        
         final HttpEntity<ExcursionDTO> request = new HttpEntity<>(excursion, new HttpHeaders());
@@ -119,7 +119,7 @@ public class RestExcursionClient {
     /**
      * Delete excursion by id.
      * @param id
-     * @return 
+     * @return the deleted excursion
      */
     public ExcursionDTO deleteExcursion(long id) {               
         ResponseEntity<ExcursionDTO> response;

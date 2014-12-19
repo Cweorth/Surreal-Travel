@@ -18,20 +18,20 @@ public interface CustomerDAO {
     /**
      * Get the customer with the given id.
      * @param id
-     * @return 
+     * @return the customer
      */
     public Customer getCustomerById(long id);
 
     /**
      * Get all customers.
-     * @return 
+     * @return the list of customers
      */
     public List<Customer> getAllCustomers();
     
     /**
      * Modify the customer.
      * @param customer 
-     * @return  
+     * @return the modified customer
      */
     public Customer updateCustomer(Customer customer);
     

@@ -55,7 +55,7 @@ public class ExcursionController {
     /**
      * Default page - list all excursions.
      * @param model
-     * @return 
+     * @return redirect
      */
     @RequestMapping(method = RequestMethod.GET)
     public String listExcrusions(ModelMap model) {
@@ -66,7 +66,7 @@ public class ExcursionController {
     /**
      * Display a form for creating a new excursion.
      * @param model
-     * @return 
+     * @return redirect
      */
     @RequestMapping(value = "/new", method = RequestMethod.GET)
     public String newExcursionForm(ModelMap model) {
@@ -81,7 +81,7 @@ public class ExcursionController {
      * @param redirectAttributes
      * @param uriBuilder
      * @param locale
-     * @return 
+     * @return redirect
      */
     @RequestMapping(value = "/new", method = RequestMethod.POST)
     public String newExcursion(@Validated @ModelAttribute ExcursionDTO excursionDTO, BindingResult bindingResult, RedirectAttributes redirectAttributes, UriComponentsBuilder uriBuilder, Locale locale) {       
@@ -110,7 +110,7 @@ public class ExcursionController {
      * Display a form for editing of a excursion.
      * @param id
      * @param model
-     * @return 
+     * @return redirect
      */
     @RequestMapping(value = "/edit/{id}", method = RequestMethod.GET)
     public String editExcursionForm(@PathVariable long id, ModelMap model) {
@@ -135,7 +135,7 @@ public class ExcursionController {
      * @param redirectAttributes
      * @param uriBuilder
      * @param locale
-     * @return 
+     * @return redirect
      */
     @RequestMapping(value = "/edit", method = RequestMethod.POST)
     public String editExcursion(@Validated @ModelAttribute ExcursionDTO excursionDTO, BindingResult bindingResult, RedirectAttributes redirectAttributes, UriComponentsBuilder uriBuilder, Locale locale) {       
@@ -170,7 +170,7 @@ public class ExcursionController {
      * @param redirectAttributes
      * @param uriBuilder
      * @param locale
-     * @return 
+     * @return redirect
      */
     @RequestMapping(value = "/delete/{id}", method = RequestMethod.GET)
     public String deleteExcursion(@PathVariable long id, RedirectAttributes redirectAttributes, UriComponentsBuilder uriBuilder, Locale locale) {
@@ -200,7 +200,7 @@ public class ExcursionController {
      * Check BindingResult of a request for errors found by a validator.
      * @param bindingResult
      * @param viewName
-     * @return 
+     * @return redirect
      */
     private void logFormErrors(BindingResult bindingResult) {
         logger.debug("Encountered following errors when validating form.");

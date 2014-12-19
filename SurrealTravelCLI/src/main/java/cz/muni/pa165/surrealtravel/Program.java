@@ -14,6 +14,7 @@ import org.kohsuke.args4j.CmdLineException;
 import org.kohsuke.args4j.CmdLineParser;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
+import org.springframework.web.client.ResourceAccessException;
 
 /**
  * The main class, provides CLI handling
@@ -153,7 +154,15 @@ public class Program {
             System.exit(2);
         } catch (RESTAccessException ex) {
             logger.error("Rest access exception", ex);
-            System.err.println("OPERATION FAILED: " + ex.getMessage());
+            
+            Throwable cause = ex.getCause();
+            
+            if ((cause != null) && cause.getClass().equals(ResourceAccessException.class)) {
+                System.err.println("OPERATION FAILED: Unable to connect to the resource");
+            } else {
+                System.err.println("OPERATION FAILED: " + ex.getMessage());
+            }
+            
             System.err.println("For the details, please see the log file.");
             System.exit(3);
         } catch (RuntimeException ex) { // this is bad, but can't be helped

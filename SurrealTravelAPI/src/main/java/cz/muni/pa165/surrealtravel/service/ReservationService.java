@@ -27,7 +27,7 @@ public interface ReservationService {
     /**
      * Get a list of all reservations for the given {@code customer}
      * @param customerDTO the customer for we need the reservations
-     * @return
+     * @return the list of reservations
      */
     List<ReservationDTO> getAllReservationsByCustomer(CustomerDTO customerDTO);
 

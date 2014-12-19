@@ -48,7 +48,7 @@ public class CustomerController {
     /**
      * Default page - list all customers.
      * @param model
-     * @return 
+     * @return redirect
      */
     @RequestMapping(method = RequestMethod.GET)
     public String listCustomers(ModelMap model) {
@@ -59,7 +59,7 @@ public class CustomerController {
     /**
      * Display a form for creating a new customer.
      * @param model
-     * @return 
+     * @return redirect
      */
     @RequestMapping(value = "/new", method = RequestMethod.GET)
     public String newCustomerForm(ModelMap model) {
@@ -74,7 +74,7 @@ public class CustomerController {
      * @param redirectAttributes
      * @param uriBuilder
      * @param locale
-     * @return 
+     * @return redirect
      */
     @RequestMapping(value = "/new", method = RequestMethod.POST)
     public String newCustomer(@Validated @ModelAttribute CustomerDTO customerDTO, BindingResult bindingResult, RedirectAttributes redirectAttributes, UriComponentsBuilder uriBuilder, Locale locale) {       
@@ -104,7 +104,7 @@ public class CustomerController {
      * Display a form for editing of a customer.
      * @param id
      * @param model
-     * @return 
+     * @return redirect
      */
     @RequestMapping(value = "/edit/{id}", method = RequestMethod.GET)
     public String editCustomerForm(@PathVariable long id, ModelMap model) {
@@ -129,7 +129,7 @@ public class CustomerController {
      * @param redirectAttributes
      * @param uriBuilder
      * @param locale
-     * @return 
+     * @return redirect
      */
     @RequestMapping(value = "/edit", method = RequestMethod.POST)
     public String editCustomer(@Validated @ModelAttribute CustomerDTO customerDTO, BindingResult bindingResult, RedirectAttributes redirectAttributes, UriComponentsBuilder uriBuilder, Locale locale) {       
@@ -164,7 +164,7 @@ public class CustomerController {
      * @param redirectAttributes
      * @param uriBuilder
      * @param locale
-     * @return 
+     * @return redirect
      */
     @RequestMapping(value = "/delete/{id}", method = RequestMethod.GET)
     public String deleteCustomer(@PathVariable long id, RedirectAttributes redirectAttributes, UriComponentsBuilder uriBuilder, Locale locale) {
@@ -193,7 +193,7 @@ public class CustomerController {
      * Check BindingResult of a request for errors found by a validator.
      * @param bindingResult
      * @param viewName
-     * @return 
+     * @return redirect
      */
     private void logFormErrors(BindingResult bindingResult) {
         logger.debug("Encountered following errors when validating form.");

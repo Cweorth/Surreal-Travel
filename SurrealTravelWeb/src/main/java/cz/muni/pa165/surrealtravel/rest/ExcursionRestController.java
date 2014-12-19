@@ -35,7 +35,7 @@ public class ExcursionRestController {
     
     /**
      * Default page - list all excursions.
-     * @return
+     * @return list of excursions
      */
     @RequestMapping(method = RequestMethod.GET)
     public @ResponseBody List<ExcursionDTO> listExcursions() {
@@ -46,7 +46,7 @@ public class ExcursionRestController {
     /**
      * Get excursion by id.
      * @param id
-     * @return
+     * @return the excursion
      */
     @RequestMapping(value = "/get/{id}", method = RequestMethod.GET)
     public @ResponseBody ExcursionDTO getExcursion(@PathVariable long id) {
@@ -63,7 +63,7 @@ public class ExcursionRestController {
     /**
      * Create new excursion
      * @param excursion
-     * @return 
+     * @return the new excursion
      */
     @RequestMapping(value="/new", method=RequestMethod.POST, consumes = MediaType.APPLICATION_JSON_VALUE)
     @ResponseStatus(value = HttpStatus.CREATED)
@@ -83,7 +83,7 @@ public class ExcursionRestController {
      * Modify excursion.
      * @param excursion
      * @param id
-     * @return 
+     * @return the updated excursion
      */
     @RequestMapping(value = "/edit/{id}", method = RequestMethod.PUT,  consumes = MediaType.APPLICATION_JSON_VALUE)
     @ResponseStatus(value = HttpStatus.ACCEPTED)
@@ -102,7 +102,7 @@ public class ExcursionRestController {
     /**
      * Delete excursion by id.
      * @param id
-     * @return 
+     * @return the deleted excursion
      */
     @RequestMapping(value = "/delete/{id}", method = RequestMethod.DELETE)
     public @ResponseBody ExcursionDTO deleteExcursion(@PathVariable long id) {

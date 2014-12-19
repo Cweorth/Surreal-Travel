@@ -1,0 +1,8 @@
+#!/usr/bin/perl
+
+use strict;
+use warnings;
+
+system("mvn clean compile install") unless (-d "./target");
+
+system("mvn tomcat7:run");

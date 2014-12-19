@@ -67,7 +67,7 @@ public class TripController {
     /**
      * Default page that lists all customers
      * @param model
-     * @return 
+     * @return redirect
      */
     @RequestMapping(method = RequestMethod.GET)
     public String listTrips(ModelMap model) {
@@ -78,7 +78,7 @@ public class TripController {
     /**
      * Redirects to a NewTrip form
      * @param model
-     * @return 
+     * @return redirect
      */
     @RequestMapping(value = "/new", method = RequestMethod.GET)
     public String newTripForm(ModelMap model) {
@@ -93,7 +93,7 @@ public class TripController {
      * @param redirectAttributes
      * @param uriBuilder
      * @param locale
-     * @return 
+     * @return redirect
      */
     @RequestMapping(value = "/new", method = RequestMethod.POST)
     public String newTrip(@Validated @ModelAttribute("tripdata") TripModelData data, 
@@ -131,7 +131,7 @@ public class TripController {
      * @param redirectAttributes
      * @param locale
      * @param uriBuilder
-     * @return 
+     * @return redirect
      */
     @RequestMapping(value = "/edit/{id}", method = RequestMethod.GET)
     public String editTripForm(@PathVariable long id, ModelMap model, RedirectAttributes redirectAttributes, Locale locale, UriComponentsBuilder uriBuilder) {
@@ -163,7 +163,7 @@ public class TripController {
      * @param redirectAttributes
      * @param uriBuilder
      * @param locale
-     * @return 
+     * @return redirect
      */
     @RequestMapping(value = "/edit", method = RequestMethod.POST)
     public String editTrip(@Validated @ModelAttribute("tripdata") TripModelData data, BindingResult bindingResult, RedirectAttributes redirectAttributes, UriComponentsBuilder uriBuilder, Locale locale) {
@@ -196,7 +196,7 @@ public class TripController {
      * @param redirectAttributes
      * @param uriBuilder
      * @param locale
-     * @return 
+     * @return redirect
      */
     @RequestMapping(value = "/delete/{id}", method = RequestMethod.GET)
     public String deleteTrip(@PathVariable long id, RedirectAttributes redirectAttributes, UriComponentsBuilder uriBuilder, Locale locale) {
