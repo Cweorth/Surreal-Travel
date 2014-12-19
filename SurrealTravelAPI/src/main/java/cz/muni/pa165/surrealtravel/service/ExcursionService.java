@@ -21,13 +21,6 @@ public interface ExcursionService {
      * @return 
      */
     ExcursionDTO getExcursionById(long id);
- 
-    /**
-     * Get list of excursion DTOs with the given destination.
-     * @param destination
-     * @return 
-     */
-    List<ExcursionDTO> getExcursionsByDestination(String destination);
     
     /**
      * Get list of all excursion DTOs.
@@ -40,12 +33,6 @@ public interface ExcursionService {
      * @param excursionDTO 
      */
     void updateExcursion(ExcursionDTO excursionDTO);
-   
-     /**
-     * Delete excursion entry for the given DTO.
-     * @param excursionDTO
-     */
-    void deleteExcursion(ExcursionDTO excursionDTO);
     
     /**
      * Delete excursion entry for the given id.

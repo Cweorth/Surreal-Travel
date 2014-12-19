@@ -22,13 +22,6 @@ public interface ExcursionDAO {
     public Excursion getExcursionById(long id);
     
     /**
-     * Get the excursion with the given destination. More excursion with the same destination can exist in the system.
-     * @param destination
-     * @return 
-     */
-    public List<Excursion> getExcursionsByDestination(String destination);
-    
-    /**
      * Get all excursions.
      * @return 
      */
@@ -39,13 +32,6 @@ public interface ExcursionDAO {
      * @param excursion 
      */
     public Excursion updateExcursion(Excursion excursion);
-    
-    /**
-     * Remove excursion.
-     * @param excursion 
-     * @return 
-     */
-    public void deleteExcursion(Excursion excursion);
      
     /**
      * Remove excursion by ID.

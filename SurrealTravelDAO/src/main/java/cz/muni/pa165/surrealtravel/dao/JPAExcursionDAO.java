@@ -3,7 +3,6 @@ package cz.muni.pa165.surrealtravel.dao;
 import cz.muni.pa165.surrealtravel.entity.Excursion;
 import java.math.BigDecimal;
 import java.util.List;
-import java.util.Objects;
 import javax.persistence.EntityManager;
 import javax.persistence.PersistenceContext;
 import org.springframework.stereotype.Repository;
@@ -48,15 +47,6 @@ public class JPAExcursionDAO implements ExcursionDAO {
         return entityManager.find(Excursion.class, id);
     }
     
-    @Override
-    public List<Excursion> getExcursionsByDestination(String destination){
-       Objects.requireNonNull(destination, "destination");
-        
-        return entityManager.createQuery("SELECT e FROM Excursion e WHERE e.destination = :d", Excursion.class)
-            .setParameter("d", destination)
-            .getResultList();
-    }
-    
     @Override 
     public List<Excursion> getAllExcursions(){
       return entityManager.createNamedQuery("Excursion.getAll", Excursion.class)
@@ -77,12 +67,6 @@ public class JPAExcursionDAO implements ExcursionDAO {
         return entityManager.merge(excursion);
     }
     
-   @Override
-    public void deleteExcursion(Excursion excursion){
-        if(excursion == null) throw new NullPointerException("Excursion object is null.");
-        
-        entityManager.remove(excursion);
-    }
     @Override
     public void deleteExcursionById(long id){
         if (id < 0) throw new IllegalArgumentException("The id has a negative value");

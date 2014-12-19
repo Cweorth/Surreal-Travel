@@ -55,21 +55,6 @@ public class DefaultExcursionService implements ExcursionService{
     }
  
     /**
-     * Get list of excursion DTOs with the given destination.
-     * @param destination
-     * @return 
-     */
-    @Override
-    public List<ExcursionDTO> getExcursionsByDestination(String destination){
-       Objects.requireNonNull(destination, "destination");
-       
-       List<ExcursionDTO> result = new ArrayList<>();
-         for (Excursion excursion : excursionDAO.getExcursionsByDestination(destination)) 
-             result.add(mapper.map(excursion,ExcursionDTO.class));
-       return result;
-    }
-    
-    /**
      * Get list of all excursion DTOs.
      * @return 
      */
@@ -112,18 +97,6 @@ public class DefaultExcursionService implements ExcursionService{
         excursionDAO.updateExcursion(newExcursion);
     }
    
-     /**
-     * Delete excursion entry for the given DTO.
-     * @param excursionDTO
-     */
-    @Override
-    @Transactional
-    public void deleteExcursion(ExcursionDTO excursionDTO){
-        Objects.requireNonNull(excursionDTO, "Excursion is null");
-        
-        excursionDAO.deleteExcursion(mapper.map(excursionDTO, Excursion.class));
-    }
-    
     /**
      * Delete excursion entry for the given id.
      * @param id 

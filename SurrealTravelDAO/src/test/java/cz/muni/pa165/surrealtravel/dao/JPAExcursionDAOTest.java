@@ -133,41 +133,6 @@ public class JPAExcursionDAOTest extends AbstractPersistenceTest {
         }
     }
     
-    @Test(expected = NullPointerException.class)
-    @Transactional
-    public void testGetExcursionsByNullDestination() {
-        dao.getExcursionsByDestination(null);
-    }
-    
-    @Test
-    @Transactional
-    public void testGetExcursionByDestinationEmpty() {
-        List<Excursion> expected = new ArrayList<>();
-        List<Excursion> actual   = dao.getExcursionsByDestination("Edoras");
-        
-        Assert.assertEquals(expected, actual);
-    }
-    
-    @Test
-    @Transactional
-    public void testGetExcursionsByDestination() {
-        insertTestExcursions();
-        String[] destinations = new String[] { "Erebor", "Mordor", "Esgaroth" };
-        
-        for(String destination : destinations) {
-            logger.info(String.format("destination = %s", destination));
-            List<Excursion> expected = filter(new DestEquals(destination), createTestExcursions());
-            List<Excursion> actual   = dao.getExcursionsByDestination(destination);
-            
-            Assert.assertEquals(expected.size(), actual.size());
-            
-            for(int ix = 0; ix < actual.size(); ++ix) {
-                expected.get(ix).setId(actual.get(ix).getId());
-                Assert.assertTrue(actual.contains(expected.get(ix)));
-            }
-        }
-    }
-    
     @Test
     @Transactional
     public void testGetAllExcursionsEmpty() {
@@ -241,23 +206,6 @@ public class JPAExcursionDAOTest extends AbstractPersistenceTest {
         for(Excursion excursion : updated) {
             Assert.assertEquals(20, (int) excursion.getDuration());
         }
-    }
-    
-    @Test(expected = NullPointerException.class)
-    @Transactional
-    public void testDeleteExcursionNull() {
-        dao.deleteExcursion(null);
-    }
-    
-    @Test
-    @Transactional
-    public void testDeleteExcursion() {
-        insertTestExcursions();
-        Excursion excursion = createTestExcursions().get(0);
-
-        dao.deleteExcursion(excursion);
-       
-        Assert.assertFalse(dao.getAllExcursions().contains(excursion));
     }
     
     @Test

@@ -8,7 +8,6 @@ import cz.muni.pa165.surrealtravel.entity.Excursion;
 import cz.muni.pa165.surrealtravel.entity.Trip;
 import java.math.BigDecimal;
 import java.util.ArrayList;
-import java.util.Arrays;
 import java.util.Date;
 import java.util.List;
 import org.junit.Assert;
@@ -82,32 +81,6 @@ public class ExcursionServiceTest extends AbstractServiceTest {
         assertEquals(expected, retrieved);
     }
     
-    @Test(expected = NullPointerException.class)
-    public void testGetExcursionsByDestinationNull() {
-        service.getExcursionsByDestination(null);
-    }
-
-    @Test
-    public void testGetExcursionsByDestination() {
-        String destination = "somewhereInTheJungle";
-        
-        List<ExcursionDTO> excursions = prepareDummyExcursions(5);
-        ExcursionDTO selectedExcursion = excursions.get(1);
-        
-        List<ExcursionDTO> expected = Arrays.asList(new ExcursionDTO[] {selectedExcursion});
-        Excursion entity = mapper.map(selectedExcursion, Excursion.class);
-              
-        when(dao.getExcursionsByDestination(destination)).thenReturn(Arrays.asList(new Excursion[] {entity}));
-        List<ExcursionDTO> retrieved = service.getExcursionsByDestination(destination);
-               
-        verify(dao, times(1)).getExcursionsByDestination(Matchers.eq(destination));
-        assertNotNull(retrieved);
-        assertTrue(retrieved.size() > 0);
-        for(ExcursionDTO e : retrieved)
-            assertEquals(destination, e.getDestination());
-        assertEquals(expected, retrieved);
-    }
-
     @Test
     public void testGetAllExcursions() {
         List<ExcursionDTO> expected = prepareDummyExcursions(5);
@@ -136,19 +109,6 @@ public class ExcursionServiceTest extends AbstractServiceTest {
         
         service.updateExcursion(toUpdate);
         verify(dao, times(1)).updateExcursion(entity);
-    }
-
-    @Test(expected = NullPointerException.class)
-    public void testDeleteExcursionNull() {
-        service.deleteExcursion(null);
-    }
-    
-    @Test
-    public void testDeleteExcursion() {
-        ExcursionDTO toRemove = prepareDummyExcursion();
-        Excursion entity = mapper.map(toRemove, Excursion.class);
-        service.deleteExcursion(toRemove);
-        verify(dao, times(1)).deleteExcursion(entity);
     }
 
     @Test
