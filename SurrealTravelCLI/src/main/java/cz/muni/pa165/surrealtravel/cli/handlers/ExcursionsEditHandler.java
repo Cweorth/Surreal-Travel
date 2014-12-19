@@ -19,9 +19,6 @@ public class ExcursionsEditHandler implements CommandHandler {
     
     private final static Logger logger = LoggerFactory.getLogger(ExcursionsEditHandler.class);
     
-    private static final String ERROR_MESSAGE = "OPERATION FAILED. SEE LOG FOR MORE DETAILS.";
-    private static final String ERROR_MESSAGE_NOT_FOUND = "OPERATION FAILED. EXCURSION DOES NOT EXIST.";
-    
     @Option(name = "--id", metaVar = "id", usage = "specify the excursion id", required = true)
     private long id;
     
@@ -52,36 +49,30 @@ public class ExcursionsEditHandler implements CommandHandler {
 
     @Override
     public void run(MainOptions options) {
-        ExcursionDTO excursion;
-        try {
-            excursion = AppConfig.getExcursionClient().getExcursion(id);
-        } catch(Exception e) {
-            logger.info("Following errors encountered when retrieving excursion: " + e.getMessage());
-            System.out.println(ERROR_MESSAGE);
-            return;
-        }
+        ExcursionDTO excursion = AppConfig.getExcursionClient().getExcursion(id);
         
         if(excursion == null) {
-            logger.info("Excursion with given id does not exist.");
-            System.out.println(ERROR_MESSAGE_NOT_FOUND);
+            logger.info("Excursion does not exist.");
+            System.out.println("EXCURSION DOES NOT EXIST.");
             return;
         }
-        
+
         if(description != null) excursion.setDescription(description);
         if(destination != null) excursion.setDestination(destination);
         if(duration != null) excursion.setDuration(duration);
         if(excursionDate != null) excursion.setExcursionDate(excursionDate);
         if(price != null) excursion.setPrice(price);
         
-        try {
-            excursion = AppConfig.getExcursionClient().editExcursion(excursion);
-        } catch(Exception e) {
-            logger.info("Following errors encountered when updating excursion: " + e.getMessage());
-            System.out.println(ERROR_MESSAGE);
+        excursion = AppConfig.getExcursionClient().editExcursion(excursion);
+        
+        if(excursion == null) {
+            logger.info("Excursion does not exist.");
+            System.out.println("EXCURSION COULD NOT BE MODIFIED.");
             return;
         }
-        
-        System.out.println("- The following excursion was modified >>");
+
+        logger.info("Printing modified excursion object (with new values).");
+        System.out.println("The following excursion was modified:");
         
         CLITableExcursion.print(excursion);
     }

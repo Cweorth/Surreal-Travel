@@ -6,6 +6,8 @@ import cz.muni.pa165.surrealtravel.cli.AppConfig;
 import cz.muni.pa165.surrealtravel.cli.utils.CLITableExcursion;
 import cz.muni.pa165.surrealtravel.dto.ExcursionDTO;
 import java.util.List;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 
 /**
  * The {@code excursions-list} command handler
@@ -14,6 +16,8 @@ import java.util.List;
 public class ExcursionsListHandler implements CommandHandler {
     
     //--[  Interface implementation  ]------------------------------------------
+    
+    private final static Logger logger = LoggerFactory.getLogger(ExcursionsListHandler.class);
     
     @Override
     public Command getCommand() {
@@ -30,10 +34,12 @@ public class ExcursionsListHandler implements CommandHandler {
         List<ExcursionDTO> excursions = AppConfig.getExcursionClient().getAllExcursions();
 
         if (excursions.isEmpty()) {
-            System.out.println("NO EXCURSIONS FOUND");
+            System.out.println("NO EXCURSIONS FOUND.");
             return;
         }
 
+        logger.info("Printing fetched excursion objects.");
+        
         CLITableExcursion.print(excursions);
     }
 

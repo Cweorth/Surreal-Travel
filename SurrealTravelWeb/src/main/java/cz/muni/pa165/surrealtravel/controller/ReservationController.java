@@ -37,7 +37,7 @@ import org.springframework.web.servlet.mvc.support.RedirectAttributes;
 import org.springframework.web.util.UriComponentsBuilder;
 
 /**
- *
+ * Reservation controller.
  * @author Tomáš Kácel [359965]
  */
 @Controller
@@ -95,6 +95,12 @@ public class ReservationController {
           });
     }
     
+    /**
+     * List all excursions. Prepared to be called via ajax.
+     * @param id
+     * @param model
+     * @return 
+     */
     @RequestMapping(value = "/ajaxGetExcursions/{id}", method = RequestMethod.GET)
     public String listExcursionsAjax(@PathVariable long id, ModelMap model) {
         TripDTO trip = tripService.getTripById(id);
@@ -103,6 +109,11 @@ public class ReservationController {
         return "reservation/excursionsAjax";
     }
     
+    /**
+     * Get all reservations.
+     * @param model
+     * @return 
+     */
     @RequestMapping(method = RequestMethod.GET)
     public String listReservations(ModelMap model) {
         model.addAttribute("reservations", reservationService.getAllReservations());
@@ -263,11 +274,6 @@ public class ReservationController {
         c1.setName("Honza");
         c1.setAddress("Olomouc");
         customerService.addCustomer(c1);
-        //CustomerDTO c2 = new CustomerDTO();
-        //c2.setName("Eva");
-        //c2.setAddress("Olomouc");
-        //customerService.addCustomer(c1);
-        //customerService.addCustomer(c2);
         TripDTO trip= new TripDTO();
         
         Calendar calendar = new GregorianCalendar();
@@ -282,7 +288,6 @@ public class ReservationController {
         trip.setCapacity(15);
         trip.setBasePrice(new BigDecimal(500));
         
-        
         ExcursionDTO e1 = new ExcursionDTO();
         e1.setDestination("Afgánistán");
         e1.setDescription("Best of war");
@@ -290,37 +295,19 @@ public class ReservationController {
         e1.setExcursionDate(from);
         e1.setPrice(new BigDecimal(0));
         
-        //ExcursionDTO e2 = new ExcursionDTO();
-        //e2.setDestination("Afgánistán");
-        //e2.setDescription("Best of army stock");
-        //e2.setDuration(5);
-        //e2.setExcursionDate(from);
-        //e2.setPrice(new BigDecimal(10));
         excursionService.addExcursion(e1);
-        //excursionService.addExcursion(e2);
         List<ExcursionDTO> excursions= new ArrayList<>();
         excursions.add(e1);
-        
-        //excursions.add(e2);
         
         trip.setExcursions(excursions);
         tripService.addTrip(trip);
         
-        //customerService.addCustomer(c2);
         ReservationDTO res1 = new ReservationDTO();
         res1.setTrip(trip);
         res1.addExcursion(e1);
         res1.setCustomer(c1);
-       
-        
-        //ReservationDTO res2= new ReservationDTO();
-        //res2.setExcursions(excursions);
-        //res2.setTrip(trip);
-        //res2.setCustomer(c1);
         
         reservationService.addReservation(res1);
-        //reservationService.addReservation(res2);
-       
                 
     }
 }

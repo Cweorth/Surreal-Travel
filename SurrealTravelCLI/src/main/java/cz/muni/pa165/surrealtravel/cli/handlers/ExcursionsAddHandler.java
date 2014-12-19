@@ -3,7 +3,6 @@ package cz.muni.pa165.surrealtravel.cli.handlers;
 import cz.muni.pa165.surrealtravel.Command;
 import cz.muni.pa165.surrealtravel.MainOptions;
 import cz.muni.pa165.surrealtravel.cli.AppConfig;
-import cz.muni.pa165.surrealtravel.cli.rest.RestExcursionClient;
 import cz.muni.pa165.surrealtravel.cli.utils.CLITableExcursion;
 import cz.muni.pa165.surrealtravel.dto.ExcursionDTO;
 import java.math.BigDecimal;
@@ -11,7 +10,6 @@ import java.util.Date;
 import org.kohsuke.args4j.Option;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
-import org.springframework.stereotype.Component;
 
 /**
  * Handler for excursions-add command.
@@ -55,15 +53,16 @@ public class ExcursionsAddHandler implements CommandHandler {
         excursion.setExcursionDate(excursionDate);
         excursion.setPrice(price);
 
-        try {
-            excursion = AppConfig.getExcursionClient().addExcursion(excursion);
-        } catch(Exception e) {
-            logger.info("Following errors encountered: " + e.getMessage());
-            System.out.println("OPERATION FAILED. SEE LOG FOR MORE DETAILS.");
+        excursion = AppConfig.getExcursionClient().addExcursion(excursion);
+        
+        if(excursion == null) {
+            logger.info("Excursion adding failed.");
+            System.out.println("EXCURSION COULD NOT BE ADDED.");
             return;
         }
         
-        System.out.println("- The following excursion was added >>");
+        logger.info("Printing added excursion object.");
+        System.out.println("The following excursion was added:");
         
         CLITableExcursion.print(excursion);
     }

@@ -1,11 +1,13 @@
 package cz.muni.pa165.surrealtravel.cli.handlers;
 
-import cz.muni.pa165.surrealtravel.cli.utils.CLITableExcursion;
 import cz.muni.pa165.surrealtravel.Command;
 import cz.muni.pa165.surrealtravel.MainOptions;
 import cz.muni.pa165.surrealtravel.cli.AppConfig;
+import cz.muni.pa165.surrealtravel.cli.utils.CLITableExcursion;
 import cz.muni.pa165.surrealtravel.dto.ExcursionDTO;
 import org.kohsuke.args4j.Option;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 
 /**
  * Handler for excursions-get command.
@@ -15,6 +17,8 @@ public class ExcursionsGetHandler implements CommandHandler {
     
     @Option(name = "--id", metaVar = "id", usage = "specify the excursion id", required = true)
     private long id;
+    
+    private final static Logger logger = LoggerFactory.getLogger(ExcursionsGetHandler.class);
     
     @Override
     public Command getCommand() {
@@ -31,11 +35,12 @@ public class ExcursionsGetHandler implements CommandHandler {
         ExcursionDTO excursion = AppConfig.getExcursionClient().getExcursion(id);
         
         if(excursion == null) {
-            System.out.println("NO EXCURSION FOUND");
+            logger.info("Excursion does not exist.");
+            System.out.println("EXCURSION DOES NOT EXIST.");
             return;
         }
         
-        System.out.println("- The following excursion was found >>");
+        logger.info("Printing fetched excursion object.");
         
         CLITableExcursion.print(excursion);
     }

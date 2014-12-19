@@ -26,6 +26,10 @@ public class RestExcursionClient {
     
     private final RestTemplate template;
     
+    /**
+     * Constructor.
+     * @param template 
+     */
     public RestExcursionClient(RestTemplate template) {
         this.template = Objects.requireNonNull(template, "template");
     }
@@ -181,22 +185,20 @@ public class RestExcursionClient {
         
         logger.info("Deleting by calling " + address.toString());
                
-        // TODO tomorow
-//        ResponseEntity<ExcursionDTO> response;
-//        try {
-////            response = template.
-//        } catch (RestClientException ex) {
-//            throw new RESTAccessException(ex.getMessage(), ex);
-//        }
-//        
-//        logger.info(response.toString());
-//        
-//        if (!response.hasBody()) {
-//            throw new RESTAccessException(response.getStatusCode().toString());
-//        }
-//        
-//        return response.getBody();
-        return null;
+        ResponseEntity<ExcursionDTO> response;
+        try {
+            response = template.exchange(address.toString(), HttpMethod.DELETE, null, ExcursionDTO.class);
+        } catch (RestClientException ex) {
+            throw new RESTAccessException(ex.getMessage(), ex);
+        }
+        
+        logger.info(response.toString());
+        
+        if (!response.hasBody()) {
+            throw new RESTAccessException(response.getStatusCode().toString());
+        }
+        
+        return response.getBody();
     }
      
 }

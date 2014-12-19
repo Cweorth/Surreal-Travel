@@ -24,15 +24,6 @@ public class JPAReservationDAOTest extends AbstractPersistenceTest {
     @Autowired
     private ReservationDAO dao;
     
-    @Autowired
-    private ExcursionDAO excursionDao;
-    
-    @Autowired
-    private CustomerDAO customerDao;
-    
-    @Autowired
-    private TripDAO tripDao;
-    
     @Test(expected = NullPointerException.class)
     @Transactional
     public void testNullExcursion() {
@@ -86,7 +77,7 @@ public class JPAReservationDAOTest extends AbstractPersistenceTest {
         Trip trip = mktrip(mkdate(1, 11, 2014), mkdate(8, 11, 2014), "Iraq", 500, new BigDecimal(99));
         Reservation reservation = mkreservation(customer, trip);
         
-        dao.addReservation(reservation);
+        em.persist(reservation);
         
         long id = reservation.getId();
         Reservation retrieved = dao.getReservationById(id);
@@ -192,7 +183,7 @@ public class JPAReservationDAOTest extends AbstractPersistenceTest {
         
         chosenReservation = dao.updateReservation(chosenReservation);
 
-        Reservation retrieved = dao.getReservationById(chosenReservation.getId());
+        Reservation retrieved = em.find(Reservation.class, chosenReservation.getId());
         
         assertEquals(retrieved, chosenReservation);
     }
@@ -205,7 +196,7 @@ public class JPAReservationDAOTest extends AbstractPersistenceTest {
         Reservation reservation = mkreservation(customer, trip);
         Excursion excursion = mkexcursion(mkdate(8, 11, 2014), 4, "description of excursion", "someplace", new BigDecimal(99));
         
-        dao.addReservation(reservation);
+        em.persist(reservation);
         
         // we need to detach managed object or the update method below is redundant
         em.detach(reservation);
@@ -234,7 +225,8 @@ public class JPAReservationDAOTest extends AbstractPersistenceTest {
         
         dao.deleteReservation(chosenReservation);
         
-        assertFalse(dao.getAllReservations().contains(chosenReservation));
+        List<Reservation> all = em.createQuery("SELECT r FROM Reservation r").getResultList();
+        assertFalse(all.contains(chosenReservation));
     }
     
     @Test(expected = NullPointerException.class)
@@ -260,18 +252,9 @@ public class JPAReservationDAOTest extends AbstractPersistenceTest {
         
         BigDecimal expected = sumReservation(reservation1);
         expected = expected.add(sumReservation(reservation2));
-       
-        customerDao.addCustomer(reservation1.getCustomer());
-        for(Excursion e : reservation1.getExcursions())
-            excursionDao.addExcursion(e);
-        tripDao.addTrip(reservation1.getTrip());
-        dao.addReservation(reservation1);
         
-        customerDao.addCustomer(reservation2.getCustomer());
-        for(Excursion e : reservation2.getExcursions())
-            excursionDao.addExcursion(e);
-        tripDao.addTrip(reservation2.getTrip());
-        dao.addReservation(reservation2);
+        storeReservation(reservation1);
+        storeReservation(reservation2);
         
         BigDecimal retrieved = dao.getFullPriceByCustomer(customer);
 
@@ -293,7 +276,7 @@ public class JPAReservationDAOTest extends AbstractPersistenceTest {
         
         dao.removeExcursionFromAllReservations(chosenExcursion);
         
-        List<Reservation> allReservations = dao.getAllReservations();
+        List<Reservation> allReservations = em.createQuery("SELECT r FROM Reservation r").getResultList();
         
         for(Reservation r : allReservations)
             assertFalse(r.getExcursions().contains(chosenExcursion));
@@ -368,12 +351,20 @@ public class JPAReservationDAOTest extends AbstractPersistenceTest {
      */
     private void storeReservations(List<Reservation> res) {
         for(Reservation r : res) {
-            customerDao.addCustomer(r.getCustomer());
-            for(Excursion e : r.getExcursions())
-                excursionDao.addExcursion(e);
-            tripDao.addTrip(r.getTrip());
-            dao.addReservation(r);
+            storeReservation(r);
         }
+    }
+    
+    /**
+     * Store single reservation.
+     * @param r 
+     */
+    private void storeReservation(Reservation r) {
+        em.persist(r.getCustomer());
+        for(Excursion e : r.getExcursions())
+            em.persist(e);
+        em.persist(r.getTrip());
+        em.persist(r);
     }
     
     /**
