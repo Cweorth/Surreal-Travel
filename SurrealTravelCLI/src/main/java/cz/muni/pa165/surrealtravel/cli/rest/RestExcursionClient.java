@@ -39,29 +39,14 @@ public class RestExcursionClient {
      * @return the list of all excursions
      */
     public List<ExcursionDTO> getAllExcursions() {
-        URL address;
-        
-        try {
-            address = new URL(AppConfig.getBase(), "excursions");
-        } catch (MalformedURLException ex) {
-            logger.error("URL format exception", ex);
-            throw new RESTAccessException("Malformed URL", ex);
-        }
-        
-        logger.info("Retrieving from " + address.toString());
-        
         ResponseEntity<ExcursionDTO[]> response;
         try {
-            response = template.getForEntity(address.toString(), ExcursionDTO[].class);
-        } catch (RestClientException ex) {
+            response = template.getForEntity(getAddress("excursions"), ExcursionDTO[].class);
+        } catch(RestClientException ex) {
             throw new RESTAccessException(ex.getMessage(), ex);
         }
         
         logger.info(response.toString());
-        
-        if (!response.hasBody()) {
-            throw new RESTAccessException(response.getStatusCode().toString());
-        }
         
         return Arrays.asList(response.getBody());
     }
@@ -72,29 +57,17 @@ public class RestExcursionClient {
      * @return 
      */
     public ExcursionDTO getExcursion(long id) {
-        URL address;
-        
-        try {
-            address = new URL(AppConfig.getBase(), "excursions/get/" + id);
-        } catch (MalformedURLException ex) {
-            logger.error("URL format exception", ex);
-            throw new RESTAccessException("Malformed URL", ex);
-        }
-        
-        logger.info("Retrieving from " + address.toString());
-        
         ResponseEntity<ExcursionDTO> response;
         try {
-            response = template.getForEntity(address.toString(), ExcursionDTO.class);
-        } catch (RestClientException ex) {
-            throw new RESTAccessException(ex.getMessage(), ex);
+            response = template.getForEntity(getAddress("excursions/get/" + id), ExcursionDTO.class);
+        } catch(RestClientException ex) {
+            switch(parseStatusCode(ex.getMessage())) {
+                case 404: throw new RESTAccessException("The excursion with ID " + id + " was not found.");
+                default:  throw new RESTAccessException(ex);
+            }
         }
         
         logger.info(response.toString());
-        
-        if (!response.hasBody()) {
-            throw new RESTAccessException(response.getStatusCode().toString());
-        }
         
         return response.getBody();
     }
@@ -104,30 +77,18 @@ public class RestExcursionClient {
      * @param excursion
      * @return 
      */
-    public ExcursionDTO addExcursion(ExcursionDTO excursion) {
-        URL address;
-        
-        try {
-            address = new URL(AppConfig.getBase(), "excursions/new");
-        } catch (MalformedURLException ex) {
-            logger.error("URL format exception", ex);
-            throw new RESTAccessException("Malformed URL", ex);
-        }
-        
-        logger.info("Adding excursion via " + address.toString());
-        
+    public ExcursionDTO addExcursion(ExcursionDTO excursion) {        
         ResponseEntity<ExcursionDTO> response;
         try {
-            response = template.postForEntity(address.toString(), excursion, ExcursionDTO.class);
-        } catch (RestClientException ex) {
-            throw new RESTAccessException(ex.getMessage(), ex);
+            response = template.postForEntity(getAddress("excursions/new"), excursion, ExcursionDTO.class);
+        } catch(RestClientException ex) {
+            switch(parseStatusCode(ex.getMessage())) {
+                case 400: throw new RESTAccessException("The excursion is not valid.");
+                default:  throw new RESTAccessException(ex);
+            }
         }
 
         logger.info(response.toString());
-        
-        if (!response.hasBody()) {
-            throw new RESTAccessException(response.getStatusCode().toString());
-        }
         
         return response.getBody();
     }
@@ -137,35 +98,22 @@ public class RestExcursionClient {
      * @param excursion
      * @return 
      */
-    public ExcursionDTO editExcursion(ExcursionDTO excursion) {
-        URL address;
-        
-        try {
-            address = new URL(AppConfig.getBase(), "excursions/edit/" + excursion.getId());
-        } catch (MalformedURLException ex) {
-            logger.error("URL format exception", ex);
-            throw new RESTAccessException("Malformed URL", ex);
-        }
-        
-        logger.info("Modifying excursion via " + address.toString());
-        
+    public ExcursionDTO editExcursion(ExcursionDTO excursion) {        
         final HttpEntity<ExcursionDTO> request = new HttpEntity<>(excursion, new HttpHeaders());
         
         ResponseEntity<ExcursionDTO> response;
         try {
-            response = template.exchange(address.toString(), HttpMethod.PUT, request, ExcursionDTO.class);
-        } catch (RestClientException ex) {
-            throw new RESTAccessException(ex.getMessage(), ex);
+            response = template.exchange(getAddress("excursions/edit/" + excursion.getId()), HttpMethod.PUT, request, ExcursionDTO.class);
+        } catch(RestClientException ex) {
+            switch(parseStatusCode(ex.getMessage())) {
+                case 400: throw new RESTAccessException("A constraint prevented this excursion from modification.");
+                default:  throw new RESTAccessException(ex);
+            }
         }
         
         logger.info(response.toString());
-        
-        if(!response.hasBody()) {
-            throw new RESTAccessException(response.getStatusCode().toString());
-        }
-        
+
         return response.getBody();
-        
     }
     
     /**
@@ -173,32 +121,43 @@ public class RestExcursionClient {
      * @param id
      * @return 
      */
-    public ExcursionDTO deleteExcursion(long id) {
-        URL address;
-        
-        try {
-            address = new URL(AppConfig.getBase(), "excursions/delete/" + id);
-        } catch (MalformedURLException ex) {
-            logger.error("URL format exception", ex);
-            throw new RESTAccessException("Malformed URL", ex);
-        }
-        
-        logger.info("Deleting by calling " + address.toString());
-               
+    public ExcursionDTO deleteExcursion(long id) {               
         ResponseEntity<ExcursionDTO> response;
         try {
-            response = template.exchange(address.toString(), HttpMethod.DELETE, null, ExcursionDTO.class);
-        } catch (RestClientException ex) {
-            throw new RESTAccessException(ex.getMessage(), ex);
+            response = template.exchange(getAddress("excursions/delete/" + id), HttpMethod.DELETE, null, ExcursionDTO.class);
+        } catch(RestClientException ex) {
+            switch(parseStatusCode(ex.getMessage())) {
+                case 400: throw new RESTAccessException("The excursion cannot be deleted because of integrity constraints.");
+                default:  throw new RESTAccessException(ex);
+            }
         }
         
         logger.info(response.toString());
         
-        if (!response.hasBody()) {
-            throw new RESTAccessException(response.getStatusCode().toString());
+        return response.getBody();
+    }
+    
+    private int parseStatusCode(String errorMessage) {
+        String[] parts = errorMessage.split(" ", 2);
+        
+        try {
+            return Integer.parseInt(parts[0]);
+        } catch (NumberFormatException ex) {
+            return -1;
+        }
+    }
+    
+    private String getAddress(String suffix) {
+        URL address;
+        
+        try {
+            address = new URL(AppConfig.getBase(), suffix);
+        } catch (MalformedURLException ex) {
+            throw new RESTAccessException("Malformed URL", ex);
         }
         
-        return response.getBody();
+        logger.info("Retrieving from " + address.toString());
+        return address.toString();
     }
      
 }

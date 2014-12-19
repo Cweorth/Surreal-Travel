@@ -34,12 +34,6 @@ public class ExcursionsGetHandler implements CommandHandler {
     public void run(MainOptions options) {
         ExcursionDTO excursion = AppConfig.getExcursionClient().getExcursion(id);
         
-        if(excursion == null) {
-            logger.info("Excursion does not exist.");
-            System.out.println("EXCURSION DOES NOT EXIST.");
-            return;
-        }
-        
         logger.info("Printing fetched excursion object.");
         
         CLITableExcursion.print(excursion);

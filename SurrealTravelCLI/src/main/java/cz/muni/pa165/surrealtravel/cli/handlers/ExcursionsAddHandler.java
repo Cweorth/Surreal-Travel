@@ -55,12 +55,6 @@ public class ExcursionsAddHandler implements CommandHandler {
 
         excursion = AppConfig.getExcursionClient().addExcursion(excursion);
         
-        if(excursion == null) {
-            logger.info("Excursion adding failed.");
-            System.out.println("EXCURSION COULD NOT BE ADDED.");
-            return;
-        }
-        
         logger.info("Printing added excursion object.");
         System.out.println("The following excursion was added:");
         

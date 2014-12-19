@@ -33,12 +33,6 @@ public class ExcursionsDeleteHandler implements CommandHandler {
     @Override
     public void run(MainOptions options) {
         ExcursionDTO excursion = AppConfig.getExcursionClient().deleteExcursion(id);
-
-        if(excursion == null) {
-            logger.info("Excursion to be removed does not exist.");
-            System.out.println("EXCURSION DOES NOT EXIST.");
-            return;
-        }
         
         logger.info("Printing deleted excursion object.");
         System.out.println("The following excursion was deleted:");

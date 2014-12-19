@@ -50,26 +50,37 @@ public class ExcursionsEditHandler implements CommandHandler {
     @Override
     public void run(MainOptions options) {
         ExcursionDTO excursion = AppConfig.getExcursionClient().getExcursion(id);
-        
-        if(excursion == null) {
-            logger.info("Excursion does not exist.");
-            System.out.println("EXCURSION DOES NOT EXIST.");
-            return;
-        }
 
-        if(description != null) excursion.setDescription(description);
-        if(destination != null) excursion.setDestination(destination);
-        if(duration != null) excursion.setDuration(duration);
-        if(excursionDate != null) excursion.setExcursionDate(excursionDate);
-        if(price != null) excursion.setPrice(price);
+        boolean changed = false;
+        
+        if(description != null) {
+            excursion.setDescription(description);
+            changed |= true;
+        }
+        
+        if(destination != null) {
+            excursion.setDestination(destination);
+            changed |= true;
+        }
+        
+        if(duration != null) {
+            excursion.setDuration(duration);
+            changed |= true;
+        }
+        
+        if(excursionDate != null) {
+            excursion.setExcursionDate(excursionDate);
+            changed |= true;
+        }
+        
+        if(price != null) {
+            excursion.setPrice(price);
+            changed |= true;
+        }
+        
+        if(!changed) throw new RuntimeException("No change in the excursion.");
         
         excursion = AppConfig.getExcursionClient().editExcursion(excursion);
-        
-        if(excursion == null) {
-            logger.info("Excursion does not exist.");
-            System.out.println("EXCURSION COULD NOT BE MODIFIED.");
-            return;
-        }
 
         logger.info("Printing modified excursion object (with new values).");
         System.out.println("The following excursion was modified:");
