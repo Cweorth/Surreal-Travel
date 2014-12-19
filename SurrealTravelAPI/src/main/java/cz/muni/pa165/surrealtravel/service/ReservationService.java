@@ -40,13 +40,6 @@ public interface ReservationService {
     List<ReservationDTO> getAllReservationsByCustomer(CustomerDTO customerDTO);
 
     /**
-     * Get a list with all reservation with selected excursion
-     * @param excursionDTO the selected excursion we want all reservation from there
-     * @return
-     */
-    List<ReservationDTO> getAllReservationsByExcursion(ExcursionDTO excursionDTO);
-
-    /**
      * Get full price of all reservations for the given {@code customer}.
      * @param customerDTO the customer
      * @return the price
@@ -59,12 +52,6 @@ public interface ReservationService {
      * @return the reservation
      */
     ReservationDTO getReservationById(long id);
-
-    /**
-     * remove excursion from all reservations
-     * @param excursionDTO the reservation which must be remove
-     */
-    void removeExcursionFromAllReservations(ExcursionDTO excursionDTO);
 
     /**
      * Update the reservation.

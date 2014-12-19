@@ -82,24 +82,7 @@ public class DefaultReservationService implements ReservationService {
         }
       return result;
   }
-  /**
-   * get list with all reservation with selected excursion
-   * @param excursionDTO the selected excursion we want all reservation from there
-   * @return 
-   */
-  @Transactional(readOnly = true)
-    @Override
-  public List<ReservationDTO> getAllReservationsByExcursion(ExcursionDTO excursionDTO){
-      Objects.requireNonNull(excursionDTO);
-      List<ReservationDTO> result = new ArrayList<>();
-      Excursion excursion=mapper.map(excursionDTO, Excursion.class);
-      List<Reservation> reservations = reservationDAO.getAllReservationsByExcursion(excursion);
-      for (Reservation reservation : reservations) {
-            result.add(mapper.map(reservation,ReservationDTO.class));
-        }
-      return result;
-  }
-  
+
   /**
    * update reservation data
    * @param reservationDTO the reservation with data to update
@@ -136,17 +119,7 @@ public class DefaultReservationService implements ReservationService {
       BigDecimal result= reservationDAO.getFullPriceByCustomer(customer);
       return result;
   }
-  /**
-   * remove excursion from all reservations
-   * @param excursionDTO the reservation which must be remove
-   */
-  @Transactional
-    @Override
-  public void removeExcursionFromAllReservations(ExcursionDTO excursionDTO){
-      Objects.requireNonNull(excursionDTO);
-      Excursion excursion=mapper.map(excursionDTO, Excursion.class);
-      reservationDAO.removeExcursionFromAllReservations(excursion);
-  }
+
 /**
  * simple validation
  * @param reservationDTO to validate
@@ -177,6 +150,7 @@ public class DefaultReservationService implements ReservationService {
      * @param id 
      */
     @Transactional
+      @Override
     public void deleteReservationById(long id){
         reservationDAO.deleteReservationById(id);
     }

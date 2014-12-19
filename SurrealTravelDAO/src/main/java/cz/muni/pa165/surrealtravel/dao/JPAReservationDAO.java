@@ -66,18 +66,7 @@ public class JPAReservationDAO implements ReservationDAO {
         return reserves;    
         
     }
-    
-    @Override
-    public List<Reservation> getAllReservationsByExcursion(Excursion excursion) {
-        
-        if(excursion == null) throw new NullPointerException("excursion doesnt exist.");
-        List<Reservation> reserves = entityManager.createQuery("SELECT r FROM Reservation r JOIN r.excursions e WHERE e.id= :d", Reservation.class)
-                .setParameter("d", excursion.getId())
-                .getResultList();
-        
-        return reserves;
-    }
-    
+      
     @Override
     public Reservation updateReservation(Reservation reservation) {
         if(reservation == null) throw new NullPointerException("reservation doesnt exist.");
@@ -112,20 +101,6 @@ public class JPAReservationDAO implements ReservationDAO {
       
       return dec;  
         
-    }
-    
-    @Override
-    public void removeExcursionFromAllReservations(Excursion excursion) {
-        if(excursion==null)throw new NullPointerException("excursion doesnt exist.");
-        if(excursion.getId() < 0) throw new IllegalArgumentException("excursion id must be positiv number.");
-        
-        List<Reservation> res= getAllReservations();
-        for(Reservation r: res){
-            if(r.getExcursions().contains(excursion)){
-                r.removeExcursion(excursion);
-                updateReservation(r);
-            }
-        }
     }
     
     @Override

@@ -188,23 +188,6 @@ public class ReservationServiceTest extends AbstractServiceTest {
     }
     
     @Test(expected = NullPointerException.class)
-    public void getReservationsByExcursionNullTest() {
-        service.getAllReservationsByExcursion(null);
-    }
-    
-    @Test
-    public void getReservationsByExcursionTest() {
-        Excursion excursion = excursionDTOToEntity(excursions.get(0));
-        List<Reservation> result = map(toEntity, reservations.subList(0, 1));
-        
-        when(dao.getAllReservationsByExcursion(excursion)).thenReturn(result);
-        
-        List<ReservationDTO> actual = service.getAllReservationsByExcursion(excursions.get(0));
-        assertEquals(              reservations.subList(0, 1), actual);
-        verify(dao, times(1)).getAllReservationsByExcursion(any(Excursion.class));
-    }
-
-    @Test(expected = NullPointerException.class)
     public void updateReservationNullTest() {
         service.updateReservation(null);
     }
@@ -235,17 +218,5 @@ public class ReservationServiceTest extends AbstractServiceTest {
     public void getFullPriceTest() {
         service.getFullPriceByCustomer(customers.get(0));
         verify(dao, times(1)).getFullPriceByCustomer(any(Customer.class));
-    }
-    
-    @Test(expected = NullPointerException.class)
-    public void removeExcursionNullTest() {
-        service.removeExcursionFromAllReservations(null);
-    }
-    
-    @Test
-    public void removeExcursionTest() {
-        service.removeExcursionFromAllReservations(excursions.get(0));
-        verify(dao, times(1)).removeExcursionFromAllReservations(any(Excursion.class));
-    }
-    
+    }     
 }

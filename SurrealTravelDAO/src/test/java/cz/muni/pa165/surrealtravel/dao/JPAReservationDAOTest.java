@@ -125,26 +125,7 @@ public class JPAReservationDAOTest extends AbstractPersistenceTest {
         
         assertDeepEquals(expected, retrieved);
     }
-    
-    @Test(expected = NullPointerException.class)
-    @Transactional
-    public void testGetAllReservationsByExcursionNull() {
-        dao.getAllReservationsByExcursion(null);
-    }
-    
-    @Test
-    @Transactional
-    public void testGetAllReservationsByExcursion() {
-        List<Reservation> res = prepareReservationBatch();
-        storeReservations(res);
-        Excursion chosenExcursion = res.get(0).getTrip().getExcursions().get(0); // every trip has at least 1 excursion, therefore this is a valid selection
-        
-        List<Reservation> expected = getReservationsForExcursion(res, chosenExcursion);
-        List<Reservation> retrieved = dao.getAllReservationsByExcursion(chosenExcursion);
-
-        assertDeepEquals(expected, retrieved);
-    }
-    
+      
     @Test(expected = NullPointerException.class)
     @Transactional
     public void testUpdateReservationNull() {
@@ -259,30 +240,7 @@ public class JPAReservationDAOTest extends AbstractPersistenceTest {
         BigDecimal retrieved = dao.getFullPriceByCustomer(customer);
 
         assertEquals(expected, retrieved);
-    }
-    
-    @Test(expected = NullPointerException.class)
-    @Transactional
-    public void testRemoveExcursionFromAllReservationsNull() {
-        dao.removeExcursionFromAllReservations(null);
-    }
-    
-    @Test
-    @Transactional
-    public void testRemoveExcursionFromAllReservations() {
-        List<Reservation> res = prepareReservationBatch();
-        storeReservations(res);
-        Excursion chosenExcursion = res.get(0).getExcursions().get(0);
-        
-        dao.removeExcursionFromAllReservations(chosenExcursion);
-        
-        List<Reservation> allReservations = em.createQuery("SELECT r FROM Reservation r").getResultList();
-        
-        for(Reservation r : allReservations)
-            assertFalse(r.getExcursions().contains(chosenExcursion));
-    }
-    
-    
+    }  
     //--[  Helper methods  ]---------------------------------------------------
     
     /**

@@ -37,12 +37,6 @@ public interface ReservationDAO {
      * @return 
      */
     public List<Reservation> getAllReservationsByCustomer(Customer customer);
-    /**
-     * get all reservations wich have got this excursion
-     * @param excursion
-     * @return list of reservation with excrsion
-     */
-    public List<Reservation> getAllReservationsByExcursion(Excursion excursion);
     
     /**
      * updatereservation
@@ -63,13 +57,7 @@ public interface ReservationDAO {
      * @return decimal fullprice
      */
     public BigDecimal getFullPriceByCustomer(Customer customer);
-    
-    /**
-     * remove one kind of excursion from all reservations
-     * @param excursion 
-     */
-    public void removeExcursionFromAllReservations(Excursion excursion);
-    
+      
     /**
      *
      * @param id
