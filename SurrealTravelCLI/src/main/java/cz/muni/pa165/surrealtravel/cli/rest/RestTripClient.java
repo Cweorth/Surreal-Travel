@@ -6,11 +6,10 @@ import java.net.MalformedURLException;
 import java.net.URL;
 import java.util.Arrays;
 import java.util.List;
+import java.util.Objects;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
-import org.springframework.stereotype.Component;
 import org.springframework.web.client.RestClientException;
 import org.springframework.web.client.RestTemplate;
 
@@ -18,16 +17,14 @@ import org.springframework.web.client.RestTemplate;
  * The REST client providing operations for {@link cz.muni.pa165.surrealtravel.dto.TripDTO}
  * @author Roman Lacko [396157]
  */
-@Component
 public class RestTripClient {
     
-    final static Logger logger = LoggerFactory.getLogger(RestTripClient.class);
+    private final static Logger logger = LoggerFactory.getLogger(RestTripClient.class);
+    private final RestTemplate template;
     
-    @Autowired
-    private RestTemplate template;
-    
-    public RestTripClient()
-    { }
+    public RestTripClient(RestTemplate template) {
+        this.template = Objects.requireNonNull(template, "template");
+    }
     
     /**
      * Returns the list of all trips

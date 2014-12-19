@@ -1,10 +1,15 @@
 package cz.muni.pa165.surrealtravel;
 
-import cz.muni.pa165.surrealtravel.cli.AppConfig;
 import cz.muni.pa165.surrealtravel.cli.handlers.CommandHandler;
+import cz.muni.pa165.surrealtravel.cli.handlers.ExcursionsAddHandler;
+import cz.muni.pa165.surrealtravel.cli.handlers.ExcursionsDeleteHandler;
+import cz.muni.pa165.surrealtravel.cli.handlers.ExcursionsEditHandler;
+import cz.muni.pa165.surrealtravel.cli.handlers.ExcursionsGetHandler;
+import cz.muni.pa165.surrealtravel.cli.handlers.ExcursionsListHandler;
+import cz.muni.pa165.surrealtravel.cli.handlers.TripsListHandler;
 import cz.muni.pa165.surrealtravel.cli.rest.RESTAccessException;
-import cz.muni.pa165.surrealtravel.cli.rest.RestExcursionClient;
 import java.io.PrintStream;
+import java.util.EnumMap;
 import java.util.Map;
 import java.util.Set;
 import org.apache.log4j.Appender;
@@ -13,8 +18,6 @@ import org.kohsuke.args4j.CmdLineException;
 import org.kohsuke.args4j.CmdLineParser;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
-import org.springframework.context.ApplicationContext;
-import org.springframework.context.support.ClassPathXmlApplicationContext;
 
 /**
  * The main class, provides CLI handling
@@ -64,21 +67,41 @@ public class Program {
     public static void main(String[] args) {
         logger.debug("Starting application");
         
-        try {
-            logger.debug("About to load application context");
-            ApplicationContext context = new ClassPathXmlApplicationContext("surrealtravel.xml");
-            
-            // temp
-            AppConfig.excursionClient = context.getBean(RestExcursionClient.class);
-        
-            logger.debug("Context loaded, parsing command-line arguments");
+        try {       
+            logger.debug("Parsing command-line arguments");
             MainOptions   options = new MainOptions();
             CmdLineParser parser  = new CmdLineParser(options);
             
             parser.parseArgument(args);
         
-            Map<Command, CommandHandler> handlers = context.getBean("handlers", Map.class);
+            Map<Command, CommandHandler> handlers = new EnumMap<>(Command.class);
+            handlers.put(Command.EXCURSIONS_ADD,    new ExcursionsAddHandler());
+            handlers.put(Command.EXCURSIONS_DELETE, new ExcursionsDeleteHandler());
+            handlers.put(Command.EXCURSIONS_EDIT,   new ExcursionsEditHandler());
+            handlers.put(Command.EXCURSIONS_GET,    new ExcursionsGetHandler());
+            handlers.put(Command.EXCURSIONS_LIST,   new ExcursionsListHandler());
+            handlers.put(Command.TRIPS_LIST,        new TripsListHandler());
             
+        
+            //<editor-fold desc="[  Debug & Verbose handling  ]" defaultstate="collapsed">
+            if (options.isVerbose() || options.isDebug()) {
+                logger.debug("entering log-verbose mode");
+                org.apache.log4j.Logger rootLogger  = LogManager.getRootLogger();
+                org.apache.log4j.Logger debuglogger = LogManager.getLogger("DebugLogger");
+
+                rootLogger.removeAppender("console");
+                rootLogger.addAppender((Appender) debuglogger.getAllAppenders().nextElement());
+
+                if (options.isDebug()) {
+                    logger.debug("entering log-debugging mode");
+                    LogManager.getRootLogger().getAppender("console").clearFilters();
+                    logger.debug("log-debugging mode enabled");
+                }
+
+                logger.debug("log-verbose mode enabled");
+            }
+            //</editor-fold>
+                        
             //<editor-fold desc="[  Help handling  ]" defaultstate="collapsed">
             if (options.isHelp()) {
                 printHelp(System.out);
@@ -113,26 +136,7 @@ public class Program {
                 }
             }
             //</editor-fold>
-        
-            //<editor-fold desc="[  Debug & Verbose handling  ]" defaultstate="collapsed">
-            if (options.isVerbose() || options.isDebug()) {
-                logger.debug("entering log-verbose mode");
-                org.apache.log4j.Logger rootLogger  = LogManager.getRootLogger();
-                org.apache.log4j.Logger debuglogger = LogManager.getLogger("DebugLogger");
 
-                rootLogger.removeAppender("console");
-                rootLogger.addAppender((Appender) debuglogger.getAllAppenders().nextElement());
-
-                if (options.isDebug()) {
-                    logger.debug("entering log-debugging mode");
-                    LogManager.getRootLogger().getAppender("console").clearFilters();
-                    logger.debug("log-debugging mode enabled");
-                }
-
-                logger.debug("log-verbose mode enabled");
-            }
-            //</editor-fold>
-            
             if (!handlers.containsKey(options.getCommand())) {
                 throw new RuntimeException("No handler for command " + options.getCommand());
             }

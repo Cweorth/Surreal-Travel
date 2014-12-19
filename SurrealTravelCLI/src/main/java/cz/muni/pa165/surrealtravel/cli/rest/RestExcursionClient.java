@@ -6,16 +6,13 @@ import java.net.MalformedURLException;
 import java.net.URL;
 import java.util.Arrays;
 import java.util.List;
+import java.util.Objects;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpEntity;
 import org.springframework.http.HttpHeaders;
 import org.springframework.http.HttpMethod;
-import org.springframework.http.MediaType;
-import org.springframework.http.RequestEntity;
 import org.springframework.http.ResponseEntity;
-import org.springframework.stereotype.Component;
 import org.springframework.web.client.RestClientException;
 import org.springframework.web.client.RestTemplate;
 
@@ -23,16 +20,15 @@ import org.springframework.web.client.RestTemplate;
  * The REST client providing operations for {@link cz.muni.pa165.surrealtravel.dto.ExcursionDTO}.
  * @author Jan Klimeš [374259]
  */
-@Component
 public class RestExcursionClient {
 
-    final static Logger logger = LoggerFactory.getLogger(RestExcursionClient.class);
+    private final static Logger logger = LoggerFactory.getLogger(RestExcursionClient.class);
     
-    @Autowired
-    private RestTemplate template;
+    private final RestTemplate template;
     
-    public RestExcursionClient()
-    { }
+    public RestExcursionClient(RestTemplate template) {
+        this.template = Objects.requireNonNull(template, "template");
+    }
     
     /**
      * Returns the list of all excursions
@@ -201,14 +197,6 @@ public class RestExcursionClient {
 //        
 //        return response.getBody();
         return null;
-    }
-
-    public RestTemplate getTemplate() {
-        return template;
-    }
-
-    public void setTemplate(RestTemplate template) {
-        this.template = template;
     }
      
 }

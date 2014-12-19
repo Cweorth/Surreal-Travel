@@ -2,30 +2,19 @@ package cz.muni.pa165.surrealtravel.cli.handlers;
 
 import cz.muni.pa165.surrealtravel.Command;
 import cz.muni.pa165.surrealtravel.MainOptions;
-import cz.muni.pa165.surrealtravel.cli.rest.RestExcursionClient;
-import cz.muni.pa165.surrealtravel.cli.rest.RestTripClient;
-import cz.muni.pa165.surrealtravel.dto.ExcursionDTO;
+import cz.muni.pa165.surrealtravel.cli.AppConfig;
 import cz.muni.pa165.surrealtravel.dto.TripDTO;
 import java.text.DateFormat;
 import java.text.SimpleDateFormat;
 import java.util.List;
 import org.codehaus.plexus.util.StringUtils;
 import org.kohsuke.args4j.Option;
-import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.stereotype.Component;
 
 /**
  * The {@code trips-list} command handler.
  * @author Roman Lacko [396157]
  */
-@Component
 public class TripsListHandler implements CommandHandler {
-
-    @Autowired
-    private RestTripClient client;
-    
-    @Autowired
-    private RestExcursionClient exclient;
     
     @Option(name = "-e", aliases = {"--list-excursions"}, usage = "lists excursions in the trip")
     private boolean listExcursions;
@@ -64,7 +53,7 @@ public class TripsListHandler implements CommandHandler {
 
     @Override
     public void run(MainOptions options) {
-        List<TripDTO> trips = client.getAllTrips();
+        List<TripDTO> trips = AppConfig.getTripClient().getAllTrips();
 
         if (trips.isEmpty()) {
             System.out.println("NO TRIPS FOUND");

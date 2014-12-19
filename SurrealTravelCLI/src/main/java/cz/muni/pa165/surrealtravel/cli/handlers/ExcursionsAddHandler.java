@@ -17,14 +17,9 @@ import org.springframework.stereotype.Component;
  * Handler for excursions-add command.
  * @author Jan Klimeš [374259]
  */
-@Component
 public class ExcursionsAddHandler implements CommandHandler {
-    
-//    @Autowired(required = true)
-//    private RestExcursionClient client;
-    private RestExcursionClient client = AppConfig.excursionClient;
-    
-    final static Logger logger = LoggerFactory.getLogger(ExcursionsAddHandler.class);
+       
+    private final static Logger logger = LoggerFactory.getLogger(ExcursionsAddHandler.class);
     
     @Option(name = "--description", metaVar = "description", usage = "specify the excursion description [string]", required = true)
     private String description;
@@ -61,7 +56,7 @@ public class ExcursionsAddHandler implements CommandHandler {
         excursion.setPrice(price);
 
         try {
-            excursion = client.addExcursion(excursion);
+            excursion = AppConfig.getExcursionClient().addExcursion(excursion);
         } catch(Exception e) {
             logger.info("Following errors encountered: " + e.getMessage());
             System.out.println("OPERATION FAILED. SEE LOG FOR MORE DETAILS.");
@@ -71,14 +66,6 @@ public class ExcursionsAddHandler implements CommandHandler {
         System.out.println("- The following excursion was added >>");
         
         CLITableExcursion.print(excursion);
-    }
-
-    public RestExcursionClient getClient() {
-        return client;
-    }
-
-    public void setClient(RestExcursionClient client) {
-        this.client = client;
     }
 
     public String getDestination() {

@@ -3,7 +3,6 @@ package cz.muni.pa165.surrealtravel.cli.handlers;
 import cz.muni.pa165.surrealtravel.Command;
 import cz.muni.pa165.surrealtravel.MainOptions;
 import cz.muni.pa165.surrealtravel.cli.AppConfig;
-import cz.muni.pa165.surrealtravel.cli.rest.RestExcursionClient;
 import cz.muni.pa165.surrealtravel.cli.utils.CLITableExcursion;
 import cz.muni.pa165.surrealtravel.dto.ExcursionDTO;
 import java.math.BigDecimal;
@@ -11,20 +10,14 @@ import java.util.Date;
 import org.kohsuke.args4j.Option;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
-import org.springframework.stereotype.Component;
 
 /**
  * Handler for excursions-edit command.
  * @author Jan Klimeš [374259]
  */
-@Component
 public class ExcursionsEditHandler implements CommandHandler {
     
-//    @Autowired(required = true)
-//    private RestExcursionClient client;
-    private RestExcursionClient client = AppConfig.excursionClient;
-    
-    final static Logger logger = LoggerFactory.getLogger(ExcursionsEditHandler.class);
+    private final static Logger logger = LoggerFactory.getLogger(ExcursionsEditHandler.class);
     
     private static final String ERROR_MESSAGE = "OPERATION FAILED. SEE LOG FOR MORE DETAILS.";
     private static final String ERROR_MESSAGE_NOT_FOUND = "OPERATION FAILED. EXCURSION DOES NOT EXIST.";
@@ -61,7 +54,7 @@ public class ExcursionsEditHandler implements CommandHandler {
     public void run(MainOptions options) {
         ExcursionDTO excursion;
         try {
-            excursion = client.getExcursion(id);
+            excursion = AppConfig.getExcursionClient().getExcursion(id);
         } catch(Exception e) {
             logger.info("Following errors encountered when retrieving excursion: " + e.getMessage());
             System.out.println(ERROR_MESSAGE);
@@ -81,7 +74,7 @@ public class ExcursionsEditHandler implements CommandHandler {
         if(price != null) excursion.setPrice(price);
         
         try {
-            excursion = client.editExcursion(excursion);
+            excursion = AppConfig.getExcursionClient().editExcursion(excursion);
         } catch(Exception e) {
             logger.info("Following errors encountered when updating excursion: " + e.getMessage());
             System.out.println(ERROR_MESSAGE);
@@ -91,14 +84,6 @@ public class ExcursionsEditHandler implements CommandHandler {
         System.out.println("- The following excursion was modified >>");
         
         CLITableExcursion.print(excursion);
-    }
-
-    public RestExcursionClient getClient() {
-        return client;
-    }
-
-    public void setClient(RestExcursionClient client) {
-        this.client = client;
     }
 
     public long getId() {
