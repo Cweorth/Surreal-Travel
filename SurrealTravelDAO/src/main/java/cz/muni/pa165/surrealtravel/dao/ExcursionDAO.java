@@ -30,6 +30,7 @@ public interface ExcursionDAO {
     /**
      * Modify the excursion.
      * @param excursion 
+     * @return the modified excursion
      */
     public Excursion updateExcursion(Excursion excursion);
      

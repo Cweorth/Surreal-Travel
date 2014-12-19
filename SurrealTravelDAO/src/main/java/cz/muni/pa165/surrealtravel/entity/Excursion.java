@@ -107,10 +107,7 @@ public class Excursion implements Serializable{
             return false;
         }
         Excursion other = (Excursion) obj;
-        if (id != other.id) {
-            return false;
-        }
-        return true;
+        return id == other.id;
 
     }
 

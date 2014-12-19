@@ -77,10 +77,7 @@ public class Customer implements Serializable {
         if ((this.name == null) ? (other.name != null) : !this.name.equals(other.name)) {
             return false;
         }
-        if ((this.address == null) ? (other.address != null) : !this.address.equals(other.address)) {
-            return false;
-        }
-        return true;
+        return !((this.address == null) ? (other.address != null) : !this.address.equals(other.address));
     }
 
     @Override

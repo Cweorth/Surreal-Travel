@@ -17,36 +17,31 @@ import javax.persistence.NamedQuery;
  * @author Tomáš Kácel [359965]
  */
 @NamedQueries({
-    @NamedQuery(name="Reservation.getAll",query="SELECT r FROM Reservation r"),
-    @NamedQuery(name="Reservation.getAllByCustomer",query="SELECT c FROM Customer c WHERE c.name = :name"),
-    //@NamedQuery(name="Customer.removeById",query="DELETE FROM Customer c WHERE c.id = :id"),
-})
+    @NamedQuery(name = "Reservation.getAll", query = "SELECT r FROM Reservation r"),
+    @NamedQuery(name = "Reservation.getAllByCustomer", query = "SELECT c FROM Customer c WHERE c.name = :name"),})
 @Entity
 public class Reservation implements Serializable {
+
     //private methods
+
     @Id
     @GeneratedValue
     private long id = 0;
-    
-    //@Column(nullable = false)
+
     @ManyToOne
     private Customer customer;
-    
-    
-    //@Column(nullable = false)
+
     @ManyToOne
     private Trip trip;
-    
-    
-    
+
     @ManyToMany
     private List<Excursion> excursions;
-    
+
     //methods
-    
     public Reservation() {
         excursions = new ArrayList<>();
     }
+
     public long getId() {
         return id;
     }
@@ -54,13 +49,13 @@ public class Reservation implements Serializable {
     public void setId(long id) {
         this.id = id;
     }
-    
-    public Customer getCustomer(){
+
+    public Customer getCustomer() {
         return customer;
     }
-    
-    public void setCustomer(Customer customer){
-        this.customer= customer;
+
+    public void setCustomer(Customer customer) {
+        this.customer = customer;
     }
 
     public Trip getTrip() {
@@ -78,29 +73,28 @@ public class Reservation implements Serializable {
     public void setExcursions(List<Excursion> excursions) {
         this.excursions = excursions;
     }
-    
-    public void addExcursion(Excursion excursion){
-        if(excursion==null)throw new NullPointerException("nejede");
+
+    public void addExcursion(Excursion excursion) {
+        if (excursion == null) {
+            throw new NullPointerException("excursion");
+        }
         this.excursions.add(excursion);
     }
-    
-    public void removeExcursion(Excursion excursion){
+
+    public void removeExcursion(Excursion excursion) {
         this.excursions.remove(excursion);
     }
-    
-    public BigDecimal getTotalPrice(){
-        BigDecimal base= this.getTrip().getBasePrice();
-        //List<Excursion> excursio=this.getExcursions();
-        //if(excursions.isEmpty()){return base;}
-        BigDecimal dc=new BigDecimal(0);
-        for(Excursion ext:getExcursions()){
-          dc= dc.add(ext.getPrice());
+
+    public BigDecimal getTotalPrice() {
+        BigDecimal base = this.getTrip().getBasePrice();
+        BigDecimal dc = new BigDecimal(0);
+        for (Excursion ext : getExcursions()) {
+            dc = dc.add(ext.getPrice());
         }
-        dc=dc.add(base);
+        dc = dc.add(base);
         return dc;
     }
-    
-    
+
     @Override
     public int hashCode() {
         final int prime = 17;
@@ -108,8 +102,6 @@ public class Reservation implements Serializable {
         result = prime * result + (int) (id ^ (id >>> 32));
         return result;
     }
-    
-    
 
     @Override
     public boolean equals(Object obj) {
@@ -139,9 +131,5 @@ public class Reservation implements Serializable {
     public String toString() {
         return "Reservation{" + "id=" + id + ", customer=" + customer + ", trip=" + trip + ", excursions=" + excursions + '}';
     }
-    
-    
-    
-    
-    
+
 }
