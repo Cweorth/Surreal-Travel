@@ -6,6 +6,12 @@
 
 <t:layout title="${title}">
 <jsp:attribute name="content">
-    Main page, todo
+    <h2><f:message key="basic.introduction.title"/></h2>
+    <p><f:message key="basic.introduction"/></p>
+    
+    <h3><f:message key="basic.introduction.board"/></h3>
+    <ul>
+        <li><strong><f:message key="basic.introduction.board.title"/></strong><br><f:message key="basic.introduction.board.content"/></li>
+    </ul>
 </jsp:attribute>
 </t:layout>

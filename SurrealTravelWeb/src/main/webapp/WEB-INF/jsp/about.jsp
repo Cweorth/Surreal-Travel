@@ -6,6 +6,6 @@
 
 <t:layout title="${title}">
 <jsp:attribute name="content">
-    Some made up jibber jabber to make this look interesting.
+    <p><f:message key="basic.about.content"/></p>
 </jsp:attribute>
 </t:layout>
