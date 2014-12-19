@@ -1,8 +1,9 @@
-package cz.muni.pa165.surrealtravel.cli.handlers;
+package cz.muni.pa165.surrealtravel.cli.handlers.excursion;
 
 import cz.muni.pa165.surrealtravel.Command;
 import cz.muni.pa165.surrealtravel.MainOptions;
 import cz.muni.pa165.surrealtravel.cli.AppConfig;
+import cz.muni.pa165.surrealtravel.cli.handlers.CommandHandler;
 import cz.muni.pa165.surrealtravel.cli.utils.CLITableExcursion;
 import cz.muni.pa165.surrealtravel.dto.ExcursionDTO;
 import org.kohsuke.args4j.Option;
@@ -10,32 +11,31 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
 /**
- * Handler for excursions-delete command.
+ * Handler for excursions-get command.
  * @author Jan Klimeš [374259]
  */
-public class ExcursionsDeleteHandler implements CommandHandler {
+public class ExcursionsGetHandler implements CommandHandler {
     
     @Option(name = "--id", metaVar = "id", usage = "specify the excursion id", required = true)
     private long id;
     
-    private final static Logger logger = LoggerFactory.getLogger(ExcursionsDeleteHandler.class);
+    private final static Logger logger = LoggerFactory.getLogger(ExcursionsGetHandler.class);
     
     @Override
     public Command getCommand() {
-        return Command.EXCURSIONS_DELETE;
+        return Command.EXCURSIONS_GET;
     }
 
     @Override
     public String getDescription() {
-        return "delete existing excursion";
+        return "list excursions with the given id";
     }
 
     @Override
     public void run(MainOptions options) {
-        ExcursionDTO excursion = AppConfig.getExcursionClient().deleteExcursion(id);
+        ExcursionDTO excursion = AppConfig.getExcursionClient().getExcursion(id);
         
-        logger.info("Printing deleted excursion object.");
-        System.out.println("The following excursion was deleted:");
+        logger.info("Printing fetched excursion object.");
         
         CLITableExcursion.print(excursion);
     }
@@ -47,5 +47,5 @@ public class ExcursionsDeleteHandler implements CommandHandler {
     public void setId(long id) {
         this.id = id;
     }
-
+    
 }

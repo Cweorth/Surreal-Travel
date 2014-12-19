@@ -18,7 +18,7 @@ import org.kohsuke.args4j.spi.Setter;
  * @author Jan Klimeš [374259]
  */
 public class DateOptionHandler extends OptionHandler<Date> {
-
+    
     public DateOptionHandler(CmdLineParser parser, OptionDef option, Setter<? super Date> setter) {
         super(parser, option, setter);
     }
@@ -30,7 +30,7 @@ public class DateOptionHandler extends OptionHandler<Date> {
         try {
             date = formatter.parse(params.getParameter(0));
         } catch (ParseException ex) {
-            Logger.getLogger(DateOptionHandler.class.getName()).log(Level.SEVERE, null, ex);
+            throw new CmdLineException(owner, ex.getLocalizedMessage(), ex);
         }
         setter.addValue(date);
         return 1;

@@ -1,8 +1,12 @@
-package cz.muni.pa165.surrealtravel.cli.handlers;
+package cz.muni.pa165.surrealtravel.cli.handlers.trip;
 
 import cz.muni.pa165.surrealtravel.Command;
 import cz.muni.pa165.surrealtravel.MainOptions;
 import cz.muni.pa165.surrealtravel.cli.AppConfig;
+import cz.muni.pa165.surrealtravel.cli.handlers.BigDecimalOptionHandler;
+import cz.muni.pa165.surrealtravel.cli.handlers.CommandHandler;
+import cz.muni.pa165.surrealtravel.cli.handlers.DateOptionHandler;
+import cz.muni.pa165.surrealtravel.cli.handlers.LongArrayOptionHandler;
 import cz.muni.pa165.surrealtravel.cli.utils.CLITableTrip;
 import cz.muni.pa165.surrealtravel.dto.ExcursionDTO;
 import cz.muni.pa165.surrealtravel.dto.TripDTO;
@@ -37,6 +41,9 @@ public class TripsEditHandler implements CommandHandler {
 
     @Option(name = "--excursions", aliases = {"-e"}, handler = LongArrayOptionHandler.class, metaVar = "ids...", usage = "indices of excursions for this trip")
     private List<Long> excursionIDs;
+    
+    @Option(name = "--no-excursions", forbids = "--excursions", usage = "remove all excursions")
+    private boolean noExcursions;
 
     @Override
     public Command getCommand() {
@@ -63,10 +70,15 @@ public class TripsEditHandler implements CommandHandler {
         if (excursionIDs != null) {
             changed |= true;
             
-            for(long id : excursionIDs) {
-                ExcursionDTO excursion = AppConfig.getExcursionClient().getExcursion(id);
+            for(long eid : excursionIDs) {
+                ExcursionDTO excursion = AppConfig.getExcursionClient().getExcursion(eid);
                 trip.getExcursions().add(excursion);
             }
+        }
+        
+        if (noExcursions) {
+            changed |= true;
+            trip.getExcursions().clear();
         }
         
         if (! changed) {

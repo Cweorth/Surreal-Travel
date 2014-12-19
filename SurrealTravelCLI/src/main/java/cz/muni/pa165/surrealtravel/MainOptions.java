@@ -1,7 +1,9 @@
 package cz.muni.pa165.surrealtravel;
 
+import cz.muni.pa165.surrealtravel.cli.handlers.trip.*;
+import cz.muni.pa165.surrealtravel.cli.handlers.excursion.*;
 import cz.muni.pa165.surrealtravel.cli.AppConfig;
-import cz.muni.pa165.surrealtravel.cli.handlers.*;
+import cz.muni.pa165.surrealtravel.cli.handlers.CommandHandler;
 import java.net.URL;
 import org.kohsuke.args4j.Argument;
 import org.kohsuke.args4j.Option;

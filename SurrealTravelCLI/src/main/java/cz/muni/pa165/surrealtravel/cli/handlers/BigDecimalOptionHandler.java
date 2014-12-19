@@ -20,7 +20,12 @@ public class BigDecimalOptionHandler extends OptionHandler<BigDecimal> {
     
     @Override
     public int parseArguments(Parameters params) throws CmdLineException {
-        setter.addValue(new BigDecimal(params.getParameter(0)));
+        try {
+            setter.addValue(new BigDecimal(params.getParameter(0)));
+        } catch (NumberFormatException ex) {
+            throw new CmdLineException(owner, "\"" + params.getParameter(0) + "\" is not a valid value for BigDecimal", ex);
+        }
+        
         return 1;
     }
 

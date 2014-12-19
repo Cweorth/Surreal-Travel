@@ -1,6 +1,8 @@
 package cz.muni.pa165.surrealtravel;
 
-import cz.muni.pa165.surrealtravel.cli.handlers.*;
+import cz.muni.pa165.surrealtravel.cli.handlers.CommandHandler;
+import cz.muni.pa165.surrealtravel.cli.handlers.trip.*;
+import cz.muni.pa165.surrealtravel.cli.handlers.excursion.*;
 import cz.muni.pa165.surrealtravel.cli.rest.RESTAccessException;
 import java.io.PrintStream;
 import java.util.EnumMap;
@@ -30,6 +32,8 @@ public class Program {
         
         ps.print("usage: ");
         parser.printSingleLineUsage(ps);
+        ps.println();
+        ps.print("use -? [--command-help] to show help for each subcommand");
         ps.println();
         ps.println();
         

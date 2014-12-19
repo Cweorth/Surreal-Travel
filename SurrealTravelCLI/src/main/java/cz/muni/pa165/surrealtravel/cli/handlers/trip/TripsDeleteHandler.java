@@ -1,8 +1,9 @@
-package cz.muni.pa165.surrealtravel.cli.handlers;
+package cz.muni.pa165.surrealtravel.cli.handlers.trip;
 
 import cz.muni.pa165.surrealtravel.Command;
 import cz.muni.pa165.surrealtravel.MainOptions;
 import cz.muni.pa165.surrealtravel.cli.AppConfig;
+import cz.muni.pa165.surrealtravel.cli.handlers.CommandHandler;
 import cz.muni.pa165.surrealtravel.cli.utils.CLITableTrip;
 import cz.muni.pa165.surrealtravel.dto.TripDTO;
 import org.kohsuke.args4j.Option;

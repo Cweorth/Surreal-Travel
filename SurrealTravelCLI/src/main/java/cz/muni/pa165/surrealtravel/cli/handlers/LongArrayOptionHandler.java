@@ -33,8 +33,12 @@ public class LongArrayOptionHandler extends OptionHandler<Long> {
                 break;
             }
             
-            for (String p : param.split(" ")) {
-                setter.addValue(Long.valueOf(p));
+            try {
+                for (String p : param.split(" ")) {
+                    setter.addValue(Long.valueOf(p));
+                }
+            } catch (NumberFormatException ex) {
+                throw new CmdLineException(owner, ex.getLocalizedMessage(), ex);
             }
             
             ++counter;
