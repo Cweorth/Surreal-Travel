@@ -7,56 +7,56 @@ import java.math.BigDecimal;
 import java.util.List;
 
 /**
- *
+ * The Reservation Service.
  * @author Tomáš Kácel
  */
 public interface ReservationService {
 
     /**
-     * save trip
-     * @param reservationDTO  the DTO of reservation
+     * Save the reservation.
+     * @param reservationDTO the reservation to save
      */
     
     void addReservation(ReservationDTO reservationDTO);
 
     /**
-     * delete reservation from databaze
+     * Delete the reservation from the database.
      * @param reservationDTO the reservation to delete
      */
     
     void deleteReservation(ReservationDTO reservationDTO);
 
     /**
-     * return list of al reservation
-     * @return list of reservation
+     * Get a list of all reservations.
+     * @return list of all reservations
      */
     List<ReservationDTO> getAllReservations();
 
     /**
-     * return list of all reservation for selected customer
+     * Get a list of all reservations for the given {@code customer}
      * @param customerDTO the customer for we need the reservations
      * @return
      */
     List<ReservationDTO> getAllReservationsByCustomer(CustomerDTO customerDTO);
 
     /**
-     * get list with all reservation with selected excursion
+     * Get a list with all reservation with selected excursion
      * @param excursionDTO the selected excursion we want all reservation from there
      * @return
      */
     List<ReservationDTO> getAllReservationsByExcursion(ExcursionDTO excursionDTO);
 
     /**
-     * get full price to pay for one customer
-     * @param customerDTO the customer, for him we calculate the price
-     * @return
+     * Get full price of all reservations for the given {@code customer}.
+     * @param customerDTO the customer
+     * @return the price
      */
     BigDecimal getFullPriceByCustomer(CustomerDTO customerDTO);
 
     /**
-     * get all reservation with selected id
-     * @param id the id of reservation
-     * @return result reservation with selected id
+     * Get the reservation with the given {@code id}.
+     * @param id the id to search for
+     * @return the reservation
      */
     ReservationDTO getReservationById(long id);
 
@@ -67,13 +67,14 @@ public interface ReservationService {
     void removeExcursionFromAllReservations(ExcursionDTO excursionDTO);
 
     /**
-     * update reservation data
-     * @param reservationDTO the reservation with data to update
+     * Update the reservation.
+     * @param reservationDTO the reservation to update
      */
     void updateReservation(ReservationDTO reservationDTO);
+    
     /**
-     * 
-     * @param id 
+     * Remove the reservation with the given {@code id}.
+     * @param id the id to search for
      */
     void deleteReservationById(long id);
 }

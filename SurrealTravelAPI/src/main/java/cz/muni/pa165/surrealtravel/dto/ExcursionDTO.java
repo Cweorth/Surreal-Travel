@@ -81,10 +81,7 @@ public class ExcursionDTO implements Serializable{
             return false;
         }
         ExcursionDTO other = (ExcursionDTO) obj;
-        if (id != other.id) {
-            return false;
-        }
-        return true;
+        return id == other.id;
     }
 
     @Override

@@ -5,21 +5,20 @@ import java.util.ArrayList;
 import java.util.List;
 
 /**
- * the DTO for reservation
+ * The DTO for reservation.
  * @author Tomáš Kácel [359965]
  */
 public class ReservationDTO {
-    private long id=0;
+
+    private long id = 0;
     private CustomerDTO customer;
     private TripDTO trip;
     private List<ExcursionDTO> excursions;
-    
+
     public ReservationDTO() {
         excursions = new ArrayList<>();
-        
-        
     }
-    
+
     public long getId() {
         return id;
     }
@@ -27,13 +26,13 @@ public class ReservationDTO {
     public void setId(long id) {
         this.id = id;
     }
-    
-    public CustomerDTO getCustomer(){
+
+    public CustomerDTO getCustomer() {
         return customer;
     }
-    
-    public void setCustomer(CustomerDTO customer){
-        this.customer= customer;
+
+    public void setCustomer(CustomerDTO customer) {
+        this.customer = customer;
     }
 
     public TripDTO getTrip() {
@@ -51,36 +50,41 @@ public class ReservationDTO {
     public void setExcursions(List<ExcursionDTO> excursions) {
         this.excursions = excursions;
     }
+
     /**
-     * add excursion to reservation
-     * @param excursion to add
+     * Add an excursion to the reservation.
+     * @param excursion      An excursion to add.
      */
-    public void addExcursion(ExcursionDTO excursion){
-        if(excursion==null)throw new NullPointerException("nejede");
+    public void addExcursion(ExcursionDTO excursion) {
+        if (excursion == null) {
+            throw new NullPointerException("excursion");
+        }
+
         this.excursions.add(excursion);
     }
+
     /**
-     * remove excursion form reservation
-     * @param excursion to remove
+     * Remove an excursion form the reservation.
+     * @param excursion      an excursion to remove.
      */
-    public void removeExcursion(ExcursionDTO excursion){
+    public void removeExcursion(ExcursionDTO excursion) {
         this.excursions.remove(excursion);
     }
+
     /**
-     * method calculate total price for reservation
-     * @return totalprice
+     * Method calculates the total price for the reservation.
+     * @return The total price.
      */
-    public BigDecimal getTotalPrice(){
-        BigDecimal base= this.getTrip().getBasePrice();
-        BigDecimal dc=new BigDecimal(0);
-        for(ExcursionDTO ext:getExcursions()){
-          dc= dc.add(ext.getPrice());
+    public BigDecimal getTotalPrice() {
+        BigDecimal base = this.getTrip().getBasePrice();
+        BigDecimal dc = new BigDecimal(0);
+        for (ExcursionDTO ext : getExcursions()) {
+            dc = dc.add(ext.getPrice());
         }
-        dc=dc.add(base);
+        dc = dc.add(base);
         return dc;
     }
-    
-    
+
     @Override
     public int hashCode() {
         final int prime = 17;
@@ -88,8 +92,6 @@ public class ReservationDTO {
         result = prime * result + (int) (id ^ (id >>> 32));
         return result;
     }
-    
-    
 
     @Override
     public boolean equals(Object obj) {
@@ -99,6 +101,7 @@ public class ReservationDTO {
         if (getClass() != obj.getClass()) {
             return false;
         }
+        
         final ReservationDTO other = (ReservationDTO) obj;
         if (this.id != other.id) {
             return false;
@@ -109,10 +112,7 @@ public class ReservationDTO {
         if (this.trip != other.trip && (this.trip == null || !this.trip.equals(other.trip))) {
             return false;
         }
-        if (this.excursions != other.excursions && (this.excursions == null || !this.excursions.equals(other.excursions))) {
-            return false;
-        }
-        return true;
+        return !((this.excursions != other.excursions) && (this.excursions == null || !this.excursions.equals(other.excursions)));
     }
 
     @Override
