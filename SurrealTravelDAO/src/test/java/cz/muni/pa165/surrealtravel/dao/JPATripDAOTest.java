@@ -10,7 +10,7 @@ import java.util.List;
 
 import static org.junit.Assert.assertEquals;
 
-import static org.junit.Assert.assertNull;
+import static org.junit.Assert.assertFalse;
 import org.junit.Test;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.transaction.annotation.Transactional;
@@ -99,23 +99,6 @@ public class JPATripDAOTest extends AbstractPersistenceTest {
     }
 
     @Test
-    public void deleteTrip() {
-        Trip trip1 = mktrip(mkdate(15, 6, 2015), mkdate(20, 7, 2015), "Trip to tramtaria", 15, new BigDecimal(1000));
-        Excursion ext = mkexcursion(mkdate(16, 6, 2015), 21, "Tramtaria", "Tramtaria castle", new BigDecimal(2020));
-        List<Excursion> extList = new ArrayList<>();
-        extList.add(ext);
-        trip1.setExcursions(extList);
-        dao.addTrip(trip1);
-
-        Long id = trip1.getId();
-
-        Trip trp2 = dao.getTripById(id);
-        dao.deleteTrip(trip1);
-        Trip trp3 = dao.getTripById(id);
-        assertNull(trp3);
-    }
-
-    @Test
     public void deleteTripById() {
         Trip trip1 = mktrip(mkdate(15, 6, 2015), mkdate(20, 7, 2015), "Trip to prerov", 15, new BigDecimal(1000));
         Excursion ext = mkexcursion(mkdate(16, 6, 2015), 21, "Prerov", "Prerov castle", new BigDecimal(2020));
@@ -126,44 +109,14 @@ public class JPATripDAOTest extends AbstractPersistenceTest {
 
         Long id = trip1.getId();
 
-        Trip trp2 = dao.getTripById(id);
-        dao.deleteTrip(trip1);
-        Trip trp3 = dao.getTripById(id);
-        assertNull(trp3);
-
+        dao.deleteTripById(id);
+        assertFalse(dao.getAllTrips().contains(trip1));
     }
 
     @Test(expected = NullPointerException.class)
     public void getTripByDestinationNull() {
         Trip trip1 = mktrip(mkdate(15, 6, 2015), mkdate(18, 6, 2018), null, 15, new BigDecimal(1000));
         dao.addTrip(trip1);
-    }
-
-    @Test
-    public void getTripsByDestination() {
-
-        Trip trip1 = mktrip(mkdate(15, 6, 2015), mkdate(18, 6, 2018), "Trip to Transilvania", 15, new BigDecimal(1000));
-        Excursion ext = mkexcursion(mkdate(2015, 6, 15), 21, "Transilvania", "Transilvani castle", new BigDecimal(2020));
-        List<Excursion> extList = new ArrayList<>();
-        extList.add(ext);
-        trip1.setExcursions(extList);
-
-        Trip trip2 = mktrip(mkdate(5, 2, 2018), mkdate(5, 1, 2020), "Trip to gogoland", 15, new BigDecimal(1000));
-        Excursion ext2 = mkexcursion(mkdate(5, 2, 2018), 21, "gogoland", "gogoland is very goood", new BigDecimal(2020));
-        List<Excursion> extList2 = new ArrayList<>();
-        extList.add(ext);
-        trip1.setExcursions(extList);
-
-        em.persist(trip1);
-        em.persist(trip2);
-        Long id = trip1.getId();
-        Long id2 = trip2.getId();
-        em.persist(ext);
-        em.persist(ext2);
-        List<Trip> trips = dao.getTripsByDestination(trip1.getDestination());
-        for (Trip newTrip : trips) {
-            assertEquals(newTrip.getDestination(), trip1.getDestination());
-        }
     }
 
     @Test

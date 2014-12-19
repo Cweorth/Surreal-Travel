@@ -92,15 +92,6 @@ public class JPATripDAO implements TripDAO {
     }
 
     @Override
-    public List<Trip> getTripsByDestination(String destination) {
-        Objects.requireNonNull(destination, "destination");
-        
-        return entityManager.createQuery("SELECT t FROM Trip t WHERE t.destination = :d", Trip.class)
-            .setParameter("d", destination)
-            .getResultList();
-    }
-
-    @Override
     public List<Trip> getTripsWithExcursion(Excursion excursion) {
         Objects.requireNonNull(excursion, "excursion");
         
@@ -119,12 +110,6 @@ public class JPATripDAO implements TripDAO {
     public Trip updateTrip(Trip trip) {
         validate(trip);
         return entityManager.merge(trip);
-    }    
-
-    @Override
-    public void deleteTrip(Trip trip) {
-        Objects.requireNonNull(trip);
-        entityManager.remove(trip);
     }
 
     @Override

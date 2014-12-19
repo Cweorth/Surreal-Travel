@@ -32,8 +32,8 @@ public class TripServiceTest extends AbstractServiceTest{
     @InjectMocks
     private DefaultTripService service;
     
-    private List<TripDTO> trips;
-    private List<ExcursionDTO> excursions;
+    private final List<TripDTO>      trips;
+    private final List<ExcursionDTO> excursions;
      
     public TripServiceTest() {
         super();
@@ -95,41 +95,6 @@ public class TripServiceTest extends AbstractServiceTest{
         verify(dao, times(1)).getAllTrips();
         assertTrue(retrieved.size() == trips.size());
         assertEquals(trips, retrieved); 
-    }
-    
-    @Test
-    public void deleteTripTest(){
-        TripDTO toRemove = trips.get(0);
-        Trip entity = mapper.map(toRemove, Trip.class);
-        service.deleteTrip(toRemove);
-        verify(dao, times(1)).deleteTrip(entity);
-    }
-    
-    @Test(expected = NullPointerException.class)
-    public void getTripByDestinationNullTest(){
-        String destination = null;
-        
-        service.getTripsByDestination(destination);
-    }
-    
-    @Test
-    public void getTripsByDestinationTest(){
-        String destination = "Brno";
-        
-        TripDTO tripToFind = trips.get(0);
-        
-        List<TripDTO> expected = Arrays.asList(new TripDTO[] {tripToFind});
-        Trip entity = mapper.map(tripToFind, Trip.class);
-              
-        when(dao.getTripsByDestination(destination)).thenReturn(Arrays.asList(new Trip[] {entity}));
-        List<TripDTO> retrieved = service.getTripsByDestination(destination);
-               
-        verify(dao, times(1)).getTripsByDestination(Matchers.eq(destination));
-        assertNotNull(retrieved);
-        assertTrue(retrieved.size() > 0);
-        for(TripDTO e : retrieved)
-            assertEquals(destination, e.getDestination());
-        assertEquals(expected, retrieved);
     }
     
     @Test

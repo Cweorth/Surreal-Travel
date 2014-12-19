@@ -24,13 +24,6 @@ public interface TripDAO {
     public Trip getTripById(long id);
     
     /**
-     * Returns all trips that have the specified {@code destination}.
-     * @param  destination   The destination to look for in all trips.
-     * @return               A list of trips.
-     */
-    public List<Trip> getTripsByDestination(String destination);
-    
-    /**
      * Returns all trips that contain a given {@code excursion}.
      * @param  excursion     The excursion to look for.
      * @return               A list of trips.
@@ -49,12 +42,6 @@ public interface TripDAO {
      * @return The updated trip reference.
      */
     public Trip updateTrip(Trip trip);
-    
-    /**
-     * Removes the specified {@code trip}.
-     * @param  trip          The trip to remove.
-     */
-    public void deleteTrip(Trip trip);
 
     /**
      * Removes the trip with the specified {@code id}.

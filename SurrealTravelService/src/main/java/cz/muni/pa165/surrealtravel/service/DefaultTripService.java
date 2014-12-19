@@ -89,18 +89,6 @@ public class DefaultTripService implements TripService {
     }
     
     /**
-     * Finds all trips with the specified {@code destination}.
-     * @param destination    The destination to look for.
-     * @return               A list of matching trips.
-     */
-    @Override
-    @Transactional(readOnly = true)
-    public List<TripDTO> getTripsByDestination(String destination) {
-        Objects.requireNonNull(destination, "destination");
-        return map(toDTO, tripDao.getTripsByDestination(destination));
-    }
-    
-    /**
      * Finds all trips that contain the specified {@code excursion}.
      * @param excursion      The excursion to look for.
      * @return               A list of matching trips.
@@ -131,17 +119,6 @@ public class DefaultTripService implements TripService {
     public void updateTrip(TripDTO trip) {
         Objects.requireNonNull(trip, "trip");
         tripDao.updateTrip(toEntity.apply(trip));
-    }
-    
-    /**
-     * Removes the given {@code trip}.
-     * @param trip           The trip to remove.
-     */
-    @Override
-    @Transactional
-    public void deleteTrip(TripDTO trip) {
-        Objects.requireNonNull(trip);
-        tripDao.deleteTrip(toEntity.apply(trip));
     }
     
     /**
