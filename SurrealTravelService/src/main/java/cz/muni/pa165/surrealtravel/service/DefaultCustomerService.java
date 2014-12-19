@@ -33,12 +33,14 @@ public class DefaultCustomerService implements CustomerService {
         customer.setId(entity.getId());
     }
     
+    @Transactional(readOnly = true)
     @Override
     public CustomerDTO getCustomerById(long id) {
         Customer customer = customerDao.getCustomerById(id);
         return customer == null ? null : mapper.map(customer, CustomerDTO.class);
     }
     
+    @Transactional(readOnly = true)
     @Override
     public List<CustomerDTO> getAllCustomers() {
         List<CustomerDTO> customersDTO = new ArrayList<>();
