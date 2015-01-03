@@ -27,6 +27,7 @@ public class AppConfig {
             base = new URL("http://localhost:8080/pa165/rest/");
         } catch (MalformedURLException ex) {
             LoggerFactory.getLogger(AppConfig.class).error("Initializer error", ex);
+            throw new RuntimeException(ex);
         }
         
         MappingJackson2HttpMessageConverter converter = new MappingJackson2HttpMessageConverter();

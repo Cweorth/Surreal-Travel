@@ -13,6 +13,7 @@ import org.springframework.http.HttpEntity;
 import org.springframework.http.HttpHeaders;
 import org.springframework.http.HttpMethod;
 import org.springframework.http.ResponseEntity;
+import org.springframework.web.client.HttpClientErrorException;
 import org.springframework.web.client.RestClientException;
 import org.springframework.web.client.RestTemplate;
 
@@ -60,11 +61,13 @@ public class RestExcursionClient {
         ResponseEntity<ExcursionDTO> response;
         try {
             response = template.getForEntity(getAddress("excursions/get/" + id), ExcursionDTO.class);
-        } catch(RestClientException ex) {
-            switch(parseStatusCode(ex.getMessage())) {
-                case 404: throw new RESTAccessException("The excursion with ID " + id + " was not found.");
-                default:  throw new RESTAccessException(ex);
+        } catch(HttpClientErrorException ex) {
+            switch (ex.getStatusCode()) {
+                case NOT_FOUND: throw new RESTAccessException("The excursion with ID " + id + " was not found.");
+                default:        throw new RESTAccessException(ex);
             }
+        } catch(RestClientException ex) {
+            throw new RESTAccessException(ex);
         }
         
         logger.info(response.toString());
@@ -81,11 +84,13 @@ public class RestExcursionClient {
         ResponseEntity<ExcursionDTO> response;
         try {
             response = template.postForEntity(getAddress("excursions/new"), excursion, ExcursionDTO.class);
-        } catch(RestClientException ex) {
-            switch(parseStatusCode(ex.getMessage())) {
-                case 400: throw new RESTAccessException("The excursion is not valid.");
-                default:  throw new RESTAccessException(ex);
+        } catch(HttpClientErrorException ex) {
+            switch (ex.getStatusCode()) {
+                case BAD_REQUEST: throw new RESTAccessException("The excursion is not valid.");
+                default:          throw new RESTAccessException(ex);
             }
+        } catch(RestClientException ex) {
+            throw new RESTAccessException(ex);
         }
 
         logger.info(response.toString());
@@ -104,11 +109,13 @@ public class RestExcursionClient {
         ResponseEntity<ExcursionDTO> response;
         try {
             response = template.exchange(getAddress("excursions/edit/" + excursion.getId()), HttpMethod.PUT, request, ExcursionDTO.class);
-        } catch(RestClientException ex) {
-            switch(parseStatusCode(ex.getMessage())) {
-                case 400: throw new RESTAccessException("A constraint prevented this excursion from modification.");
-                default:  throw new RESTAccessException(ex);
+        } catch(HttpClientErrorException ex) {
+            switch (ex.getStatusCode()) {
+                case BAD_REQUEST: throw new RESTAccessException("A constraint prevented this excursion from modification.");
+                default:          throw new RESTAccessException(ex);
             }
+        } catch(RestClientException ex) {
+            throw new RESTAccessException(ex);
         }
         
         logger.info(response.toString());
@@ -125,26 +132,18 @@ public class RestExcursionClient {
         ResponseEntity<ExcursionDTO> response;
         try {
             response = template.exchange(getAddress("excursions/delete/" + id), HttpMethod.DELETE, null, ExcursionDTO.class);
-        } catch(RestClientException ex) {
-            switch(parseStatusCode(ex.getMessage())) {
-                case 400: throw new RESTAccessException("The excursion cannot be deleted because of integrity constraints.");
-                default:  throw new RESTAccessException(ex);
+        } catch(HttpClientErrorException ex) {
+            switch (ex.getStatusCode()) {
+                case BAD_REQUEST: throw new RESTAccessException("The excursion cannot be deleted because of integrity constraints.");
+                default:          throw new RESTAccessException(ex);
             }
+        } catch(RestClientException ex) {
+            throw new RESTAccessException(ex);
         }
         
         logger.info(response.toString());
         
         return response.getBody();
-    }
-    
-    private int parseStatusCode(String errorMessage) {
-        String[] parts = errorMessage.split(" ", 2);
-        
-        try {
-            return Integer.parseInt(parts[0]);
-        } catch (NumberFormatException ex) {
-            return -1;
-        }
     }
     
     private String getAddress(String suffix) {

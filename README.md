@@ -14,7 +14,7 @@ $ mvn tomcat7:run
 ```
 
 ## To run CLI application:
-(again from the project rood directory)
+(again from the project root directory)
 ```bash
 $ cd SurrealTravelCLI
 $ mvn exec:java -Dexec.args="[ARGUMENTS]"

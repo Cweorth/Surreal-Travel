@@ -13,6 +13,7 @@ import org.springframework.http.HttpEntity;
 import org.springframework.http.HttpHeaders;
 import org.springframework.http.HttpMethod;
 import org.springframework.http.ResponseEntity;
+import org.springframework.web.client.HttpClientErrorException;
 import org.springframework.web.client.RestClientException;
 import org.springframework.web.client.RestTemplate;
 
@@ -24,16 +25,6 @@ public class RestTripClient {
     
     private final static Logger logger = LoggerFactory.getLogger(RestTripClient.class);
     private final RestTemplate template;
-    
-    private int parseStatusCode(String errorMessage) {
-        String[] parts = errorMessage.split(" ", 2);
-        
-        try {
-            return Integer.parseInt(parts[0]);
-        } catch (NumberFormatException ex) {
-            return -1;
-        }
-    }
     
     private String getAddress(String suffix) {
         URL address;
@@ -79,11 +70,13 @@ public class RestTripClient {
         
         try {
             response = template.getForEntity(getAddress("trips/get/" + id), TripDTO.class);
-        } catch (RestClientException ex) {
-            switch (parseStatusCode(ex.getMessage())) {
-                case 404: throw new RESTAccessException("The trip with id " + id + " was not found");
-                default:  throw new RESTAccessException(ex);
+        } catch (HttpClientErrorException ex) {
+            switch (ex.getStatusCode()) {
+                case NOT_FOUND: throw new RESTAccessException("The trip with id " + id + " was not found", ex);
+                default:        throw new RESTAccessException(ex);
             }
+        } catch (RestClientException ex) {
+            throw new RESTAccessException(ex);
         }
         
         logger.info(response.toString());        
@@ -100,12 +93,14 @@ public class RestTripClient {
         
         try {
             response = template.postForEntity(getAddress("trips/new"), trip, TripDTO.class);
-        } catch (RestClientException ex) {
-            switch (parseStatusCode(ex.getMessage())) {
-                case 400: throw new RESTAccessException("The trip is not valid");
-                case 404: throw new RESTAccessException("The trip contains invalid excursion ID");
-                default:  throw new RESTAccessException(ex);
+        } catch (HttpClientErrorException ex) {
+            switch (ex.getStatusCode()) {
+                case BAD_REQUEST: throw new RESTAccessException("The trip is not valid", ex);
+                case NOT_FOUND:   throw new RESTAccessException("The trip contains invalid excursion ID", ex);
+                default:          throw new RESTAccessException(ex);
             }
+        } catch (RestClientException ex) {
+            throw new RESTAccessException(ex);
         }
 
         logger.info(response.toString());
@@ -124,12 +119,14 @@ public class RestTripClient {
         try {
             request  = new HttpEntity<>(trip, new HttpHeaders());
             response = template.exchange(getAddress("trips/edit/" + trip.getId()), HttpMethod.PUT, request, TripDTO.class);
-        } catch (RestClientException ex) {
-            switch (parseStatusCode(ex.getMessage())) {
-                case 400: throw new RESTAccessException("A constraint prevented this trip from modification");
-                case 404: throw new RESTAccessException("The trip contains invalid excursion ID");
-                default:  throw new RESTAccessException(ex);
+        } catch (HttpClientErrorException ex) {
+            switch (ex.getStatusCode()) {
+                case BAD_REQUEST: throw new RESTAccessException("A constraint prevented this trip from modification", ex);
+                case NOT_FOUND:   throw new RESTAccessException("The trip contains invalid excursion ID", ex);
+                default:          throw new RESTAccessException(ex);
             }
+        } catch (RestClientException ex) {
+            throw new RESTAccessException(ex);
         }
         
         logger.info(response.toString());
@@ -146,11 +143,13 @@ public class RestTripClient {
         
         try {
             response = template.exchange(getAddress("trips/delete/" + id), HttpMethod.DELETE, null, TripDTO.class);
-        } catch (RestClientException ex) {
-            switch (parseStatusCode(ex.getMessage())) {
-                case 400: throw new RESTAccessException("The trip cannot be deleted because of integrity constraints");
-                default:  throw new RESTAccessException(ex);
+        } catch (HttpClientErrorException ex) {
+            switch (ex.getStatusCode()) {
+                case BAD_REQUEST: throw new RESTAccessException("The trip cannot be deleted because of integrity constraints", ex);
+                default:          throw new RESTAccessException(ex);
             }
+        } catch (RestClientException ex) {
+            throw new RESTAccessException(ex);
         }
         
         logger.info(response.toString());        

@@ -37,7 +37,7 @@ public class MainOptions {
     private boolean debug;
 
     @Option(name = "--url", metaVar = "url", usage = "specify base URL")
-    public void setURI(URL url) {
+    public void setURL(URL url) {
         LoggerFactory.getLogger(MainOptions.class).info("Changing URL to \"" + url.toString() + "\"");
         AppConfig.setBase(url);
     }    
