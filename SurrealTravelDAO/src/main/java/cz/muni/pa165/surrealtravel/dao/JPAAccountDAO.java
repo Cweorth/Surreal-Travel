@@ -50,6 +50,7 @@ public class JPAAccountDAO implements AccountDAO {
     @Override
     public void deleteAccountById(long id) {
         if(id < 0) throw new IllegalArgumentException("Id < 0");
+        em.createNativeQuery("DELETE FROM ACCOUNT_ROLES ar WHERE ar.account_id = :id").setParameter("id", id).executeUpdate();
         em.createQuery("DELETE FROM Account a WHERE a.id = :id").setParameter("id", id).executeUpdate();
     }
     

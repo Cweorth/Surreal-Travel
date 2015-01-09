@@ -2,8 +2,13 @@ package cz.muni.pa165.surrealtravel.entity;
 
 import java.io.Serializable;
 import java.util.Objects;
+import java.util.Set;
+import javax.persistence.CollectionTable;
 import javax.persistence.Column;
+import javax.persistence.ElementCollection;
 import javax.persistence.Entity;
+import javax.persistence.EnumType;
+import javax.persistence.Enumerated;
 import javax.persistence.GeneratedValue;
 import javax.persistence.Id;
 import javax.persistence.OneToOne;
@@ -27,6 +32,12 @@ public class Account implements Serializable {
     
     @OneToOne
     private Customer customer;
+    
+    @ElementCollection(targetClass=UserRole.class)
+    @Enumerated(EnumType.STRING)
+    @CollectionTable(name="ACCOUNT_ROLES")
+    @Column(name="ROLE", nullable = false)
+    private Set<UserRole> roles;
 
     public long getId() {
         return id;
@@ -60,6 +71,14 @@ public class Account implements Serializable {
         this.customer = customer;
     }
 
+    public Set<UserRole> getRoles() {
+        return roles;
+    }
+
+    public void setRoles(Set<UserRole> roles) {
+        this.roles = roles;
+    }
+
     @Override
     public int hashCode() {
         int hash = 7;
@@ -67,6 +86,7 @@ public class Account implements Serializable {
         hash = 59 * hash + Objects.hashCode(this.username);
         hash = 59 * hash + Objects.hashCode(this.password);
         hash = 59 * hash + Objects.hashCode(this.customer);
+        hash = 59 * hash + Objects.hashCode(this.roles);
         return hash;
     }
 
@@ -91,12 +111,15 @@ public class Account implements Serializable {
         if (!Objects.equals(this.customer, other.customer)) {
             return false;
         }
+        if (!Objects.equals(this.roles, other.roles)) {
+            return false;
+        }
         return true;
     }
 
     @Override
     public String toString() {
-        return "Account{" + "id=" + id + ", username=" + username + ", password=" + password + ", customer=" + customer + '}';
+        return "Account[" + "id=" + id + ", username=" + username + ", password=" + password + ", customer=" + customer + ", roles=" + roles + ']';
     }
-    
+
 }

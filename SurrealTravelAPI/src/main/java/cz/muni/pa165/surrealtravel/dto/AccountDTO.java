@@ -2,6 +2,7 @@ package cz.muni.pa165.surrealtravel.dto;
 
 import java.io.Serializable;
 import java.util.Objects;
+import java.util.Set;
 
 /**
  * Account data transfer object.
@@ -13,6 +14,7 @@ public class AccountDTO implements Serializable {
     private String username;
     private String password;
     private CustomerDTO customer;
+    private Set<UserRole> roles;
 
     public long getId() {
         return id;
@@ -46,13 +48,22 @@ public class AccountDTO implements Serializable {
         this.customer = customer;
     }
 
+    public Set<UserRole> getRoles() {
+        return roles;
+    }
+
+    public void setRoles(Set<UserRole> roles) {
+        this.roles = roles;
+    }
+
     @Override
     public int hashCode() {
-        int hash = 7;
-        hash = 37 * hash + (int) (this.id ^ (this.id >>> 32));
-        hash = 37 * hash + Objects.hashCode(this.username);
-        hash = 37 * hash + Objects.hashCode(this.password);
-        hash = 37 * hash + Objects.hashCode(this.customer);
+        int hash = 5;
+        hash = 97 * hash + (int) (this.id ^ (this.id >>> 32));
+        hash = 97 * hash + Objects.hashCode(this.username);
+        hash = 97 * hash + Objects.hashCode(this.password);
+        hash = 97 * hash + Objects.hashCode(this.customer);
+        hash = 97 * hash + Objects.hashCode(this.roles);
         return hash;
     }
 
@@ -77,12 +88,15 @@ public class AccountDTO implements Serializable {
         if (!Objects.equals(this.customer, other.customer)) {
             return false;
         }
+        if (!Objects.equals(this.roles, other.roles)) {
+            return false;
+        }
         return true;
     }
 
     @Override
     public String toString() {
-        return "AccountDTO[" + "id=" + id + ", username=" + username + ", password=" + password + ", customer=" + customer + ']';
+        return "AccountDTO[" + "id=" + id + ", username=" + username + ", password=" + password + ", customer=" + customer + ", roles=" + roles + ']';
     }
 
 }
