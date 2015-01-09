@@ -24,7 +24,7 @@ public class Account implements Serializable {
     @GeneratedValue
     private long id;
     
-    @Column(nullable = false)
+    @Column(nullable = false, unique = true)
     private String username;
     
     @Column(nullable = false)
@@ -33,10 +33,10 @@ public class Account implements Serializable {
     @OneToOne
     private Customer customer;
     
-    @ElementCollection(targetClass=UserRole.class)
+    @ElementCollection(targetClass = UserRole.class)
     @Enumerated(EnumType.STRING)
-    @CollectionTable(name="ACCOUNT_ROLES")
-    @Column(name="ROLE", nullable = false)
+    @CollectionTable(name = "ACCOUNT_ROLES")
+    @Column(name = "ROLE", nullable = false)
     private Set<UserRole> roles;
 
     public long getId() {
