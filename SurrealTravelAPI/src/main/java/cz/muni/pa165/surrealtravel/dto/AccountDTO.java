@@ -1,32 +1,18 @@
-package cz.muni.pa165.surrealtravel.entity;
+package cz.muni.pa165.surrealtravel.dto;
 
 import java.io.Serializable;
 import java.util.Objects;
-import javax.persistence.Column;
-import javax.persistence.Entity;
-import javax.persistence.GeneratedValue;
-import javax.persistence.Id;
-import javax.persistence.OneToOne;
 
 /**
- * Account entity.
+ * Account data transfer object.
  * @author Jan Klimeš [374259]
  */
-@Entity
-public class Account implements Serializable {
+public class AccountDTO implements Serializable {
     
-    @Id
-    @GeneratedValue
     private long id;
-    
-    @Column(nullable = false)
     private String username;
-    
-    @Column(nullable = false)
     private String password;
-    
-    @OneToOne
-    private Customer customer;
+    private CustomerDTO customer;
 
     public long getId() {
         return id;
@@ -52,21 +38,21 @@ public class Account implements Serializable {
         this.password = password;
     }
 
-    public Customer getCustomer() {
+    public CustomerDTO getCustomer() {
         return customer;
     }
 
-    public void setCustomer(Customer customer) {
+    public void setCustomer(CustomerDTO customer) {
         this.customer = customer;
     }
 
     @Override
     public int hashCode() {
         int hash = 7;
-        hash = 59 * hash + (int) (this.id ^ (this.id >>> 32));
-        hash = 59 * hash + Objects.hashCode(this.username);
-        hash = 59 * hash + Objects.hashCode(this.password);
-        hash = 59 * hash + Objects.hashCode(this.customer);
+        hash = 37 * hash + (int) (this.id ^ (this.id >>> 32));
+        hash = 37 * hash + Objects.hashCode(this.username);
+        hash = 37 * hash + Objects.hashCode(this.password);
+        hash = 37 * hash + Objects.hashCode(this.customer);
         return hash;
     }
 
@@ -78,7 +64,7 @@ public class Account implements Serializable {
         if (getClass() != obj.getClass()) {
             return false;
         }
-        final Account other = (Account) obj;
+        final AccountDTO other = (AccountDTO) obj;
         if (this.id != other.id) {
             return false;
         }
@@ -96,7 +82,7 @@ public class Account implements Serializable {
 
     @Override
     public String toString() {
-        return "Account{" + "id=" + id + ", username=" + username + ", password=" + password + ", customer=" + customer + '}';
+        return "AccountDTO[" + "id=" + id + ", username=" + username + ", password=" + password + ", customer=" + customer + ']';
     }
-    
+
 }

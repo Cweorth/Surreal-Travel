@@ -7,7 +7,7 @@ import javax.persistence.PersistenceContext;
 import org.springframework.stereotype.Repository;
 
 /**
- *
+ * Account repository implementation.
  * @author Jan Klimeš [374259]
  */
 @Repository(value = "accountDao")
