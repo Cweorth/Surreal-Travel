@@ -1,7 +1,7 @@
 <%-- 
     Document   : layout
     Created on : 22.11.2014, 12:10:23
-    Author     : Jan KlimeÅ¡ [374259]
+    Author     : Jan Klimeš [374259]
 --%>
 
 <%@ tag pageEncoding="utf-8" dynamic-attributes="dynattrs" trimDirectiveWhitespaces="true" %>
@@ -9,6 +9,7 @@
 <%@ attribute name="content" fragment="true" required="true" %>
 <%@ taglib prefix="c" uri="http://java.sun.com/jsp/jstl/core" %>
 <%@ taglib prefix="f" uri="http://java.sun.com/jsp/jstl/fmt" %>
+<%@ taglib prefix="sec" uri="http://www.springframework.org/security/tags" %>
 
 <!DOCTYPE html>
 <html lang="${pageContext.request.locale}">
@@ -48,6 +49,16 @@
         <li><a href="${pageContext.request.contextPath}/customers"><f:message key="customer.title" /></a></li>
         <li><a href="${pageContext.request.contextPath}/about"><f:message key="about.title" /></a></li>
     </ul>
+    <div class="login">
+        <c:choose>
+            <c:when test="${pageContext.request.userPrincipal.name != null}">
+                <strong>${pageContext.request.userPrincipal.name}</strong> (<a href="javascript:document.getElementById('logoutForm').submit()"><f:message key="auth.logout"/></a>)
+            </c:when>
+            <c:otherwise>
+                <a href="${pageContext.request.contextPath}/login"><f:message key="auth.signin"/></a> / <a href="${pageContext.request.contextPath}/register"><f:message key="auth.signup"/></a>
+            </c:otherwise>
+        </c:choose>
+    </div>
     <br style="clear: both;"> 
 </div>
     
@@ -60,6 +71,10 @@
     </div>
 
 </div>
+    
+<sec:authorize access="hasRole('ROLE_USER')">
+    <form action="<c:url value='/j_spring_security_logout' />" method="post" id="logoutForm"><input type="hidden" name="${_csrf.parameterName}" value="${_csrf.token}" /></form>
+</sec:authorize>
 
 </body>
 </html>

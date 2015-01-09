@@ -1,14 +1,20 @@
 package cz.muni.pa165.surrealtravel.controller;
 
+import cz.muni.pa165.surrealtravel.dto.AccountDTO;
 import cz.muni.pa165.surrealtravel.dto.CustomerDTO;
+import cz.muni.pa165.surrealtravel.dto.UserRole;
+import cz.muni.pa165.surrealtravel.service.AccountService;
 import cz.muni.pa165.surrealtravel.service.CustomerService;
 import cz.muni.pa165.surrealtravel.validator.CustomerValidator;
+import java.util.HashSet;
 import java.util.Locale;
+import java.util.Set;
 import javax.annotation.PostConstruct;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.MessageSource;
+import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.ModelMap;
 import org.springframework.validation.BindingResult;
@@ -222,6 +228,27 @@ public class CustomerController {
         customerService.addCustomer(c1);
         customerService.addCustomer(c2);
         customerService.addCustomer(c3);
+        
+        // TEMPORARY
+        BCryptPasswordEncoder encoder = new BCryptPasswordEncoder(12);
+       
+        AccountDTO a1 = new AccountDTO();
+        a1.setUsername("pa165");
+        a1.setPassword(encoder.encode("pa165"));
+
+        Set<UserRole> roles = new HashSet<>();
+        roles.add(UserRole.ROLE_USER);
+        roles.add(UserRole.ROLE_ADMIN);
+        roles.add(UserRole.ROLE_STAFF);
+        
+        a1.setRoles(roles);
+
+        accountService.addAccount(a1);
+  
     }
+    
+    // TEMPORARY
+    @Autowired
+    private AccountService accountService;
     
 }

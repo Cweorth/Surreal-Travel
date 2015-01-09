@@ -6,21 +6,19 @@
     http://www.springframework.org/schema/security
     http://www.springframework.org/schema/security/spring-security-3.2.xsd">
  
-    <!-- enable use-expressions -->
     <http auto-config="true" use-expressions="true">
 
-        <intercept-url pattern="/reservations**" access="hasRole('ROLE_ADMIN')" />
-
-        <!-- access denied page -->
         <access-denied-handler error-page="/403" />
 
         <form-login 
             login-page="/login" 
-            default-target-url="/welcome" 
+            default-target-url="/" 
             authentication-failure-url="/login?error" 
             username-parameter="username"
             password-parameter="password" />
-        <logout logout-success-url="/login?logout"  />
+        <logout
+            logout-success-url="/logout" />
+        
         <!-- enable csrf protection -->
         <csrf/>
     </http>
@@ -31,14 +29,14 @@
             <password-encoder ref="encoder"/>
             <jdbc-user-service data-source-ref="dataSource"
               users-by-username-query=
-                "SELECT username,password FROM account WHERE username=?"
+                "SELECT a.username,a.password,TRUE FROM account a WHERE a.username=?"
               authorities-by-username-query=
-                "SELECT a.username, r.role FROM account a, account_roles r WHERE a.id = r.account_id AND a.username=?" />
+                "SELECT a.username, r.authority FROM account a, account_roles r WHERE a.id = r.account_id AND a.username=?" />
         </authentication-provider>
     </authentication-manager>
     
     <beans:bean class="org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder" id="encoder">
-        <beans:constructor-arg value="10" name="strength"/>
+        <beans:constructor-arg value="12" name="strength"/>
     </beans:bean>
  
 </beans:beans>

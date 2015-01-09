@@ -83,6 +83,7 @@ div.navigation ul {margin: 0; padding: 0; list-style: none; display: inline;}
 div.navigation ul li {float: left; margin: 0 30px 0 0;}
 div.navigation ul li a {font-size: 14px; text-decoration: none; color: #000000; padding: 15px; display: block;}
 div.navigation ul li a:hover {color: #cae2f5; background: #4e88b7}
+div.navigation .login {float: right; padding: 15px; font-size: 14px;}
 
 div.body {padding: 10px;}
 

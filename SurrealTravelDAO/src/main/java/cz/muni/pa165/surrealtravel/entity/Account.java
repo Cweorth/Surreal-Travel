@@ -36,7 +36,7 @@ public class Account implements Serializable {
     @ElementCollection(targetClass = UserRole.class)
     @Enumerated(EnumType.STRING)
     @CollectionTable(name = "ACCOUNT_ROLES")
-    @Column(name = "ROLE", nullable = false)
+    @Column(name = "AUTHORITY", nullable = false)
     private Set<UserRole> roles;
 
     public long getId() {
