@@ -13,6 +13,7 @@ public class AccountDTO implements Serializable {
     private long id;
     private String username;
     private String password;
+    private String plainPassword;
     private CustomerDTO customer;
     private Set<UserRole> roles;
 
@@ -40,6 +41,14 @@ public class AccountDTO implements Serializable {
         this.password = password;
     }
 
+    public String getPlainPassword() {
+        return plainPassword;
+    }
+
+    public void setPlainPassword(String plainPassword) {
+        this.plainPassword = plainPassword;
+    }
+    
     public CustomerDTO getCustomer() {
         return customer;
     }
@@ -85,6 +94,9 @@ public class AccountDTO implements Serializable {
         if (!Objects.equals(this.password, other.password)) {
             return false;
         }
+        if (!Objects.equals(this.plainPassword, other.plainPassword)) {
+            return false;
+        }
         if (!Objects.equals(this.customer, other.customer)) {
             return false;
         }
@@ -96,7 +108,7 @@ public class AccountDTO implements Serializable {
 
     @Override
     public String toString() {
-        return "AccountDTO[" + "id=" + id + ", username=" + username + ", password=" + password + ", customer=" + customer + ", roles=" + roles + ']';
+        return "AccountDTO[" + "id=" + id + ", username=" + username + ", password=" + password + ", plainPassword=" + plainPassword + ", customer=" + customer + ", roles=" + roles + ']';
     }
 
 }

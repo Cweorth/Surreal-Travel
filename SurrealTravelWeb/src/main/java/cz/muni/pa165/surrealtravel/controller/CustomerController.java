@@ -231,10 +231,12 @@ public class CustomerController {
         
         // TEMPORARY
         BCryptPasswordEncoder encoder = new BCryptPasswordEncoder(12);
+        String password1 = "pa165";
        
         AccountDTO a1 = new AccountDTO();
         a1.setUsername("pa165");
-        a1.setPassword(encoder.encode("pa165"));
+        a1.setPassword(encoder.encode(password1));
+        a1.setPlainPassword(password1);
 
         Set<UserRole> roles = new HashSet<>();
         roles.add(UserRole.ROLE_USER);

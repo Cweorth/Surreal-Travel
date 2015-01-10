@@ -12,6 +12,10 @@ import javax.persistence.Enumerated;
 import javax.persistence.GeneratedValue;
 import javax.persistence.Id;
 import javax.persistence.OneToOne;
+import javax.persistence.Transient;
+import javax.validation.constraints.NotNull;
+import javax.validation.constraints.Pattern;
+import javax.validation.constraints.Size;
 
 /**
  * Account entity.
@@ -25,10 +29,17 @@ public class Account implements Serializable {
     private long id;
     
     @Column(nullable = false, unique = true)
+    @Size(min = 5, max = 32)
+    @Pattern(regexp = "[a-z0-9]+")
     private String username;
     
     @Column(nullable = false)
-    private String password;
+    private String password; // hash of the password
+    
+    @Transient
+    @NotNull
+    @Size(min = 5, max = 32)
+    private String plainPassword; // not persisted, used only for purposes of password length
     
     @OneToOne
     private Customer customer;
@@ -61,6 +72,14 @@ public class Account implements Serializable {
 
     public void setPassword(String password) {
         this.password = password;
+    }
+
+    public String getPlainPassword() {
+        return plainPassword;
+    }
+
+    public void setPlainPassword(String plainPassword) {
+        this.plainPassword = plainPassword;
     }
 
     public Customer getCustomer() {
@@ -108,6 +127,9 @@ public class Account implements Serializable {
         if (!Objects.equals(this.password, other.password)) {
             return false;
         }
+        if (!Objects.equals(this.plainPassword, other.plainPassword)) {
+            return false;
+        }
         if (!Objects.equals(this.customer, other.customer)) {
             return false;
         }
@@ -119,7 +141,7 @@ public class Account implements Serializable {
 
     @Override
     public String toString() {
-        return "Account[" + "id=" + id + ", username=" + username + ", password=" + password + ", customer=" + customer + ", roles=" + roles + ']';
+        return "Account[" + "id=" + id + ", username=" + username + ", password=" + password + ", plainPassword=" + plainPassword + ", customer=" + customer + ", roles=" + roles + ']';
     }
 
 }
