@@ -25,7 +25,7 @@ public interface AccountDAO {
     /**
      * Get the account with the given username.
      * @param username
-     * @return the account (username is unique, only one result at most)
+     * @return the account (username is unique, only one result at most), null when not found
      */
     public Account getAccountByUsername(String username);
 

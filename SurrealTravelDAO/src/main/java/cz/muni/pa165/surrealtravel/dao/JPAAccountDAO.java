@@ -4,6 +4,7 @@ import cz.muni.pa165.surrealtravel.entity.Account;
 import java.util.List;
 import java.util.Objects;
 import javax.persistence.EntityManager;
+import javax.persistence.NoResultException;
 import javax.persistence.PersistenceContext;
 import org.springframework.stereotype.Repository;
 
@@ -41,7 +42,14 @@ public class JPAAccountDAO implements AccountDAO {
     public Account getAccountByUsername(String username) {
         Objects.requireNonNull(username, "Username is null.");
         if(username.isEmpty()) throw new IllegalArgumentException("Username is empty.");
-        return em.createQuery("SELECT a FROM Account a WHERE a.username = :username", Account.class).setParameter("username", username).getSingleResult();
+        Account retrieved;
+        try {
+            retrieved =  em.createQuery("SELECT a FROM Account a WHERE a.username = :username", Account.class).setParameter("username", username).getSingleResult();
+        } catch(NoResultException e) {
+            // well, we prefer null to exception, when no result is found
+            retrieved = null;
+        }
+        return retrieved;
     }
 
     @Override
