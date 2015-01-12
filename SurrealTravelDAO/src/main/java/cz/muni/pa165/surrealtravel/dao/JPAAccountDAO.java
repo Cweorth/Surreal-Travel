@@ -2,6 +2,7 @@ package cz.muni.pa165.surrealtravel.dao;
 
 import cz.muni.pa165.surrealtravel.entity.Account;
 import java.util.List;
+import java.util.Objects;
 import javax.persistence.EntityManager;
 import javax.persistence.PersistenceContext;
 import org.springframework.stereotype.Repository;
@@ -34,6 +35,13 @@ public class JPAAccountDAO implements AccountDAO {
     public Account getAccountById(long id) {
         if(id < 0) throw new IllegalArgumentException("Id < 0");
         return em.find(Account.class, id);
+    }
+    
+    @Override
+    public Account getAccountByUsername(String username) {
+        Objects.requireNonNull(username, "Username is null.");
+        if(username.isEmpty()) throw new IllegalArgumentException("Username is empty.");
+        return em.createQuery("SELECT a FROM Account a WHERE a.username = :username", Account.class).setParameter("username", username).getSingleResult();
     }
 
     @Override

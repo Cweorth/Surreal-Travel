@@ -2,6 +2,7 @@ package cz.muni.pa165.surrealtravel.service;
 
 import cz.muni.pa165.surrealtravel.dao.AccountDAO;
 import cz.muni.pa165.surrealtravel.dto.AccountDTO;
+import cz.muni.pa165.surrealtravel.dto.UserRole;
 import cz.muni.pa165.surrealtravel.entity.Account;
 import java.util.ArrayList;
 import java.util.List;
@@ -28,6 +29,7 @@ public class DefaultAccountService implements AccountService {
     @Override
     public void addAccount(AccountDTO account) {
         Objects.requireNonNull(account, "Account data transfer object is null.");
+        checkRoles(account);
         Account entity = mapper.map(account, Account.class);
         accountDao.addAccount(entity);
         account.setId(entity.getId());
@@ -36,8 +38,15 @@ public class DefaultAccountService implements AccountService {
     @Transactional(readOnly = true)
     @Override
     public AccountDTO getAccountById(long id) {
-        Account customer = accountDao.getAccountById(id);
-        return customer == null ? null : mapper.map(customer, AccountDTO.class);
+        Account account = accountDao.getAccountById(id);
+        return account == null ? null : mapper.map(account, AccountDTO.class);
+    }
+    
+    @Transactional(readOnly = true)
+    @Override
+    public AccountDTO getAccountByUsername(String username) {
+        Account account = accountDao.getAccountByUsername(username);
+        return account == null ? null : mapper.map(account, AccountDTO.class);
     }
 
     @Transactional(readOnly = true)
@@ -53,6 +62,7 @@ public class DefaultAccountService implements AccountService {
     @Override
     public AccountDTO updateAccount(AccountDTO account) {
         Objects.requireNonNull(account, "Account data transfer object is null.");
+        checkRoles(account);
         Account updated = accountDao.updateAccount(mapper.map(account, Account.class));
         return mapper.map(updated, AccountDTO.class);
     }
@@ -61,6 +71,18 @@ public class DefaultAccountService implements AccountService {
     @Override
     public void deleteAccountById(long id) {
         accountDao.deleteAccountById(id);
+    }
+    
+    /**
+     * Check if Account's roles are set in a correct fashion.
+     * @param account 
+     */
+    private void checkRoles(AccountDTO account) {
+        if(account.getRoles().contains(UserRole.ROLE_ADMIN))
+            account.getRoles().add(UserRole.ROLE_STAFF);
+        
+        if(account.getRoles().contains(UserRole.ROLE_STAFF))
+            account.getRoles().add(UserRole.ROLE_USER);
     }
 
     public void setAccountDao(AccountDAO accountDao) {

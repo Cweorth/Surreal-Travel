@@ -21,6 +21,13 @@ public interface AccountService {
      * @return the account
      */
     public AccountDTO getAccountById(long id);
+    
+    /**
+     * Get the account with the given username.
+     * @param username
+     * @return the account (username is unique, only one result at most)
+     */
+    public AccountDTO getAccountByUsername(String username);
 
     /**
      * Get all accounts.

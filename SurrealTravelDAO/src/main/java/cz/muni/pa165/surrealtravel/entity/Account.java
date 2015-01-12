@@ -13,7 +13,6 @@ import javax.persistence.GeneratedValue;
 import javax.persistence.Id;
 import javax.persistence.OneToOne;
 import javax.persistence.Transient;
-import javax.validation.constraints.NotNull;
 import javax.validation.constraints.Pattern;
 import javax.validation.constraints.Size;
 
@@ -37,7 +36,6 @@ public class Account implements Serializable {
     private String password; // hash of the password
     
     @Transient
-    @NotNull
     @Size(min = 5, max = 32)
     private String plainPassword; // not persisted, used only for purposes of password length
     

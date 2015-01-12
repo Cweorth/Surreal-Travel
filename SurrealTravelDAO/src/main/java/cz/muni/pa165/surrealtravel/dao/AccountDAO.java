@@ -21,6 +21,13 @@ public interface AccountDAO {
      * @return the account
      */
     public Account getAccountById(long id);
+    
+    /**
+     * Get the account with the given username.
+     * @param username
+     * @return the account (username is unique, only one result at most)
+     */
+    public Account getAccountByUsername(String username);
 
     /**
      * Get all accounts.
