@@ -48,6 +48,7 @@ $(document).ready(function() {
         closeText: ""
     });
     
+    toggleCustomer();
 });
 
 $(document).on("change", "form .selectAjax", function(e){ 
@@ -153,4 +154,16 @@ function showFailureMessage() {
 function redirect(url) {
     window.location=url;
 }
-   
+
+function toggleCustomer() {
+    var selected = $('#customer').is(":checked");
+    
+    if (! selected) {
+        $('#customer-name'   ).val("");
+        $('#customer-address').val("");
+    }
+    
+    $('#customer-name'   ).prop("readonly", !selected);
+    $('#customer-address').prop("readonly", !selected);
+}
+

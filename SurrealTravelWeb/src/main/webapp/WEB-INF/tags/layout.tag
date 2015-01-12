@@ -43,6 +43,7 @@
 <div class="navigation">
     <ul>
         <li><a href="${pageContext.request.contextPath}/"><f:message key="index.title" /></a></li>
+        <li><a href="${pageContext.request.contextPath}/accounts"><f:message key="account.title"/></a></li>
         <li><a href="${pageContext.request.contextPath}/trips"><f:message key="trip.title" /></a></li>
         <li><a href="${pageContext.request.contextPath}/excursions"><f:message key="excursion.title" /></a></li>
         <li><a href="${pageContext.request.contextPath}/reservations"><f:message key="reservation.title" /></a></li>

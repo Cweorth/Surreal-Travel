@@ -33,14 +33,14 @@ public class DefaultAccountService implements AccountService {
         account.setId(entity.getId());
     }
 
-    @Transactional
+    @Transactional(readOnly = true)
     @Override
     public AccountDTO getAccountById(long id) {
         Account customer = accountDao.getAccountById(id);
         return customer == null ? null : mapper.map(customer, AccountDTO.class);
     }
 
-    @Transactional
+    @Transactional(readOnly = true)
     @Override
     public List<AccountDTO> getAllAccounts() {
         List<AccountDTO> accountsDTO = new ArrayList<>();

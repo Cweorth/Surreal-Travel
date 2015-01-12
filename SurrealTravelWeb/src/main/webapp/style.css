@@ -108,3 +108,29 @@ div.body {padding: 10px;}
     filter: progid:DXImageTransform.Microsoft.gradient(startColorstr='#bc1818', endColorstr='#b50000');
     background: -webkit-gradient(linear, left top, left bottom, from(#bc1818), to(#b50000));
     background: -moz-linear-gradient(top,  #bc1818,  #b50000);}
+
+div.role {
+    border-style:  solid;
+    border-width:  1px;
+    border-radius: 3px;
+    color:         white;
+    display:       inline-block;
+    padding:       2px 6px;
+    font-weight:   bold;
+}
+
+div.role_user {
+    border-color:     forestgreen;
+    background-color: forestgreen;
+}
+
+div.role_staff {
+    border-color:     dodgerblue;
+    background-color: dodgerblue;
+}
+
+div.role_admin {
+    color:            white;
+    border-color:     crimson;
+    background-color: crimson;
+}
