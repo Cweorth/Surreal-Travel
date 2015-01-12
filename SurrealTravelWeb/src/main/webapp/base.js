@@ -1,3 +1,5 @@
+customerCheckPath = "form input#customer";
+
 $(document).ready(function() {
     
     var notification = $.getQuery('notification');
@@ -48,7 +50,8 @@ $(document).ready(function() {
         closeText: ""
     });
     
-    toggleCustomer();
+    toggleCustomer(customerCheckPath);
+   
 });
 
 $(document).on("change", "form .selectAjax", function(e){ 
@@ -116,6 +119,10 @@ $(document).on("click", ".noPropagation", function(e) {
     e.stopPropagation();
 });
 
+$(document).on("click", customerCheckPath, function () {
+    toggleCustomer(customerCheckPath);
+});
+
 (function($){
     $.getQuery = function( query ) {
         query = query.replace(/[\[]/,"\\\[").replace(/[\]]/,"\\\]");
@@ -155,15 +162,8 @@ function redirect(url) {
     window.location=url;
 }
 
-function toggleCustomer() {
-    var selected = $('#customer').is(":checked");
-    
-    if (! selected) {
-        $('#customer-name'   ).val("");
-        $('#customer-address').val("");
-    }
-    
-    $('#customer-name'   ).prop("readonly", !selected);
-    $('#customer-address').prop("readonly", !selected);
+function toggleCustomer(selector) {
+    disable = !$(selector).prop('checked');
+    $("form input#customer-name, form input#customer-address").attr('readonly', disable).val(disable ? "" : $(this).val());
 }
 
