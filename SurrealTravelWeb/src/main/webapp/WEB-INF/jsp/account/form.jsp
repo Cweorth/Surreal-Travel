@@ -31,7 +31,7 @@
 <table border="0" cellpadding="0" cellspacing="0" class="tableForm">
     <tr>
         <td class="left">  <f:message key="account.customer"/>:</td>
-        <td><form:checkbox path="customer" id="customer" onchange="javascript:toggleCustomer()"/></td>
+        <td><form:checkbox path="customer" id="customer"/></td>
     </tr>
     <tr>
         <td class="left">* <f:message key="customer.name"/>:</td>

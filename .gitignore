@@ -12,3 +12,6 @@
 /SurrealTravelWeb/nb-configuration.xml
 /SurrealTravelWeb/target/
 /target/
+/SurrealTravelService/tests.log
+/SurrealTravelDAO/tests.log
+/SurrealTravelWeb/tests.log

@@ -90,6 +90,14 @@ public class AccountController {
         
         AccountDTO account = wrapper.getAccount();
         
+        AccountDTO other   = accountService.getAccountByUsername(account.getUsername());
+        if (other != null) {
+            String message = messageSource.getMessage("account.validator.username.used", new Object[]{ account.getUsername() }, locale);
+            bindingResult.addError(new FieldError("wrapper", "account.username", message));
+            logFormErrors(bindingResult);
+            return "account/new";
+        }
+        
         if (! wrapper.isCustomer()) {
             account.setCustomer(null);
         }
@@ -186,7 +194,7 @@ public class AccountController {
         redirectAttributes.addFlashAttribute(resultStatus + "Message", messageSource.getMessage(messageKey, new Object[]{wrapper.getAccount().getUsername()}, locale));
         return "redirect:" + uriBuilder.path("/accounts").queryParam("notification", resultStatus).build();
     }    
-    
+       
     private void logFormErrors(BindingResult bindingResult) {
         logger.debug("Encountered following errors when validating form.");
         
