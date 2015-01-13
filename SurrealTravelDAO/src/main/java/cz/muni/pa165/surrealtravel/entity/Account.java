@@ -125,9 +125,6 @@ public class Account implements Serializable {
         if (!Objects.equals(this.password, other.password)) {
             return false;
         }
-        if (!Objects.equals(this.plainPassword, other.plainPassword)) {
-            return false;
-        }
         if (!Objects.equals(this.customer, other.customer)) {
             return false;
         }
