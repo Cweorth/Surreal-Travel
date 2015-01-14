@@ -2,8 +2,10 @@
 <%@ taglib prefix="c" uri="http://java.sun.com/jsp/jstl/core" %>
 <%@ taglib prefix="f" uri="http://java.sun.com/jsp/jstl/fmt" %>
 <%@ taglib prefix="form" uri="http://www.springframework.org/tags/form" %>
+<%@ taglib prefix="sec" uri="http://www.springframework.org/security/tags" %>
 
 <table border="0" cellpadding="0" cellspacing="0" class="tableForm">
+    <sec:authorize access="hasRole('ROLE_STAFF')">
     <tr>
         <td class="left">* <f:message key="reservation.customer"/>:</td>
         <td>
@@ -12,6 +14,7 @@
             </form:select>
         </td>
     </tr>
+    </sec:authorize>
     <tr>
         <td class="left">* <f:message key="reservation.trip"/>:</td>
         <td>
@@ -27,6 +30,10 @@
         </td>
     </tr>
 </table>
+        
+<sec:authorize access="not hasRole('ROLE_STAFF')">
+    <form:hidden path="customer.id"/>
+</sec:authorize>
 
 <br>
 

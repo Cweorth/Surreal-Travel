@@ -4,6 +4,7 @@
 <%@ taglib prefix="f" uri="http://java.sun.com/jsp/jstl/fmt" %>
 <%@ taglib prefix="s" uri="http://www.springframework.org/tags" %>
 <%@ taglib prefix="form" uri="http://www.springframework.org/tags/form" %>
+<%@ taglib prefix="sec" uri="http://www.springframework.org/security/tags" %>
 
 <f:message var="title" key="reservation.title" />
 
@@ -47,6 +48,7 @@
                             </c:choose>
                         </td>
                         <td>
+                            <sec:authorize access="hasRole('ROLE_STAFF')">
                             <ul class="rowMenu">
                                 <jsp:include page="/WEB-INF/include/entryEditButton.jsp">
                                     <jsp:param name="url" value="${pageContext.request.contextPath}/reservations/edit/${reservation.id}" />
@@ -56,6 +58,7 @@
                                     <jsp:param name="url" value="${pageContext.request.contextPath}/reservations/delete/${reservation.id}" />
                                 </jsp:include>
                             </ul>
+                            </sec:authorize>
                         </td>
                     </tr>
                     <c:if test="${not reservation.excursions.isEmpty()}">

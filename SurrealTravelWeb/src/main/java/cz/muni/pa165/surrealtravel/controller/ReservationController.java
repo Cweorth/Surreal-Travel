@@ -1,13 +1,17 @@
 package cz.muni.pa165.surrealtravel.controller;
 
+import cz.muni.pa165.surrealtravel.dto.AccountDTO;
 import cz.muni.pa165.surrealtravel.dto.CustomerDTO;
 import cz.muni.pa165.surrealtravel.dto.ExcursionDTO;
 import cz.muni.pa165.surrealtravel.dto.ReservationDTO;
 import cz.muni.pa165.surrealtravel.dto.TripDTO;
+import cz.muni.pa165.surrealtravel.dto.UserRole;
+import cz.muni.pa165.surrealtravel.service.AccountService;
 import cz.muni.pa165.surrealtravel.service.CustomerService;
 import cz.muni.pa165.surrealtravel.service.ExcursionService;
 import cz.muni.pa165.surrealtravel.service.ReservationService;
 import cz.muni.pa165.surrealtravel.service.TripService;
+import cz.muni.pa165.surrealtravel.utils.AuthCommons;
 import java.beans.PropertyEditorSupport;
 import java.math.BigDecimal;
 import java.util.ArrayList;
@@ -22,6 +26,7 @@ import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.propertyeditors.CustomCollectionEditor;
 import org.springframework.context.MessageSource;
+import org.springframework.security.access.annotation.Secured;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.ModelMap;
 import org.springframework.validation.BindingResult;
@@ -56,6 +61,9 @@ public class ReservationController {
     
     @Autowired
     private ExcursionService excursionService;
+    
+    @Autowired
+    private AccountService accountService;
           
     @Autowired
     private MessageSource messageSource;
@@ -101,6 +109,7 @@ public class ReservationController {
      * @param model
      * @return redirect
      */
+    @Secured("ROLE_USER")
     @RequestMapping(value = "/ajaxGetExcursions/{id}", method = RequestMethod.GET)
     public String listExcursionsAjax(@PathVariable long id, ModelMap model) {
         TripDTO trip = tripService.getTripById(id);
@@ -110,13 +119,25 @@ public class ReservationController {
     }
     
     /**
-     * Get all reservations.
+     * Get all reservations. User must be logged in, different funtionality for (USER vs STAFF,ADMIN).
      * @param model
      * @return redirect
      */
+    @Secured("ROLE_USER")
     @RequestMapping(method = RequestMethod.GET)
     public String listReservations(ModelMap model) {
-        model.addAttribute("reservations", reservationService.getAllReservations());
+        List<ReservationDTO> reservations;
+
+        // If authenticated user is staff or higher, show all reservations. If
+        // not, show only reservations for the authenticated user.
+        if(AuthCommons.hasRole(UserRole.ROLE_STAFF)) {
+            reservations = reservationService.getAllReservations();
+        } else {
+            AccountDTO account = accountService.getAccountByUsername(AuthCommons.getUsername());
+            reservations = reservationService.getAllReservationsByCustomer(account.getCustomer());
+        }
+        
+        model.addAttribute("reservations", reservations);
         return "reservation/list";
     }
     
@@ -125,11 +146,22 @@ public class ReservationController {
      * @param model
      * @return redirect
      */
+    @Secured("ROLE_USER")
     @RequestMapping(value = "/new", method = RequestMethod.GET)
     public String newReservationForm(ModelMap model) {
         List<TripDTO> allTrips = tripService.getAllTrips();
-        model.addAttribute("reservationDTO", new ReservationDTO());
-        model.addAttribute("customers", customerService.getAllCustomers());
+        
+        // ROLE_USERs can create reservation only for themselves, others can
+        // create reservations for any Customers
+        ReservationDTO reservation = new ReservationDTO();
+        if(AuthCommons.hasRole(UserRole.ROLE_STAFF)) {
+            model.addAttribute("customers", customerService.getAllCustomers());
+        } else {
+            AccountDTO account = accountService.getAccountByUsername(AuthCommons.getUsername());
+            reservation.setCustomer(account.getCustomer());
+        }
+        model.addAttribute("reservationDTO", reservation);
+        
         model.addAttribute("trips", allTrips);
         if(!allTrips.isEmpty()) model.addAttribute("excursions", allTrips.get(0).getExcursions());
         return "reservation/new";
@@ -144,6 +176,7 @@ public class ReservationController {
      * @param locale
      * @return redirect
      */
+    @Secured("ROLE_USER")
     @RequestMapping(value = "/new", method = RequestMethod.POST)
     public String newReservation(@ModelAttribute ReservationDTO reservationDTO, BindingResult bindingResult, RedirectAttributes redirectAttributes, UriComponentsBuilder uriBuilder, Locale locale) {       
         // check the form validator output
@@ -173,6 +206,7 @@ public class ReservationController {
      * @param model
      * @return redirect
      */
+    @Secured("ROLE_STAFF")
     @RequestMapping(value = "/edit/{id}", method = RequestMethod.GET)
     public String editReservationForm(@PathVariable long id, ModelMap model) {
         ReservationDTO reservation = null;
@@ -201,6 +235,7 @@ public class ReservationController {
      * @param locale
      * @return redirect
      */
+    @Secured("ROLE_STAFF")
     @RequestMapping(value = "/edit", method = RequestMethod.POST)
     public String editReservation(@ModelAttribute ReservationDTO reservationDTO, BindingResult bindingResult, RedirectAttributes redirectAttributes, UriComponentsBuilder uriBuilder, Locale locale) {       
         
@@ -232,6 +267,7 @@ public class ReservationController {
      * @param locale
      * @return redirect
      */
+    @Secured("ROLE_STAFF")
     @RequestMapping(value = "/delete/{id}", method = RequestMethod.GET)
     public String deleteReservation(@PathVariable long id, RedirectAttributes redirectAttributes, UriComponentsBuilder uriBuilder, Locale locale) {
         String name         = null;

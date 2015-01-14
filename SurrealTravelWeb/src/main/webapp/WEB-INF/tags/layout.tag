@@ -46,7 +46,7 @@
         <li><a href="${pageContext.request.contextPath}/accounts"><f:message key="account.title"/></a></li>
         <li><a href="${pageContext.request.contextPath}/trips"><f:message key="trip.title" /></a></li>
         <li><a href="${pageContext.request.contextPath}/excursions"><f:message key="excursion.title" /></a></li>
-        <li><a href="${pageContext.request.contextPath}/reservations"><f:message key="reservation.title" /></a></li>
+        <sec:authorize access="hasRole('ROLE_USER')"><li><a href="${pageContext.request.contextPath}/reservations"><f:message key="reservation.title" /></a></li></sec:authorize>
         <li><a href="${pageContext.request.contextPath}/customers"><f:message key="customer.title" /></a></li>
         <li><a href="${pageContext.request.contextPath}/about"><f:message key="about.title" /></a></li>
     </ul>
@@ -56,7 +56,7 @@
                 <strong>${pageContext.request.userPrincipal.name}</strong> (<a href="javascript:document.getElementById('logoutForm').submit()"><f:message key="auth.logout"/></a>)
             </c:when>
             <c:otherwise>
-                <a href="${pageContext.request.contextPath}/login"><f:message key="auth.signin"/></a> / <a href="${pageContext.request.contextPath}/register"><f:message key="auth.signup"/></a>
+                <a href="${pageContext.request.contextPath}/auth/login"><f:message key="auth.signin"/></a> / <a href="${pageContext.request.contextPath}/register"><f:message key="auth.signup"/></a>
             </c:otherwise>
         </c:choose>
     </div>
@@ -74,7 +74,7 @@
 </div>
     
 <sec:authorize access="hasRole('ROLE_USER')">
-    <form action="<c:url value='/j_spring_security_logout' />" method="post" id="logoutForm"><input type="hidden" name="${_csrf.parameterName}" value="${_csrf.token}" /></form>
+    <form action="<c:url value='/auth/doLogout' />" method="post" id="logoutForm"><input type="hidden" name="${_csrf.parameterName}" value="${_csrf.token}" /></form>
 </sec:authorize>
 
 </body>

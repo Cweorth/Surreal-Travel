@@ -5,7 +5,7 @@
 
 <sec:authorize access="not isAuthenticated()">
 
-    <form name="loginForm" action="<c:url value='/j_spring_security_check' />" method="POST">
+    <form name="loginForm" action="<c:url value='/auth/doLogin' />" method="POST">
         <div class="label"><f:message key="auth.username"/>:</div>
         <input type="text" name="username" class="text">
         <br>
