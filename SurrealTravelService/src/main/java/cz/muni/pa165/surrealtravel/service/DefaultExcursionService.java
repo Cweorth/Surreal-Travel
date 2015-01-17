@@ -1,7 +1,5 @@
 package cz.muni.pa165.surrealtravel.service;
 
-import java.util.List;
-import java.util.Objects;
 import cz.muni.pa165.surrealtravel.dao.ExcursionDAO;
 import cz.muni.pa165.surrealtravel.dao.TripDAO;
 import cz.muni.pa165.surrealtravel.dto.ExcursionDTO;
@@ -10,10 +8,13 @@ import cz.muni.pa165.surrealtravel.entity.Trip;
 import java.util.ArrayList;
 import java.util.Calendar;
 import java.util.Date;
-import org.springframework.transaction.annotation.Transactional;
+import java.util.List;
+import java.util.Objects;
 import org.dozer.DozerBeanMapper;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.security.access.annotation.Secured;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 
 /**
  * Excursion service implementation
@@ -36,6 +37,7 @@ public class DefaultExcursionService implements ExcursionService {
      * Create new excursion.
      * @param excursionDTO
      */
+    @Secured("ROLE_STAFF")
     @Override
     @Transactional
     public void addExcursion(ExcursionDTO excursionDTO) {
@@ -76,6 +78,7 @@ public class DefaultExcursionService implements ExcursionService {
      * Update excursion entry for the given DTO.
      * @param excursionDTO
      */
+    @Secured("ROLE_STAFF")
     @Override
     @Transactional
     public void updateExcursion(ExcursionDTO excursionDTO) {
@@ -105,6 +108,7 @@ public class DefaultExcursionService implements ExcursionService {
      * Delete excursion entry for the given id.
      * @param id
      */
+    @Secured("ROLE_STAFF")
     @Override
     @Transactional
     public void deleteExcursionById(long id) {

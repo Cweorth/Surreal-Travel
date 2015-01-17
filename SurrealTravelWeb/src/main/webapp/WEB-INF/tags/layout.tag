@@ -46,8 +46,10 @@
         <li><a href="${pageContext.request.contextPath}/accounts"><f:message key="account.title"/></a></li>
         <li><a href="${pageContext.request.contextPath}/trips"><f:message key="trip.title" /></a></li>
         <li><a href="${pageContext.request.contextPath}/excursions"><f:message key="excursion.title" /></a></li>
-        <sec:authorize access="hasRole('ROLE_USER')"><li><a href="${pageContext.request.contextPath}/reservations"><f:message key="reservation.title" /></a></li></sec:authorize>
-        <li><a href="${pageContext.request.contextPath}/customers"><f:message key="customer.title" /></a></li>
+        <sec:authorize access="hasRole('ROLE_USER')">
+            <li><a href="${pageContext.request.contextPath}/reservations"><f:message key="reservation.title" /></a></li>
+            <li><a href="${pageContext.request.contextPath}/customers"><f:message key="customer.title" /></a></li>
+        </sec:authorize>
         <li><a href="${pageContext.request.contextPath}/about"><f:message key="about.title" /></a></li>
     </ul>
     <div class="login">

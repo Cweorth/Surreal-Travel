@@ -4,6 +4,8 @@ import cz.muni.pa165.surrealtravel.dto.UserRole;
 import org.springframework.security.core.Authentication;
 import org.springframework.security.core.GrantedAuthority;
 import org.springframework.security.core.context.SecurityContextHolder;
+import org.springframework.web.servlet.mvc.support.RedirectAttributes;
+import org.springframework.web.util.UriComponentsBuilder;
 
 /**
  * Utility class with common functionality for authentication related operations.
@@ -34,6 +36,29 @@ public class AuthCommons {
     public static String getUsername() {
         Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
         return authentication == null ? null : authentication.getName();
+    }
+    
+    /**
+     * Return denied page. Can be invoked if users snoop where they should not. No Star Wars
+     * pun intended.
+     * @param uriBuilder
+     * @return 
+     */
+    public static String forceDenied(UriComponentsBuilder uriBuilder) {
+        return "redirect:" + uriBuilder.path("/auth/403").build();
+    }
+    
+    /**
+     * Return denied page. Can be invoked if users snoop where they should not. No Star Wars
+     * pun intended. Possibility for displaying a message.
+     * @param uriBuilder
+     * @param redirectAttributes
+     * @param message
+     * @return 
+     */
+    public static String forceDenied(UriComponentsBuilder uriBuilder, RedirectAttributes redirectAttributes, String message) {
+        redirectAttributes.addFlashAttribute("failureMessage", message);
+        return "redirect:" + uriBuilder.path("/auth/403").queryParam("notification", "failure").build();
     }
     
 }

@@ -86,9 +86,8 @@ public class InitialDataController {
         BCryptPasswordEncoder encoder = new BCryptPasswordEncoder(12);
         
         // Because we are using secured service methods, we need to do authentication.
-        // User "pa165" is required to be in the DB - it is created by hibernate on
-        // DAO layer (see import.sql).
-        UsernamePasswordAuthenticationToken authRequest = new UsernamePasswordAuthenticationToken("pa165", "pa165");
+        // User "root" is created by hibernate on DAO layer (see import.sql).
+        UsernamePasswordAuthenticationToken authRequest = new UsernamePasswordAuthenticationToken("root", "root");
         SecurityContextHolder.getContext().setAuthentication(authRequest);
 
         // Available customers
@@ -116,14 +115,21 @@ public class InitialDataController {
         account.setRoles(EnumSet.of(UserRole.ROLE_ADMIN));
         accountService.addAccount(account);
         
-        String password = "password";
+        String password = "pa165";
         AccountDTO a1 = new AccountDTO();
-        a1.setUsername("username");
+        AccountDTO a2 = new AccountDTO();
+        a1.setUsername("pa165");
         a1.setPassword(encoder.encode(password));
         a1.setPlainPassword(password);
-        a1.setRoles(EnumSet.of(UserRole.ROLE_USER));
-        a1.setCustomer(c1);
+        a1.setRoles(EnumSet.of(UserRole.ROLE_ADMIN));
+        password = "password";
+        a2.setUsername("username");
+        a2.setPassword(encoder.encode(password));
+        a2.setPlainPassword(password);
+        a2.setRoles(EnumSet.of(UserRole.ROLE_USER));
+        a2.setCustomer(c1);
         accountService.addAccount(a1);
+        accountService.addAccount(a2);
         
         // Availale excursions
         ExcursionDTO e1 = new ExcursionDTO();

@@ -4,15 +4,18 @@
 <%@ taglib prefix="f" uri="http://java.sun.com/jsp/jstl/fmt" %>
 <%@ taglib prefix="s" uri="http://www.springframework.org/tags" %>
 <%@ taglib prefix="form" uri="http://www.springframework.org/tags/form" %>
+<%@ taglib prefix="sec" uri="http://www.springframework.org/security/tags" %>
 
 <f:message var="title" key="customer.title" />
 
 <t:layout title="${title}">
 <jsp:attribute name="content">
 
+    <sec:authorize access="hasRole('ROLE_ADMIN')">
     <button class="new" onclick="javascript:redirect('${pageContext.request.contextPath}/customers/new');"><f:message key="customer.add"/></button>
     
     <br><br>
+    </sec:authorize>
     
     <table cellspacing="0" cellpadding="3" border="0" class="tableEntry">
         <tr class="head">
@@ -25,7 +28,7 @@
             <c:when test="${not empty customers}">
                 <c:forEach items="${customers}" var="customer" varStatus="count">
                     <tr>
-                        <td class="number">${count.index + 1}</td>
+                        <td class="number">${count.count}</td>
                         <td><c:out value="${customer.name}"/></td>
                         <td><c:out value="${customer.address}"/></td>
                         <td>
@@ -33,10 +36,14 @@
                                 <jsp:include page="/WEB-INF/include/entryEditButton.jsp">
                                     <jsp:param name="url" value="${pageContext.request.contextPath}/customers/edit/${customer.id}" />
                                 </jsp:include>
-                                <jsp:include page="/WEB-INF/include/entryDeleteButton.jsp">
-                                    <jsp:param name="id" value="${customer.id}" />
-                                    <jsp:param name="url" value="${pageContext.request.contextPath}/customers/delete/${customer.id}" />
-                                </jsp:include>
+                                <sec:authorize access="hasRole('ROLE_ADMIN')">
+                                    <c:if test="${customersOccurence.get(count.index) == 0}">
+                                        <jsp:include page="/WEB-INF/include/entryDeleteButton.jsp">
+                                            <jsp:param name="id" value="${customer.id}" />
+                                            <jsp:param name="url" value="${pageContext.request.contextPath}/customers/delete/${customer.id}" />
+                                        </jsp:include>
+                                    </c:if>
+                                </sec:authorize>
                             </ul>
                         </td>
                     </tr>

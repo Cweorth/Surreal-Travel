@@ -8,6 +8,7 @@ import java.util.List;
 import java.util.Objects;
 import org.dozer.DozerBeanMapper;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.security.access.annotation.Secured;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
@@ -33,6 +34,7 @@ public class DefaultCustomerService implements CustomerService {
         customer.setId(entity.getId());
     }
     
+    @Secured("ROLE_USER")
     @Transactional(readOnly = true)
     @Override
     public CustomerDTO getCustomerById(long id) {
@@ -40,6 +42,7 @@ public class DefaultCustomerService implements CustomerService {
         return customer == null ? null : mapper.map(customer, CustomerDTO.class);
     }
     
+    @Secured("ROLE_USER")
     @Transactional(readOnly = true)
     @Override
     public List<CustomerDTO> getAllCustomers() {
@@ -49,6 +52,7 @@ public class DefaultCustomerService implements CustomerService {
         return customersDTO;
     }
     
+    @Secured("ROLE_USER")
     @Transactional
     @Override
     public CustomerDTO updateCustomer(CustomerDTO customer) {
@@ -57,6 +61,7 @@ public class DefaultCustomerService implements CustomerService {
         return mapper.map(updated, CustomerDTO.class);
     }
 
+    @Secured("ROLE_ADMIN")
     @Transactional
     @Override
     public void deleteCustomerById(long id) {

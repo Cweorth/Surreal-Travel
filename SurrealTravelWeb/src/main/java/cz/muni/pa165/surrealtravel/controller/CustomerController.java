@@ -1,13 +1,21 @@
 package cz.muni.pa165.surrealtravel.controller;
 
+import cz.muni.pa165.surrealtravel.dto.AccountDTO;
 import cz.muni.pa165.surrealtravel.dto.CustomerDTO;
+import cz.muni.pa165.surrealtravel.dto.UserRole;
+import cz.muni.pa165.surrealtravel.service.AccountService;
 import cz.muni.pa165.surrealtravel.service.CustomerService;
+import cz.muni.pa165.surrealtravel.service.ReservationService;
+import cz.muni.pa165.surrealtravel.utils.AuthCommons;
 import cz.muni.pa165.surrealtravel.validator.CustomerValidator;
+import java.util.ArrayList;
+import java.util.List;
 import java.util.Locale;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.MessageSource;
+import org.springframework.security.access.annotation.Secured;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.ModelMap;
 import org.springframework.validation.BindingResult;
@@ -35,6 +43,12 @@ public class CustomerController {
     
     @Autowired
     private CustomerService customerService;
+    
+    @Autowired
+    private ReservationService reservationService;
+    
+    @Autowired
+    private AccountService accountService;
 
     @Autowired
     private MessageSource messageSource;
@@ -49,9 +63,26 @@ public class CustomerController {
      * @param model
      * @return redirect
      */
+    @Secured("ROLE_USER")
     @RequestMapping(method = RequestMethod.GET)
     public String listCustomers(ModelMap model) {
-        model.addAttribute("customers", customerService.getAllCustomers());
+        List<CustomerDTO> customers = new ArrayList<>();
+        
+        // Load all customers in the system for ROLE_ADMIN, or only attached Customer
+        // for lesser roles.
+        if(!AuthCommons.hasRole(UserRole.ROLE_ADMIN)) {
+            AccountDTO account = accountService.getAccountByUsername(AuthCommons.getUsername());
+            if(account.getCustomer() != null) customers.add(account.getCustomer());
+        } else customers = customerService.getAllCustomers();
+        
+        // See if customers have some attached reservations (used to deny the possiblity
+        // to delete them in GUI).
+        List<Integer> customersOccurence = new ArrayList<>(customers.size());
+        for(CustomerDTO c : customers)
+            customersOccurence.add(reservationService.getAllReservationsByCustomer(c).size());
+        
+        model.addAttribute("customers", customers);
+        model.addAttribute("customersOccurence", customersOccurence);
         return "customer/list";
     }
     
@@ -60,6 +91,7 @@ public class CustomerController {
      * @param model
      * @return redirect
      */
+    @Secured("ROLE_ADMIN")
     @RequestMapping(value = "/new", method = RequestMethod.GET)
     public String newCustomerForm(ModelMap model) {
         model.addAttribute("customerDTO", new CustomerDTO());
@@ -75,6 +107,7 @@ public class CustomerController {
      * @param locale
      * @return redirect
      */
+    @Secured("ROLE_ADMIN")
     @RequestMapping(value = "/new", method = RequestMethod.POST)
     public String newCustomer(@Validated @ModelAttribute CustomerDTO customerDTO, BindingResult bindingResult, RedirectAttributes redirectAttributes, UriComponentsBuilder uriBuilder, Locale locale) {       
         
@@ -103,10 +136,22 @@ public class CustomerController {
      * Display a form for editing of a customer.
      * @param id
      * @param model
+     * @param uriBuilder
+     * @param redirectAttributes
+     * @param locale
      * @return redirect
      */
+    @Secured("ROLE_USER")
     @RequestMapping(value = "/edit/{id}", method = RequestMethod.GET)
-    public String editCustomerForm(@PathVariable long id, ModelMap model) {
+    public String editCustomerForm(@PathVariable long id, ModelMap model, UriComponentsBuilder uriBuilder, RedirectAttributes redirectAttributes, Locale locale) {
+        
+        // If ROLE_USER or ROLE_STAFF is trying to edit someone other than himself, deny it.
+        if(!AuthCommons.hasRole(UserRole.ROLE_ADMIN)) {
+            AccountDTO account = accountService.getAccountByUsername(AuthCommons.getUsername());
+            if(account.getCustomer() == null || account.getCustomer().getId() != id)
+                return AuthCommons.forceDenied(uriBuilder, redirectAttributes, messageSource.getMessage("customer.message.edit.403", null, locale));
+        }
+        
         CustomerDTO customer = null;
         
         try {
@@ -130,10 +175,19 @@ public class CustomerController {
      * @param locale
      * @return redirect
      */
+    @Secured("ROLE_USER")
     @RequestMapping(value = "/edit", method = RequestMethod.POST)
     public String editCustomer(@Validated @ModelAttribute CustomerDTO customerDTO, BindingResult bindingResult, RedirectAttributes redirectAttributes, UriComponentsBuilder uriBuilder, Locale locale) {       
-        String resultStatus = "success";
         
+        // If ROLE_USER or ROLE_STAFF is trying to edit someone other than himself, deny it.
+        if(!AuthCommons.hasRole(UserRole.ROLE_ADMIN)) {
+            AccountDTO account = accountService.getAccountByUsername(AuthCommons.getUsername());
+            if(account.getCustomer() == null || account.getCustomer().getId() != customerDTO.getId())
+                return AuthCommons.forceDenied(uriBuilder, redirectAttributes, messageSource.getMessage("customer.message.edit.403", null, locale));
+        }
+        
+        String resultStatus = "success";
+
         // check the form validator output
         if(bindingResult.hasErrors()) {
             logFormErrors(bindingResult);
@@ -165,6 +219,7 @@ public class CustomerController {
      * @param locale
      * @return redirect
      */
+    @Secured("ROLE_ADMIN")
     @RequestMapping(value = "/delete/{id}", method = RequestMethod.GET)
     public String deleteCustomer(@PathVariable long id, RedirectAttributes redirectAttributes, UriComponentsBuilder uriBuilder, Locale locale) {
         String resultStatus = "success";

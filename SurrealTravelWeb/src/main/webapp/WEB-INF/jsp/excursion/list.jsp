@@ -4,15 +4,18 @@
 <%@ taglib prefix="f" uri="http://java.sun.com/jsp/jstl/fmt" %>
 <%@ taglib prefix="s" uri="http://www.springframework.org/tags" %>
 <%@ taglib prefix="form" uri="http://www.springframework.org/tags/form" %>
+<%@ taglib prefix="sec" uri="http://www.springframework.org/security/tags" %>
 
 <f:message var="title" key="excursion.title" />
 
 <t:layout title="${title}">
 <jsp:attribute name="content">
 
+    <sec:authorize access="hasRole('ROLE_STAFF')">
     <button class="new" onclick="javascript:redirect('${pageContext.request.contextPath}/excursions/new');"><f:message key="excursion.add"/></button>
-    
+
     <br><br>
+    </sec:authorize>
     
     <table cellspacing="0" cellpadding="3" border="0" class="tableEntry">
         <tr class="head">
@@ -22,28 +25,32 @@
             <td><f:message key="excursion.excursionDate"/></td>
             <td><f:message key="excursion.duration"/></td>
             <td><f:message key="excursion.price"/></td>
-            <td width="200" align="right"><f:message key="basic.action"/></td>
+            <td width="200" align="right"><sec:authorize access="hasRole('ROLE_STAFF')"><f:message key="basic.action"/></sec:authorize></td>
         </tr>
         <c:choose>
             <c:when test="${not empty excursions}">
                 <c:forEach items="${excursions}" var="excursion" varStatus="count">
                     <tr>
-                        <td class="number">${count.index + 1}</td>
+                        <td class="number">${count.count}</td>
                         <td><c:out value="${excursion.destination}"/></td>
                         <td><c:out value="${excursion.description}"/></td>
                         <td><f:formatDate value="${excursion.excursionDate}" type="date"/></td>
                         <td><c:out value="${excursion.duration}"/></td>
                         <td><c:out value="${excursion.price}"/></td>
                         <td>
-                            <ul class="rowMenu">
-                                <jsp:include page="/WEB-INF/include/entryEditButton.jsp">
-                                    <jsp:param name="url" value="${pageContext.request.contextPath}/excursions/edit/${excursion.id}" />
-                                </jsp:include>
-                                <jsp:include page="/WEB-INF/include/entryDeleteButton.jsp">
-                                    <jsp:param name="id" value="${excursion.id}" />
-                                    <jsp:param name="url" value="${pageContext.request.contextPath}/excursions/delete/${excursion.id}" />
-                                </jsp:include>
-                            </ul>
+                            <sec:authorize access="hasRole('ROLE_STAFF')">
+                                <ul class="rowMenu">
+                                    <jsp:include page="/WEB-INF/include/entryEditButton.jsp">
+                                        <jsp:param name="url" value="${pageContext.request.contextPath}/excursions/edit/${excursion.id}" />
+                                    </jsp:include>
+                                    <c:if test="${excursionsOccurence.get(count.index) == 0}">
+                                        <jsp:include page="/WEB-INF/include/entryDeleteButton.jsp">
+                                            <jsp:param name="id" value="${excursion.id}" />
+                                            <jsp:param name="url" value="${pageContext.request.contextPath}/excursions/delete/${excursion.id}" />
+                                        </jsp:include>
+                                    </c:if>
+                                </ul>
+                            </sec:authorize>
                         </td>
                     </tr>
                 </c:forEach>

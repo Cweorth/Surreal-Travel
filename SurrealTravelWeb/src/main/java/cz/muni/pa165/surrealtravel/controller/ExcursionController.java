@@ -2,15 +2,19 @@ package cz.muni.pa165.surrealtravel.controller;
 
 import cz.muni.pa165.surrealtravel.dto.ExcursionDTO;
 import cz.muni.pa165.surrealtravel.service.ExcursionService;
+import cz.muni.pa165.surrealtravel.service.TripService;
 import cz.muni.pa165.surrealtravel.validator.ExcursionValidator;
 import java.text.SimpleDateFormat;
+import java.util.ArrayList;
 import java.util.Date;
+import java.util.List;
 import java.util.Locale;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.propertyeditors.CustomDateEditor;
 import org.springframework.context.MessageSource;
+import org.springframework.security.access.annotation.Secured;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.ModelMap;
 import org.springframework.validation.BindingResult;
@@ -40,6 +44,9 @@ public class ExcursionController {
     private ExcursionService excursionService;
     
     @Autowired
+    private TripService tripService;
+    
+    @Autowired
     private MessageSource messageSource;
       
     @InitBinder
@@ -57,7 +64,16 @@ public class ExcursionController {
      */
     @RequestMapping(method = RequestMethod.GET)
     public String listExcrusions(ModelMap model) {
-        model.addAttribute("excursions", excursionService.getAllExcursions());
+        List<ExcursionDTO> excursions = excursionService.getAllExcursions();
+        
+        // See if excursions have some attached Trips (used to deny the possiblity
+        // to delete them in GUI).
+        List<Integer> excursionsOccurence = new ArrayList<>(excursions.size());
+        for(ExcursionDTO e : excursions)
+            excursionsOccurence.add(tripService.getTripsWithExcursion(e).size());
+        
+        model.addAttribute("excursions", excursions);
+        model.addAttribute("excursionsOccurence", excursionsOccurence);
         return "excursion/list";
     }
     
@@ -66,6 +82,7 @@ public class ExcursionController {
      * @param model
      * @return redirect
      */
+    @Secured("ROLE_STAFF")
     @RequestMapping(value = "/new", method = RequestMethod.GET)
     public String newExcursionForm(ModelMap model) {
         model.addAttribute("excursionDTO", new ExcursionDTO());
@@ -81,6 +98,7 @@ public class ExcursionController {
      * @param locale
      * @return redirect
      */
+    @Secured("ROLE_STAFF")
     @RequestMapping(value = "/new", method = RequestMethod.POST)
     public String newExcursion(@Validated @ModelAttribute ExcursionDTO excursionDTO, BindingResult bindingResult, RedirectAttributes redirectAttributes, UriComponentsBuilder uriBuilder, Locale locale) {       
         
@@ -110,6 +128,7 @@ public class ExcursionController {
      * @param model
      * @return redirect
      */
+    @Secured("ROLE_STAFF")
     @RequestMapping(value = "/edit/{id}", method = RequestMethod.GET)
     public String editExcursionForm(@PathVariable long id, ModelMap model) {
         ExcursionDTO excursion = null;
@@ -135,6 +154,7 @@ public class ExcursionController {
      * @param locale
      * @return redirect
      */
+    @Secured("ROLE_STAFF")
     @RequestMapping(value = "/edit", method = RequestMethod.POST)
     public String editExcursion(@Validated @ModelAttribute ExcursionDTO excursionDTO, BindingResult bindingResult, RedirectAttributes redirectAttributes, UriComponentsBuilder uriBuilder, Locale locale) {       
         String resultStatus = "success";
@@ -170,6 +190,7 @@ public class ExcursionController {
      * @param locale
      * @return redirect
      */
+    @Secured("ROLE_STAFF")
     @RequestMapping(value = "/delete/{id}", method = RequestMethod.GET)
     public String deleteExcursion(@PathVariable long id, RedirectAttributes redirectAttributes, UriComponentsBuilder uriBuilder, Locale locale) {
         String resultStatus = "success";

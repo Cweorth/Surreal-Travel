@@ -28,7 +28,7 @@ public class Account implements Serializable {
     private long id;
     
     @Column(nullable = false, unique = true)
-    @Size(min = 5, max = 32)
+    @Size(min = 4, max = 32)
     @Pattern(regexp = "[a-z0-9]+")
     private String username;
     
@@ -36,7 +36,7 @@ public class Account implements Serializable {
     private String password; // hash of the password
     
     @Transient
-    @Size(min = 5, max = 32)
+    @Size(min = 4, max = 32)
     private String plainPassword; // not persisted, used only for purposes of password length
     
     @OneToOne
