@@ -48,17 +48,17 @@
                             </c:choose>
                         </td>
                         <td>
-                            <sec:authorize access="hasRole('ROLE_STAFF')">
                             <ul class="rowMenu">
+                                <sec:authorize access="hasRole('ROLE_STAFF')">
                                 <jsp:include page="/WEB-INF/include/entryEditButton.jsp">
                                     <jsp:param name="url" value="${pageContext.request.contextPath}/reservations/edit/${reservation.id}" />
                                 </jsp:include>
+                                </sec:authorize>
                                 <jsp:include page="/WEB-INF/include/entryDeleteButton.jsp">
                                     <jsp:param name="id" value="${customer.id}" />
                                     <jsp:param name="url" value="${pageContext.request.contextPath}/reservations/delete/${reservation.id}" />
                                 </jsp:include>
                             </ul>
-                            </sec:authorize>
                         </td>
                     </tr>
                     <c:if test="${not reservation.excursions.isEmpty()}">

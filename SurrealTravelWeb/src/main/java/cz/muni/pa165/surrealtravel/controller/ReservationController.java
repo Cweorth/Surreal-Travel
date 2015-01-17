@@ -2,7 +2,6 @@ package cz.muni.pa165.surrealtravel.controller;
 
 import cz.muni.pa165.surrealtravel.dto.AccountDTO;
 import cz.muni.pa165.surrealtravel.dto.CustomerDTO;
-import cz.muni.pa165.surrealtravel.dto.ExcursionDTO;
 import cz.muni.pa165.surrealtravel.dto.ReservationDTO;
 import cz.muni.pa165.surrealtravel.dto.TripDTO;
 import cz.muni.pa165.surrealtravel.dto.UserRole;
@@ -13,14 +12,8 @@ import cz.muni.pa165.surrealtravel.service.ReservationService;
 import cz.muni.pa165.surrealtravel.service.TripService;
 import cz.muni.pa165.surrealtravel.utils.AuthCommons;
 import java.beans.PropertyEditorSupport;
-import java.math.BigDecimal;
-import java.util.ArrayList;
-import java.util.Calendar;
-import java.util.Date;
-import java.util.GregorianCalendar;
 import java.util.List;
 import java.util.Locale;
-import javax.annotation.PostConstruct;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -267,7 +260,7 @@ public class ReservationController {
      * @param locale
      * @return redirect
      */
-    @Secured("ROLE_STAFF")
+    @Secured("ROLE_USER")
     @RequestMapping(value = "/delete/{id}", method = RequestMethod.GET)
     public String deleteReservation(@PathVariable long id, RedirectAttributes redirectAttributes, UriComponentsBuilder uriBuilder, Locale locale) {
         String name         = null;
@@ -303,47 +296,4 @@ public class ReservationController {
         }
     }
 
-    @PostConstruct
-    public void init() {
-        
-        CustomerDTO c1 = new CustomerDTO();
-        c1.setName("Honza");
-        c1.setAddress("Olomouc");
-        customerService.addCustomer(c1);
-        TripDTO trip= new TripDTO();
-        
-        Calendar calendar = new GregorianCalendar();
-        calendar.set(2014, 6, 21);
-        Date from= calendar.getTime();
-        calendar.set(2014,7,3);
-        Date to= calendar.getTime();
-        
-        trip.setDateFrom(from);
-        trip.setDateTo(to);
-        trip.setDestination("palava");
-        trip.setCapacity(15);
-        trip.setBasePrice(new BigDecimal(500));
-        
-        ExcursionDTO e1 = new ExcursionDTO();
-        e1.setDestination("Afgánistán");
-        e1.setDescription("Best of war");
-        e1.setDuration(2);
-        e1.setExcursionDate(from);
-        e1.setPrice(new BigDecimal(0));
-        
-        excursionService.addExcursion(e1);
-        List<ExcursionDTO> excursions= new ArrayList<>();
-        excursions.add(e1);
-        
-        trip.setExcursions(excursions);
-        tripService.addTrip(trip);
-        
-        ReservationDTO res1 = new ReservationDTO();
-        res1.setTrip(trip);
-        res1.addExcursion(e1);
-        res1.setCustomer(c1);
-        
-        reservationService.addReservation(res1);
-                
-    }
 }

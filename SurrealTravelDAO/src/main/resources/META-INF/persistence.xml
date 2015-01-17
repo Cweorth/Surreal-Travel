@@ -7,9 +7,8 @@
         <provider>org.hibernate.ejb.HibernatePersistence</provider>
         <properties>
             <property name="hibernate.dialect"                 value="org.hibernate.dialect.DerbyDialect" />
-            <property name="hibernate.hbm2ddl.auto"            value="update"/>
+            <property name="hibernate.hbm2ddl.auto"            value="create-drop"/>
             <property name="hibernate.temp.use_jdbc_metadata_defaults" value="false"/>
-            <property name="javax.persistence.schema-generation.database.action" value ="drop-and-create"/>
         </properties>
     </persistence-unit>
 </persistence>

@@ -1,20 +1,13 @@
 package cz.muni.pa165.surrealtravel.controller;
 
-import cz.muni.pa165.surrealtravel.dto.AccountDTO;
 import cz.muni.pa165.surrealtravel.dto.CustomerDTO;
-import cz.muni.pa165.surrealtravel.dto.UserRole;
-import cz.muni.pa165.surrealtravel.service.AccountService;
 import cz.muni.pa165.surrealtravel.service.CustomerService;
 import cz.muni.pa165.surrealtravel.validator.CustomerValidator;
-import java.util.HashSet;
 import java.util.Locale;
-import java.util.Set;
-import javax.annotation.PostConstruct;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.MessageSource;
-import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.ModelMap;
 import org.springframework.validation.BindingResult;
@@ -210,47 +203,5 @@ public class CustomerController {
             logger.debug("FieldError: {}", fe);
         }
     }
-    
-    @PostConstruct
-    public void init() {
-        CustomerDTO c1 = new CustomerDTO();
-        c1.setName("Honza");
-        c1.setAddress("Olomouc");
-        
-        CustomerDTO c2 = new CustomerDTO();
-        c2.setName("Eva");
-        c2.setAddress("Olomouc");
-        
-        CustomerDTO c3 = new CustomerDTO();
-        c3.setName("Slash");
-        c3.setAddress("City of Angels");
-        
-        customerService.addCustomer(c1);
-        customerService.addCustomer(c2);
-        customerService.addCustomer(c3);
-        
-        // TEMPORARY
-        BCryptPasswordEncoder encoder = new BCryptPasswordEncoder(12);
-        String password1 = "pa165";
-       
-        AccountDTO a1 = new AccountDTO();
-        a1.setUsername("pa165");
-        a1.setPassword(encoder.encode(password1));
-        a1.setPlainPassword(password1);
 
-        Set<UserRole> roles = new HashSet<>();
-        roles.add(UserRole.ROLE_USER);
-        roles.add(UserRole.ROLE_ADMIN);
-        roles.add(UserRole.ROLE_STAFF);
-        
-        a1.setRoles(roles);
-
-        accountService.addAccount(a1);
-  
-    }
-    
-    // TEMPORARY
-    @Autowired
-    private AccountService accountService;
-    
 }

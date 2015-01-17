@@ -3,11 +3,9 @@ package cz.muni.pa165.surrealtravel.controller;
 import cz.muni.pa165.surrealtravel.dto.ExcursionDTO;
 import cz.muni.pa165.surrealtravel.service.ExcursionService;
 import cz.muni.pa165.surrealtravel.validator.ExcursionValidator;
-import java.math.BigDecimal;
 import java.text.SimpleDateFormat;
 import java.util.Date;
 import java.util.Locale;
-import javax.annotation.PostConstruct;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -210,34 +208,6 @@ public class ExcursionController {
         for(FieldError fe : bindingResult.getFieldErrors()) {
             logger.debug("FieldError: {}", fe);
         }
-    }
-    
-    @PostConstruct
-    public void init() {
-        ExcursionDTO e1 = new ExcursionDTO();
-        e1.setDestination("Afgánistán");
-        e1.setDescription("Best of war");
-        e1.setDuration(2);
-        e1.setExcursionDate(new Date());
-        e1.setPrice(new BigDecimal(150));
-        
-        ExcursionDTO e2 = new ExcursionDTO();
-        e2.setDestination("Afgánistán");
-        e2.setDescription("Best of army stock");
-        e2.setDuration(5);
-        e2.setExcursionDate(new Date());
-        e2.setPrice(new BigDecimal(10));
-        
-        ExcursionDTO e3 = new ExcursionDTO();
-        e3.setDestination("Afgánistán");
-        e3.setDescription("Best places on cemetary");
-        e3.setDuration(1);
-        e3.setExcursionDate(new Date());
-        e3.setPrice(new BigDecimal(5));
-        
-        excursionService.addExcursion(e1);
-        excursionService.addExcursion(e2);
-        excursionService.addExcursion(e3);
     }
     
 }

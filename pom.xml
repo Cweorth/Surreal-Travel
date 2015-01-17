@@ -20,6 +20,7 @@
         <org.slf4j.version>1.7.6</org.slf4j.version>
         <org.springframework.version>4.1.1.RELEASE</org.springframework.version>
         <org.apache.derby.version>10.11.1.1</org.apache.derby.version>
+        <spring.security.version>3.2.5.RELEASE</spring.security.version>
     </properties>
         
 </project>
