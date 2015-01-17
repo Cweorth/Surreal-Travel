@@ -32,7 +32,8 @@ public class AuthCommons {
      * @return username or "anonymousUser" when not authenticated
      */
     public static String getUsername() {
-        return SecurityContextHolder.getContext().getAuthentication().getName();
+        Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
+        return authentication == null ? null : authentication.getName();
     }
     
 }

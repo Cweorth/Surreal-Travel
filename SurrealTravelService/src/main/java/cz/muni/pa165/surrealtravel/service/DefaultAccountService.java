@@ -2,9 +2,12 @@ package cz.muni.pa165.surrealtravel.service;
 
 import cz.muni.pa165.surrealtravel.dao.AccountDAO;
 import cz.muni.pa165.surrealtravel.dto.AccountDTO;
+import cz.muni.pa165.surrealtravel.dto.CustomerDTO;
+import cz.muni.pa165.surrealtravel.dto.ReservationDTO;
 import cz.muni.pa165.surrealtravel.dto.UserRole;
 import cz.muni.pa165.surrealtravel.entity.Account;
 import java.util.ArrayList;
+import java.util.Iterator;
 import java.util.List;
 import java.util.Objects;
 import org.dozer.DozerBeanMapper;
@@ -21,6 +24,12 @@ public class DefaultAccountService implements AccountService {
 
     @Autowired
     private AccountDAO accountDao;
+    
+    @Autowired
+    private ReservationService reservationService;
+    
+    @Autowired
+    private CustomerService customerService;
 
     @Autowired
     private DozerBeanMapper mapper;
@@ -70,6 +79,38 @@ public class DefaultAccountService implements AccountService {
     @Transactional
     @Override
     public void deleteAccountById(long id) {
+        AccountDTO account = getAccountById(id);
+        if (account == null) {
+            throw new IllegalArgumentException("Entity with id " + id + " not found");
+        }
+        
+        // customer shall be removed as well if this account is the only one
+        // that references it        
+        if (account.getCustomer() != null) {
+            boolean rmcustomer = true;
+            List<Account> accounts = accountDao.getAllAccounts();
+            
+            Account other;
+            for(Iterator<Account> it = accounts.iterator(); rmcustomer && it.hasNext(); ) {
+                other = it.next();
+                
+                rmcustomer &= (other.getCustomer()         == null)
+                           || (other.getId()               != account.getId())
+                           || (other.getCustomer().getId() != account.getCustomer().getId());
+            }
+            
+            
+            if (rmcustomer) {
+                // the customer is referenced only by this account
+                CustomerDTO customer = account.getCustomer();
+                for(ReservationDTO reservation : reservationService.getAllReservationsByCustomer(customer)) {
+                    reservationService.deleteReservationById(reservation.getId());
+                }
+                
+                customerService.deleteCustomerById(customer.getId());
+            }
+        }
+        
         accountDao.deleteAccountById(id);
     }
     
