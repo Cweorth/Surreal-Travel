@@ -37,12 +37,19 @@ This file concerns user roles and their permissions in the Surreal-Travel applic
   2. edit customer,
   3. remove customer if **not referenced** by any account or reservation,
   3. edit account
-      1. change user rights except for the ```root``` account,
-  4. remove account unless it is the ```root``` account,
-      1. **deny** ```4.4``` (remove own account) to ```root```,
+      1. change user rights,
+      2. change password,
+        * original password not required for ```USER``` or ```STAFF``` account,
+  4. remove account,
+      * password not required for ```USER``` or ```STAFF``` account
   5. create, edit and remove customer **not referenced** by any account,
 
-#### 7. Default accounts
+#### 7. Exceptions for ```root```
+  1. **deny** §*4.4* (removing own account) to ```root```,
+  2. **deny** other ```ADMIN```s to change ```root```'s password,
+  3. **deny** other ```ADMIN```s to remove ```root```
+
+#### 8. Default accounts
 
 | no. | username    | rights      | default password | customer    |
 |-----|-------------|-------------|------------------|-------------|
