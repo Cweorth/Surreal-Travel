@@ -134,3 +134,9 @@ div.role_admin {
     border-color:     crimson;
     background-color: crimson;
 }
+
+div.role_root {
+    color:            white;
+    border-color:     black;
+    background-color: black;
+}

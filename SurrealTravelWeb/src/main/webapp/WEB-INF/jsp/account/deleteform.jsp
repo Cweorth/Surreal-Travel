@@ -2,6 +2,7 @@
 <%@ taglib prefix="c" uri="http://java.sun.com/jsp/jstl/core" %>
 <%@ taglib prefix="f" uri="http://java.sun.com/jsp/jstl/fmt" %>
 <%@ taglib prefix="form" uri="http://www.springframework.org/tags/form" %>
+<%@ taglib prefix="sec" uri="http://www.springframework.org/security/tags" %>
 
 <table border="0" cellpadding="0" cellspacing="0" class="tableForm">
     <tr>
@@ -11,7 +12,17 @@
         </td>
     </tr>
     <tr>
-        <td class="left">* <f:message key="account.password.old"/>:</td>
+        <sec:authorize var="isAdmin" access="hasRole('ROLE_ADMIN')"/>
+        <td class="left">* 
+            <c:choose>
+                <c:when test="${isAdmin}">
+                    <f:message key="account.password.admin"/>
+                </c:when>
+                <c:otherwise>
+                    <f:message key="account.password.old"/>
+                </c:otherwise>
+            </c:choose>:
+        </td>
         <td>
             <form:password path="account.plainPassword" cssClass="text"/>
             <form:errors path="account.plainPassword"   cssClass="formError"/>

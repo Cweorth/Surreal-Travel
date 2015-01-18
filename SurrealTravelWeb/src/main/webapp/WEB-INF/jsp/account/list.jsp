@@ -4,6 +4,7 @@
 <%@ taglib prefix="f" uri="http://java.sun.com/jsp/jstl/fmt" %>
 <%@ taglib prefix="s" uri="http://www.springframework.org/tags" %>
 <%@ taglib prefix="form" uri="http://www.springframework.org/tags/form" %>
+<%@ taglib prefix="sec" uri="http://www.springframework.org/security/tags" %>
 
 <f:message var="title" key="account.title" />
 
@@ -23,6 +24,8 @@
             <td><f:message key="customer.address"/></td>
             <td width="200" align="right"><f:message key="basic.action"/></td>
         </tr>
+        <sec:authorize var="isAdmin" access="hasRole('ROLE_ADMIN')"/>
+        <sec:authorize var="isRoot"  access="hasRole('ROLE_ROOT')" />
         <c:choose>
             <c:when test="${not empty accounts}">
                 <c:forEach items="${accounts}" var="account" varStatus="count">
@@ -48,15 +51,19 @@
                             </c:otherwise>
                         </c:choose>
                         <td>
-                            <ul class="rowMenu">
-                                <jsp:include page="/WEB-INF/include/entryEditButton.jsp">
-                                    <jsp:param name="url" value="${pageContext.request.contextPath}/accounts/edit/${account.id}" />
-                                </jsp:include>
-                                <jsp:include page="/WEB-INF/include/entryDeleteButton.jsp">
-                                    <jsp:param name="id" value="${customer.id}" />
-                                    <jsp:param name="url" value="${pageContext.request.contextPath}/accounts/delete/${account.id}" />
-                                </jsp:include>
-                            </ul>
+                            <c:if test="${isRoot || (account.username ne 'root')}">
+                                <ul class="rowMenu">
+                                    <jsp:include page="/WEB-INF/include/entryEditButton.jsp">
+                                        <jsp:param name="url" value="${pageContext.request.contextPath}/accounts/edit/${account.id}" />
+                                    </jsp:include>
+                                    <c:if test="${account.username ne 'root'}">
+                                        <jsp:include page="/WEB-INF/include/entryDeleteButton.jsp">
+                                            <jsp:param name="id"  value="${account.id}" />
+                                            <jsp:param name="url" value="${pageContext.request.contextPath}/accounts/delete/${account.id}" />
+                                        </jsp:include>
+                                    </c:if>
+                                </ul>
+                            </c:if>
                         </td>
                     </tr>
                 </c:forEach>

@@ -8,10 +8,12 @@ import cz.muni.pa165.surrealtravel.dto.AccountDTO;
  */
 public class AccountWrapper {
     
-    private AccountDTO account;
-    private String     passwd1;
-    private String     passwd2;
-    private boolean    customer;
+    private AccountDTO account;   // the account
+    private String     passwd1;   // password field 1 (new password)
+    private String     passwd2;   // password field 2 (retype)
+    private boolean    customer;  // [add]  contains customer
+    private boolean    reqpasswd; // [edit] required password verification
+    private boolean    modperm;   // [edit] can change permissions
 
     public AccountWrapper() 
     { }
@@ -32,5 +34,12 @@ public class AccountWrapper {
  
     public boolean isCustomer()              { return customer;      }
     public void    setCustomer(boolean flag) { this.customer = flag; }
+
+    public boolean isReqpasswd()                  { return reqpasswd;           }
+    public void    setReqpasswd(boolean reqpasswd) { this.reqpasswd = reqpasswd; }
+
+    public boolean isModperm()                 { return modperm;         }
+    public void    setModperm(boolean modperm) { this.modperm = modperm; }
+    
     
 }

@@ -82,6 +82,10 @@
             <artifactId>log4j</artifactId>
             <version>1.2.16</version>
         </dependency>
-        
+        <dependency>
+            <groupId>${project.groupId}</groupId>
+            <artifactId>SurrealTravelAPI</artifactId>
+            <version>${project.version}</version>
+        </dependency>
     </dependencies>
 </project>

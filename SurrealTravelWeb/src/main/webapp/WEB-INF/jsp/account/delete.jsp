@@ -13,6 +13,7 @@
     <jsp:include page="/WEB-INF/include/requiredNotification.jsp" />
 
     <form:form action="${pageContext.request.contextPath}/accounts/delete" modelAttribute="deleteWrapper">
+        <form:hidden path="reqpasswd"/>
         <form:hidden path="account.id" />
         <form:hidden path="account.password"/>
         <form:hidden path="account.customer.id"/>

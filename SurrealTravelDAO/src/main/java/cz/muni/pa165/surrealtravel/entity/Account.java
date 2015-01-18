@@ -1,5 +1,6 @@
 package cz.muni.pa165.surrealtravel.entity;
 
+import cz.muni.pa165.surrealtravel.dto.UserRole;
 import java.io.Serializable;
 import java.util.Objects;
 import java.util.Set;

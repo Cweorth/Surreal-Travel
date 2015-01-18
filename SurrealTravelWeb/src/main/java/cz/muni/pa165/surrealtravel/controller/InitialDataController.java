@@ -49,12 +49,22 @@ public class InitialDataController {
     @Autowired
     private ReservationService reservationService;
     
-    private static final Logger logger = LoggerFactory.getLogger(InitialDataController.class);
+    private static final Logger                logger  = LoggerFactory.getLogger(InitialDataController.class);
+    private static final BCryptPasswordEncoder encoder = new BCryptPasswordEncoder(12);
     
     private Date mkdate(int day, int month, int year) {
         Calendar calendar = new GregorianCalendar();
         calendar.set(year, month, day, 0, 0, 0);
         return calendar.getTime();
+    }    
+    
+    private CustomerDTO mkcustomer(String name, String address) {
+        CustomerDTO customer = new CustomerDTO();
+        customer.setName(name);
+        customer.setAddress(address);
+        
+        logger.info("[init-mk] created " + customer.toString());
+        return customer;
     }    
     
     private ExcursionDTO mkexcursion(Date date, int duration, String description, String destination, BigDecimal price) {
@@ -65,7 +75,7 @@ public class InitialDataController {
         excursion.setDestination(destination);
         excursion.setPrice(price);
         
-        logger.info(String.format("[mk] Created %s", excursion.toString()));
+        logger.info("[init-mk] created " + excursion.toString());
         return excursion;
     }
     
@@ -77,14 +87,37 @@ public class InitialDataController {
         trip.setCapacity(capacity);
         trip.setBasePrice(price);
         
-        logger.info(String.format("[mk] Created %s", trip.toString()));
+        logger.info("[init-mk] created " + trip.toString());
         return trip;
-    }        
+    }
+
+    private ReservationDTO mkreservation(CustomerDTO customer, TripDTO trip, List<ExcursionDTO> excursions) {
+        ReservationDTO reservation = new ReservationDTO();
+        reservation.setCustomer(customer);
+        reservation.setTrip(trip);
+        
+        if (excursions != null) {
+            reservation.setExcursions(excursions);
+        }
+        
+        logger.info("[init-mk] created " + reservation.toString());
+        return reservation;
+    }
+    
+    private AccountDTO mkaccount(String username, String password, UserRole role, CustomerDTO customer) {
+        AccountDTO account = new AccountDTO();
+        account.setUsername(username);
+        account.setPlainPassword(password);
+        account.setPassword(encoder.encode(password));
+        account.setRoles(EnumSet.of(role));
+        account.setCustomer(customer);
+        
+        logger.info("[init-mk] created " + account.toString());
+        return account;
+    }
     
     @PostConstruct
     public void init() {
-        BCryptPasswordEncoder encoder = new BCryptPasswordEncoder(12);
-        
         // Because we are using secured service methods, we need to do authentication.
         // User "root" is created by hibernate on DAO layer (see import.sql).
         UsernamePasswordAuthenticationToken authRequest = new UsernamePasswordAuthenticationToken("root", "root");
@@ -197,8 +230,27 @@ public class InitialDataController {
         r1.setCustomer(c1);
         reservationService.addReservation(r1);
         
+        CustomerDTO customer1 = mkcustomer("Customer attached to USER",  null);
+        CustomerDTO customer2 = mkcustomer("Customer attached to STAFF", null);
+        CustomerDTO customer3 = mkcustomer("Customer attached to ADMIN", null);
+        
+        customerService.addCustomer(customer1);
+        customerService.addCustomer(customer2);
+        customerService.addCustomer(customer3);
+        
+        List<AccountDTO> testaccounts = Arrays.asList(
+            mkaccount("user",   "user",   UserRole.ROLE_USER,  null),
+            mkaccount("userc",  "userc",  UserRole.ROLE_USER,  customer1),
+            mkaccount("staff",  "staff",  UserRole.ROLE_STAFF, null),
+            mkaccount("staffc", "staffc", UserRole.ROLE_STAFF, customer2),
+            mkaccount("admin",  "admin",  UserRole.ROLE_ADMIN, null),
+            mkaccount("adminc", "adminc", UserRole.ROLE_ADMIN, customer3)
+        );
+        
+        for(AccountDTO pewpew : testaccounts) {
+            accountService.addAccount(pewpew);
+        }
+        
         SecurityContextHolder.getContext().getAuthentication().setAuthenticated(false);
-
     }
-    
 }

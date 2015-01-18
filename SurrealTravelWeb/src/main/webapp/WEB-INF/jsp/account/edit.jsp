@@ -15,7 +15,8 @@
     <form:form action="${pageContext.request.contextPath}/accounts/edit" modelAttribute="editWrapper">
         <form:hidden path="account.id" />
         <form:hidden path="account.password"/>
-        <form:hidden path="account.roles"/>
+        <form:hidden path="reqpasswd"/>
+        <form:hidden path="modperm"/>
         <jsp:include page="editform.jsp" />
     </form:form>
     

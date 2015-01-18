@@ -43,7 +43,9 @@
 <div class="navigation">
     <ul>
         <li><a href="${pageContext.request.contextPath}/"><f:message key="index.title" /></a></li>
-        <li><a href="${pageContext.request.contextPath}/accounts"><f:message key="account.title"/></a></li>
+        <sec:authorize access="hasRole('ROLE_ADMIN')">
+            <li><a href="${pageContext.request.contextPath}/accounts"><f:message key="account.title"/></a></li>
+        </sec:authorize>
         <li><a href="${pageContext.request.contextPath}/trips"><f:message key="trip.title" /></a></li>
         <li><a href="${pageContext.request.contextPath}/excursions"><f:message key="excursion.title" /></a></li>
         <sec:authorize access="hasRole('ROLE_USER')">

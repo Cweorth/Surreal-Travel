@@ -1,9 +1,12 @@
 package cz.muni.pa165.surrealtravel.validator;
 
+import cz.muni.pa165.surrealtravel.service.AccountService;
 import cz.muni.pa165.surrealtravel.utils.AccountWrapper;
+import java.util.Objects;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 import org.apache.commons.lang3.StringUtils;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.validation.Errors;
 import org.springframework.validation.ValidationUtils;
 import org.springframework.validation.Validator;
@@ -14,7 +17,12 @@ import org.springframework.validation.Validator;
  */
 public class AccountNewValidator implements Validator {
 
-    private static final Pattern username = Pattern.compile("[a-z0-9]+");
+    private        final AccountService accountService;
+    private static final Pattern        username = Pattern.compile("[a-z0-9]+");
+
+    public AccountNewValidator(AccountService accountService) {
+        this.accountService = Objects.requireNonNull(accountService, "accountService");
+    }
     
     @Override
     public boolean supports(Class<?> type) {
@@ -45,6 +53,8 @@ public class AccountNewValidator implements Validator {
             Matcher matcher = username.matcher(wrapper.getAccount().getUsername());
             if (! matcher.matches()) {
                 errors.rejectValue("account.username", "account.validator.username.format");
+            } else if (accountService.getAccountByUsername(wrapper.getAccount().getUsername()) != null) {
+                errors.rejectValue("username", "account.validator.username.used");
             }
         }
     }
