@@ -349,6 +349,12 @@ public class AccountController {
             return "redirect:" + uriBuilder.path(iAmAdmin() ? "/accounts" : "/").queryParam("notification", resultStatus).build(); 
         }
         
+        // fool the authentication by setting admin's password to this account
+        if (!isSelf(account)) {
+            AccountDTO myself = accountService.getAccountByUsername(AuthCommons.getUsername());
+            account.setPassword(myself.getPassword());
+        }
+        
         AccountWrapper wrapper = new AccountWrapper(account);
         wrapper.setReqpasswd(true);
         model.addAttribute("deleteWrapper", wrapper);
