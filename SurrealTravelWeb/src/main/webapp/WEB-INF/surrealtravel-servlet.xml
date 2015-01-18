@@ -30,7 +30,7 @@
             <bean class="cz.muni.pa165.surrealtravel.utils.SasAllowOriginInterceptor" />
         </mvc:interceptor>
         <mvc:interceptor>
-            <mvc:mapping path="/*"/>
+            <mvc:mapping path="/**"/>
             <bean class="cz.muni.pa165.surrealtravel.utils.AuthInterceptor" />
         </mvc:interceptor>
     </mvc:interceptors>
