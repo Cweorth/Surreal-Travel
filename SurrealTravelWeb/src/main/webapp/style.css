@@ -33,6 +33,9 @@ ul.rowMenu li a {margin: 0; padding: 0; color: #000000; text-decoration: none;}
 ul.rowMenu li span {float: left;}
 ul.rowMenu li span.text {padding-top: 1px; line-height: 1.5; font-weight: bold; font-size: 11px; cursor: default;}
 ul.rowMenu li a span.text {cursor: pointer;}
+ul.rowMenu li.inactive {background: #cccccc; border: 1px solid #cccccc; cursor: default;}
+ul.rowMenu li.inactive:hover {box-shadow: none; -webkit-box-shadow: none; -moz-box-shadow: none;}
+ul.rowMenu li.inactive span {color: #888888}
 
 form {padding: 5px; margin: 0; width: auto;}
 form fieldset {border: 1px solid #555555; padding: 10px; margin: 0;}

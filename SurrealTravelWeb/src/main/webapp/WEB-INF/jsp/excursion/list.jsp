@@ -43,12 +43,19 @@
                                     <jsp:include page="/WEB-INF/include/entryEditButton.jsp">
                                         <jsp:param name="url" value="${pageContext.request.contextPath}/excursions/edit/${excursion.id}" />
                                     </jsp:include>
-                                    <c:if test="${excursionsOccurence.get(count.index) == 0}">
-                                        <jsp:include page="/WEB-INF/include/entryDeleteButton.jsp">
-                                            <jsp:param name="id" value="${excursion.id}" />
-                                            <jsp:param name="url" value="${pageContext.request.contextPath}/excursions/delete/${excursion.id}" />
-                                        </jsp:include>
-                                    </c:if>
+                                    <c:choose>
+                                        <c:when test="${excursionsOccurence.get(count.index) == 0}">
+                                            <jsp:include page="/WEB-INF/include/entryDeleteButton.jsp">
+                                                <jsp:param name="id" value="${excursion.id}" />
+                                                <jsp:param name="url" value="${pageContext.request.contextPath}/excursions/delete/${excursion.id}" />
+                                            </jsp:include>
+                                        </c:when>
+                                        <c:otherwise>
+                                            <jsp:include page="/WEB-INF/include/entryDeleteButton.jsp">
+                                                <jsp:param name="inactive" value="true" />
+                                            </jsp:include>
+                                        </c:otherwise>
+                                    </c:choose>
                                 </ul>
                             </sec:authorize>
                         </td>
