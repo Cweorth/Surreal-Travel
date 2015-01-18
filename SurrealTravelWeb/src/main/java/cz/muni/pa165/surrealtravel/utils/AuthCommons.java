@@ -14,6 +14,15 @@ import org.springframework.web.util.UriComponentsBuilder;
 public class AuthCommons {
     
     /**
+     * Check if authentication exists.
+     * @return 
+     */
+    public static boolean isAuthenticated() {
+        Authentication auth = SecurityContextHolder.getContext().getAuthentication();
+        return auth == null ? false : auth.isAuthenticated();
+    }
+    
+    /**
      * Check if user has specified role.
      * @param role
      * @return 

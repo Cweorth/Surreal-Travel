@@ -93,7 +93,7 @@ public class ReservationController {
                 }
                 return null;
             }
-          });
+        });
     }
     
     /**
@@ -114,20 +114,23 @@ public class ReservationController {
     /**
      * Get all reservations. User must be logged in, different funtionality for (USER vs STAFF,ADMIN).
      * @param model
+     * @param uriBuilder
      * @return redirect
      */
     @Secured("ROLE_USER")
     @RequestMapping(method = RequestMethod.GET)
-    public String listReservations(ModelMap model) {
-        List<ReservationDTO> reservations;
-
+    public String listReservations(ModelMap model, UriComponentsBuilder uriBuilder) {
         // If authenticated user is staff or higher, show all reservations. If
         // not, show only reservations for the authenticated user.
+        List<ReservationDTO> reservations;
         if(AuthCommons.hasRole(UserRole.ROLE_STAFF)) {
             reservations = reservationService.getAllReservations();
         } else {
             AccountDTO account = accountService.getAccountByUsername(AuthCommons.getUsername());
-            reservations = reservationService.getAllReservationsByCustomer(account.getCustomer());
+            if(account.getCustomer() != null)
+                reservations = reservationService.getAllReservationsByCustomer(account.getCustomer());
+            else
+                return AuthCommons.forceDenied(uriBuilder);
         }
         
         model.addAttribute("reservations", reservations);
@@ -137,21 +140,25 @@ public class ReservationController {
     /**
      * Display a form for creating a new reservation.
      * @param model
+     * @param uriBuilder
      * @return redirect
      */
     @Secured("ROLE_USER")
     @RequestMapping(value = "/new", method = RequestMethod.GET)
-    public String newReservationForm(ModelMap model) {
+    public String newReservationForm(ModelMap model, UriComponentsBuilder uriBuilder) {
         List<TripDTO> allTrips = tripService.getAllTrips();
         
         // ROLE_USERs can create reservation only for themselves, others can
-        // create reservations for any Customers
+        // create reservations for any Customers.
         ReservationDTO reservation = new ReservationDTO();
         if(AuthCommons.hasRole(UserRole.ROLE_STAFF)) {
             model.addAttribute("customers", customerService.getAllCustomers());
         } else {
             AccountDTO account = accountService.getAccountByUsername(AuthCommons.getUsername());
-            reservation.setCustomer(account.getCustomer());
+            if(account.getCustomer() != null)
+                reservation.setCustomer(account.getCustomer());
+            else
+                return AuthCommons.forceDenied(uriBuilder);
         }
         model.addAttribute("reservationDTO", reservation);
         
@@ -268,6 +275,14 @@ public class ReservationController {
         
         try {
             ReservationDTO reservation = reservationService.getReservationById(id);
+            
+            // If ROLE_USER is trying to delete reservation of someone other than himself, deny it.
+            if(!AuthCommons.hasRole(UserRole.ROLE_STAFF)) {
+                AccountDTO account = accountService.getAccountByUsername(AuthCommons.getUsername());
+                if(account.getCustomer() == null || account.getCustomer().getId() != reservation.getCustomer().getId())
+                    return AuthCommons.forceDenied(uriBuilder, redirectAttributes, messageSource.getMessage("reservation.message.delete.403", null, locale));
+            }
+            
             name = reservation.getCustomer().getName();
             reservationService.deleteReservationById(id);
         } catch(Exception e) {

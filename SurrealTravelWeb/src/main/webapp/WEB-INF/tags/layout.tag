@@ -16,7 +16,7 @@
 <head>
     <title><c:out value="${title}"/></title>
     <meta charset="utf-8" />
-    <meta name="keywords" content="travel agency, cestovní agentura, holiday, vacation, dovolená, last minute, krásy Afganistánu" />
+    <meta name="keywords" content="travel agency, cestovnÃ­ agentura, holiday, vacation, dovolenÃ¡, last minute, krÃ¡sy AfganistÃ¡nu" />
     <meta name="description" content="<f:message key="basic.description" />" />
     <link rel="stylesheet" type="text/css" href="${pageContext.request.contextPath}/style.css"/>
     <link rel="stylesheet" href="//ajax.googleapis.com/ajax/libs/jqueryui/1.11.2/themes/smoothness/jquery-ui.css" />
@@ -49,8 +49,8 @@
         <li><a href="${pageContext.request.contextPath}/trips"><f:message key="trip.title" /></a></li>
         <li><a href="${pageContext.request.contextPath}/excursions"><f:message key="excursion.title" /></a></li>
         <sec:authorize access="hasRole('ROLE_USER')">
-            <li><a href="${pageContext.request.contextPath}/reservations"><f:message key="reservation.title" /></a></li>
-            <li><a href="${pageContext.request.contextPath}/customers"><f:message key="customer.title" /></a></li>
+            <c:if test="${not roleUserNoCustomer}"><li><a href="${pageContext.request.contextPath}/reservations"><f:message key="reservation.title" /></a></li></c:if>
+            <c:if test="${not roleUserNoCustomer && not roleStaffNoCustomer}"><li><a href="${pageContext.request.contextPath}/customers"><f:message key="customer.title" /></a></li></c:if>
         </sec:authorize>
         <li><a href="${pageContext.request.contextPath}/about"><f:message key="about.title" /></a></li>
     </ul>

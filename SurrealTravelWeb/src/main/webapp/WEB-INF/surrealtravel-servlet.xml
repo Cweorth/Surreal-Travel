@@ -29,6 +29,10 @@
             <mvc:mapping path="/rest/*"/>
             <bean class="cz.muni.pa165.surrealtravel.utils.SasAllowOriginInterceptor" />
         </mvc:interceptor>
+        <mvc:interceptor>
+            <mvc:mapping path="/*"/>
+            <bean class="cz.muni.pa165.surrealtravel.utils.AuthInterceptor" />
+        </mvc:interceptor>
     </mvc:interceptors>
     
     <tx:annotation-driven/>

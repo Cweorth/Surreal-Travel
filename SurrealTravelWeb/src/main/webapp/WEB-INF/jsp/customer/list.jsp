@@ -37,12 +37,19 @@
                                     <jsp:param name="url" value="${pageContext.request.contextPath}/customers/edit/${customer.id}" />
                                 </jsp:include>
                                 <sec:authorize access="hasRole('ROLE_ADMIN')">
-                                    <c:if test="${customersOccurence.get(count.index) == 0}">
-                                        <jsp:include page="/WEB-INF/include/entryDeleteButton.jsp">
-                                            <jsp:param name="id" value="${customer.id}" />
-                                            <jsp:param name="url" value="${pageContext.request.contextPath}/customers/delete/${customer.id}" />
-                                        </jsp:include>
-                                    </c:if>
+                                    <c:choose>
+                                        <c:when test="${customersOccurence.get(count.index) == 0}">
+                                            <jsp:include page="/WEB-INF/include/entryDeleteButton.jsp">
+                                                <jsp:param name="id" value="${customer.id}" />
+                                                <jsp:param name="url" value="${pageContext.request.contextPath}/customers/delete/${customer.id}" />
+                                            </jsp:include>
+                                        </c:when>
+                                        <c:otherwise>
+                                            <jsp:include page="/WEB-INF/include/entryDeleteButton.jsp">
+                                                <jsp:param name="inactive" value="true" />
+                                            </jsp:include>
+                                        </c:otherwise>
+                                    </c:choose>
                                 </sec:authorize>
                             </ul>
                         </td>

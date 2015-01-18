@@ -32,7 +32,7 @@
 </table>
         
 <sec:authorize access="not hasRole('ROLE_STAFF')">
-    <form:hidden path="customer.id"/>
+    <input type="hidden" id="customer" name="customer" value="${reservationDTO.customer.id}" />
 </sec:authorize>
 
 <br>
