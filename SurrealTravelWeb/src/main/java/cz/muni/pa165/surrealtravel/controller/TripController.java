@@ -1,27 +1,31 @@
 package cz.muni.pa165.surrealtravel.controller;
 
 import cz.muni.pa165.surrealtravel.dto.ExcursionDTO;
+import cz.muni.pa165.surrealtravel.dto.ReservationDTO;
 import cz.muni.pa165.surrealtravel.dto.TripDTO;
+import cz.muni.pa165.surrealtravel.dto.UserRole;
 import cz.muni.pa165.surrealtravel.service.ExcursionService;
+import cz.muni.pa165.surrealtravel.service.ReservationService;
 import cz.muni.pa165.surrealtravel.service.TripService;
+import cz.muni.pa165.surrealtravel.utils.AuthCommons;
 import cz.muni.pa165.surrealtravel.utils.TripModelData;
 import cz.muni.pa165.surrealtravel.validator.TripValidator;
-import java.math.BigDecimal;
 import java.text.SimpleDateFormat;
-import java.util.Arrays;
+import java.util.ArrayList;
 import java.util.Calendar;
 import java.util.Date;
-import java.util.GregorianCalendar;
 import java.util.HashMap;
+import java.util.HashSet;
 import java.util.List;
 import java.util.Locale;
 import java.util.Map;
-import javax.annotation.PostConstruct;
+import java.util.Set;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.propertyeditors.CustomDateEditor;
 import org.springframework.context.MessageSource;
+import org.springframework.security.access.annotation.Secured;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.ModelMap;
 import org.springframework.validation.BindingResult;
@@ -54,6 +58,9 @@ public class TripController {
     private ExcursionService excursionService;
     
     @Autowired
+    private ReservationService reservationService;
+    
+    @Autowired
     private MessageSource messageSource;
     
     @InitBinder
@@ -71,7 +78,23 @@ public class TripController {
      */
     @RequestMapping(method = RequestMethod.GET)
     public String listTrips(ModelMap model) {
-        model.addAttribute("trips", tripService.getAllTrips());
+        List<TripDTO> allTrips = tripService.getAllTrips();
+        List<TripDTO> reserved = new ArrayList<>();
+        model.addAttribute("trips", allTrips);
+        
+        // STAFF can delete accounts, so let's list reserved trips also
+        if (AuthCommons.hasRole(UserRole.ROLE_STAFF)) {
+            Set<TripDTO>         reservedSet  = new HashSet<>();
+            List<ReservationDTO> reservations = reservationService.getAllReservations();
+            
+            for (ReservationDTO reservation : reservations) {
+                reservedSet.add(reservation.getTrip());
+            }
+            
+            reserved.addAll(reservedSet);
+        }
+        
+        model.addAttribute("reserved", reserved);
         return "trip/list";
     }
     
@@ -80,6 +103,7 @@ public class TripController {
      * @param model
      * @return redirect
      */
+    @Secured("ROLE_STAFF")
     @RequestMapping(value = "/new", method = RequestMethod.GET)
     public String newTripForm(ModelMap model) {
         model.addAttribute("tripdata", new TripModelData(new TripDTO(), excursionService.getAllExcursions()));
@@ -95,6 +119,7 @@ public class TripController {
      * @param locale
      * @return redirect
      */
+    @Secured("ROLE_STAFF")
     @RequestMapping(value = "/new", method = RequestMethod.POST)
     public String newTrip(@Validated @ModelAttribute("tripdata") TripModelData data, 
             BindingResult bindingResult, 
@@ -133,6 +158,7 @@ public class TripController {
      * @param uriBuilder
      * @return redirect
      */
+    @Secured("ROLE_STAFF")
     @RequestMapping(value = "/edit/{id}", method = RequestMethod.GET)
     public String editTripForm(@PathVariable long id, ModelMap model, RedirectAttributes redirectAttributes, Locale locale, UriComponentsBuilder uriBuilder) {
         TripDTO trip = null;
@@ -165,6 +191,7 @@ public class TripController {
      * @param locale
      * @return redirect
      */
+    @Secured("ROLE_STAFF")
     @RequestMapping(value = "/edit", method = RequestMethod.POST)
     public String editTrip(@Validated @ModelAttribute("tripdata") TripModelData data, BindingResult bindingResult, RedirectAttributes redirectAttributes, UriComponentsBuilder uriBuilder, Locale locale) {
         
@@ -198,6 +225,7 @@ public class TripController {
      * @param locale
      * @return redirect
      */
+    @Secured("ROLE_STAFF")
     @RequestMapping(value = "/delete/{id}", method = RequestMethod.GET)
     public String deleteTrip(@PathVariable long id, RedirectAttributes redirectAttributes, UriComponentsBuilder uriBuilder, Locale locale) {
         String destination  = null;

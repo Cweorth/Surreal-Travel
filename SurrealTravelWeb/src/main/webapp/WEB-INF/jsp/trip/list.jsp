@@ -10,13 +10,23 @@
 <%@ taglib prefix="f" uri="http://java.sun.com/jsp/jstl/fmt" %>
 <%@ taglib prefix="s" uri="http://www.springframework.org/tags" %>
 <%@ taglib prefix="form" uri="http://www.springframework.org/tags/form" %>
+<%@ taglib prefix="sec" uri="http://www.springframework.org/security/tags" %>
 
 <f:message var="title" key="trip.title"/>
 
 <t:layout title="${title}">
     <jsp:attribute name="content">
-        <button class="new" onclick="javascript:redirect('${pageContext.request.contextPath}/trips/new');"><f:message key="trip.add"/></button>
-        <br><br>
+        <sec:authorize access="hasRole('ROLE_STAFF')">
+            <button class="new" onclick="javascript:redirect('${pageContext.request.contextPath}/trips/new');"><f:message key="trip.add"/></button>
+            <c:if test="${not empty reserved}">
+                <br/><br/>
+                <jsp:include page="/WEB-INF/include/note.jsp">
+                    <jsp:param name="key" value="trip.message.undeletable"/>
+                </jsp:include>
+            </c:if>
+            <br/>
+        </sec:authorize>
+
         <table cellspacing="0" cellpadding="3" border="0" class="tableEntry">
             <tr class="head">
                 <td width="25">#</td>
@@ -53,34 +63,42 @@
                                 </c:choose>
                             </td>
                             <td>
-                                <ul class="rowMenu">
-                                    <jsp:include page="/WEB-INF/include/entryEditButton.jsp">
-                                        <jsp:param name="url" value="${pageContext.request.contextPath}/trips/edit/${trip.id}" />
-                                    </jsp:include>
-                                    <jsp:include page="/WEB-INF/include/entryDeleteButton.jsp">
-                                        <jsp:param name="id"  value="${trip.id}" />
-                                        <jsp:param name="url" value="${pageContext.request.contextPath}/trips/delete/${trip.id}" />
-                                    </jsp:include>
-                                </ul>
+                                <sec:authorize access="hasRole('ROLE_STAFF')">
+                                    <ul class="rowMenu">
+                                        <jsp:include page="/WEB-INF/include/entryEditButton.jsp">
+                                            <jsp:param name="url" value="${pageContext.request.contextPath}/trips/edit/${trip.id}" />
+                                        </jsp:include>
+                                        <c:choose>
+                                            <c:when test="${(not empty reserved) && reserved.contains(trip)}">
+                                                <jsp:include page="/WEB-INF/include/entryDeleteButton.jsp">
+                                                    <jsp:param name="id"  value="${trip.id}" />
+                                                    <jsp:param name="url" value="${pageContext.request.contextPath}/trips/delete/${trip.id}" />
+                                                </jsp:include>
+                                            </c:when>
+                                            <c:otherwise>
+                                                <jsp:include page="/WEB-INF/include/entryDeleteButton.jsp">
+                                                    <jsp:param name="inactive" value="true" />
+                                                </jsp:include>
+                                            </c:otherwise>
+                                        </c:choose>
+                                    </ul>
+                                </sec:authorize>
                             </td>
                         </tr>
-                        <c:choose>
-                            <c:when test="${trip.excursions.isEmpty()}"/>
-                            <c:otherwise>
-                                <c:forEach items="${trip.excursions}" var="excursion">
-                                    <tr class="hidden">
-                                        <td/>
-                                        <td><c:out value="${excursion.destination}"/></td>
-                                        <td colspan="2"><f:formatDate value="${excursion.excursionDate}" type="date"/></td>
-                                        <td/>
-                                        <td><c:out value="${excursion.price}"/></td>
-                                        <td/>
-                                        <td><c:out value="${excursion.description}"/></td>
-                                        <td/>
-                                    </tr> 
-                                </c:forEach>
-                            </c:otherwise>
-                        </c:choose>
+                        <c:if test="${not trip.excursions.isEmpty()}">
+                            <c:forEach items="${trip.excursions}" var="excursion">
+                                <tr class="hidden">
+                                    <td/>
+                                    <td><c:out value="${excursion.destination}"/></td>
+                                    <td colspan="2"><f:formatDate value="${excursion.excursionDate}" type="date"/></td>
+                                    <td/>
+                                    <td><c:out value="${excursion.price}"/></td>
+                                    <td/>
+                                    <td><c:out value="${excursion.description}"/></td>
+                                    <td/>
+                                </tr> 
+                            </c:forEach>
+                        </c:if>
                     </c:forEach>
                 </c:when>
                 <c:otherwise>
@@ -89,8 +107,6 @@
                     </tr>
                 </c:otherwise>
             </c:choose>
-
-
-        </table>            
+        </table>
     </jsp:attribute>
 </t:layout>
