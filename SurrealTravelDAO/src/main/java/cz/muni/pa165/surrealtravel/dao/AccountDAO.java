@@ -1,6 +1,7 @@
 package cz.muni.pa165.surrealtravel.dao;
 
 import cz.muni.pa165.surrealtravel.entity.Account;
+import cz.muni.pa165.surrealtravel.entity.Customer;
 import java.util.List;
 
 /**
@@ -28,6 +29,13 @@ public interface AccountDAO {
      * @return the account (username is unique, only one result at most), null when not found
      */
     public Account getAccountByUsername(String username);
+    
+    /**
+     * Get the account with the given Customer attached. There may be more Accounts with the same customer.
+     * @param customer
+     * @return customer collection
+     */
+    public List<Account> getAccountByCustomer(Customer customer);
 
     /**
      * Get all accounts.

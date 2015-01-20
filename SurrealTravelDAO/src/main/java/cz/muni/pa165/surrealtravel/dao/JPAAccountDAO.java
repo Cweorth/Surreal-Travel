@@ -1,6 +1,7 @@
 package cz.muni.pa165.surrealtravel.dao;
 
 import cz.muni.pa165.surrealtravel.entity.Account;
+import cz.muni.pa165.surrealtravel.entity.Customer;
 import java.util.List;
 import java.util.Objects;
 import javax.persistence.EntityManager;
@@ -49,6 +50,13 @@ public class JPAAccountDAO implements AccountDAO {
             // well, we prefer null to exception, when no result is found
             retrieved = null;
         }
+        return retrieved;
+    }
+    
+    @Override
+    public List<Account> getAccountByCustomer(Customer customer) {
+        Objects.requireNonNull(customer, "Customer object is null.");
+        List<Account> retrieved = em.createQuery("SELECT a FROM Account a WHERE a.customer = :cid", Account.class).setParameter("cid", customer).getResultList();
         return retrieved;
     }
 

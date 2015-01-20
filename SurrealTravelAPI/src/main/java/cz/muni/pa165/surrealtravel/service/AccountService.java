@@ -1,6 +1,7 @@
 package cz.muni.pa165.surrealtravel.service;
 
 import cz.muni.pa165.surrealtravel.dto.AccountDTO;
+import cz.muni.pa165.surrealtravel.dto.CustomerDTO;
 import java.util.List;
 
 /**
@@ -28,6 +29,13 @@ public interface AccountService {
      * @return the account (username is unique, only one result at most)
      */
     public AccountDTO getAccountByUsername(String username);
+    
+    /**
+     * Get the account with the given Customer attached. There may be more Accounts with the same customer.
+     * @param customer
+     * @return customer collection
+     */
+    public List<AccountDTO> getAccountByCustomer(CustomerDTO customer);
 
     /**
      * Get all accounts.

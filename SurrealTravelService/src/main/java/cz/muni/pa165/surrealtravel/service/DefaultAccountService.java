@@ -6,6 +6,7 @@ import cz.muni.pa165.surrealtravel.dto.CustomerDTO;
 import cz.muni.pa165.surrealtravel.dto.ReservationDTO;
 import cz.muni.pa165.surrealtravel.dto.UserRole;
 import cz.muni.pa165.surrealtravel.entity.Account;
+import cz.muni.pa165.surrealtravel.entity.Customer;
 import java.util.ArrayList;
 import java.util.Iterator;
 import java.util.List;
@@ -66,6 +67,16 @@ public class DefaultAccountService implements AccountService {
     public AccountDTO getAccountByUsername(String username) {
         Account account = accountDao.getAccountByUsername(username);
         return account == null ? null : mapper.map(account, AccountDTO.class);
+    }
+    
+    @Override
+    @Transactional(readOnly = true)
+    public List<AccountDTO> getAccountByCustomer(CustomerDTO customer) {
+        Objects.requireNonNull(customer, "Customer data transfer object is null.");
+        List<AccountDTO> accounts = new ArrayList<>();
+        for(Account a : accountDao.getAccountByCustomer(mapper.map(customer, Customer.class)))
+            accounts.add(mapper.map(a, AccountDTO.class));
+        return accounts;
     }
 
     @Override
