@@ -13,8 +13,14 @@
 
     <sec:authorize access="hasRole('ROLE_STAFF')">
     <button class="new" onclick="javascript:redirect('${pageContext.request.contextPath}/excursions/new');"><f:message key="excursion.add"/></button>
-
-    <br><br>
+    <br/>
+    <c:if test="${excursionsOccurence.contains(excursionsOccurenceCheck)}">
+        <br/>
+        <jsp:include page="/WEB-INF/include/note.jsp">
+            <jsp:param name="key" value="excursion.message.undeletable"/>
+        </jsp:include>
+    </c:if>
+    <br/>
     </sec:authorize>
     
     <table cellspacing="0" cellpadding="3" border="0" class="tableEntry">

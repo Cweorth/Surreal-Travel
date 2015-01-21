@@ -79,10 +79,11 @@ public class CustomerController {
         // to delete them in GUI).
         List<Integer> customersOccurence = new ArrayList<>(customers.size());
         for(CustomerDTO c : customers)
-            customersOccurence.add(reservationService.getAllReservationsByCustomer(c).size() + accountService.getAccountByCustomer(c).size());
+            customersOccurence.add((reservationService.getAllReservationsByCustomer(c).isEmpty() && accountService.getAccountByCustomer(c).isEmpty()) ? 0 : 1);
              
         model.addAttribute("customers", customers);
         model.addAttribute("customersOccurence", customersOccurence);
+        model.addAttribute("customersOccurenceCheck", 1);
         return "customer/list";
     }
     

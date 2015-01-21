@@ -13,8 +13,14 @@
 
     <sec:authorize access="hasRole('ROLE_ADMIN')">
     <button class="new" onclick="javascript:redirect('${pageContext.request.contextPath}/customers/new');"><f:message key="customer.add"/></button>
-    
-    <br><br>
+    <br/>
+    <c:if test="${customersOccurence.contains(customersOccurenceCheck)}">
+        <br/>
+        <jsp:include page="/WEB-INF/include/note.jsp">
+            <jsp:param name="key" value="customer.message.undeletable"/>
+        </jsp:include>
+    </c:if>
+    <br/>
     </sec:authorize>
     
     <table cellspacing="0" cellpadding="3" border="0" class="tableEntry">

@@ -70,10 +70,11 @@ public class ExcursionController {
         // to delete them in GUI).
         List<Integer> excursionsOccurence = new ArrayList<>(excursions.size());
         for(ExcursionDTO e : excursions)
-            excursionsOccurence.add(tripService.getTripsWithExcursion(e).size());
+            excursionsOccurence.add(tripService.getTripsWithExcursion(e).isEmpty() ? 0 : 1);
         
         model.addAttribute("excursions", excursions);
         model.addAttribute("excursionsOccurence", excursionsOccurence);
+        model.addAttribute("excursionsOccurenceCheck", 1);
         return "excursion/list";
     }
     
