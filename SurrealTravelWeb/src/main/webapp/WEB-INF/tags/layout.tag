@@ -73,7 +73,9 @@
                 </div>
             </c:when>
             <c:otherwise>
-                <a href="${pageContext.request.contextPath}/auth/login"><f:message key="auth.signin"/></a> / <a href="${pageContext.request.contextPath}/accounts/new"><f:message key="auth.signup"/></a>
+                <div class="p">
+                    <a href="${pageContext.request.contextPath}/auth/login"><f:message key="auth.signin"/></a> / <a href="${pageContext.request.contextPath}/accounts/new"><f:message key="auth.signup"/></a>
+                </div>
             </c:otherwise>
         </c:choose>
     </div>
