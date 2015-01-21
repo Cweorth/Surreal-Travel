@@ -85,8 +85,17 @@ div.navigation {padding: 0; background: #ffffff;
 div.navigation ul {margin: 0; padding: 0; list-style: none; display: inline;}
 div.navigation ul li {float: left; margin: 0 30px 0 0;}
 div.navigation ul li a {font-size: 14px; text-decoration: none; color: #000000; padding: 15px; display: block;}
-div.navigation ul li a:hover {color: #cae2f5; background: #4e88b7}
-div.navigation .login {float: right; padding: 15px; font-size: 14px;}
+div.navigation ul li a:hover {color: #cae2f5; background: #4e88b7; transition: 0.2s; -moz-transition: 0.2s; -webkit-transition: 0.2s; -o-transition: 0.2s;}
+div.navigation .login {float: right; padding: 8px 13px 0 0; font-size: 14px; position: relative;}
+div.navigation .userLabel {font-weight: bold; float: left; padding: 7px 0;}
+div.navigation .username {float: left; padding: 7px 25px 2px 10px; cursor: pointer; background: url('image/dropdown.png') no-repeat; background-position: right 9px top 13px;}
+div.navigation .username:hover {background-color: #cccccc}
+div.navigation .username:hover ul.userMenu {display: block}
+div.navigation .login ul.userMenu {display: none; position: absolute; top: 33px; right: 13px; width: 150px; background: #cccccc}
+div.navigation .login ul.userMenu li {width: inherit; border-bottom: 1px dotted #ffffff}
+div.navigation .login ul.userMenu li:last-child {border: 0;}
+div.navigation .login ul.userMenu li a {padding: 4px; background: #cccccc;}
+div.navigation .login ul.userMenu li a:hover {color: #cae2f5; background: #4e88b7; transition: 0.2s; -moz-transition: 0.2s; -webkit-transition: 0.2s; -o-transition: 0.2s;}
 
 div.body {padding: 10px;}
 

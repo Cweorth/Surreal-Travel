@@ -29,6 +29,9 @@ public class AuthInterceptor extends HandlerInterceptorAdapter {
             AccountDTO account = accountService.getAccountByUsername(AuthCommons.getUsername());
             if(account == null) return;
             
+            modelAndView.addObject("userId", account.getId());
+            if(account.getCustomer() != null) modelAndView.addObject("customerId", account.getCustomer().getId());
+            
             if(!AuthCommons.hasRole(UserRole.ROLE_STAFF)) {
 
                 // ROLE_USER but not ROLE_STAFF 

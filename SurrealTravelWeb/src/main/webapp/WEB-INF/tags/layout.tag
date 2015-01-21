@@ -16,7 +16,7 @@
 <head>
     <title><c:out value="${title}"/></title>
     <meta charset="utf-8" />
-    <meta name="keywords" content="travel agency, cestovnÃ­ agentura, holiday, vacation, dovolenÃ¡, last minute, krÃ¡sy AfganistÃ¡nu" />
+    <meta name="keywords" content="travel agency, cestovní agentura, holiday, vacation, dovolená, last minute, krásy Afganistánu" />
     <meta name="description" content="<f:message key="basic.description" />" />
     <link rel="stylesheet" type="text/css" href="${pageContext.request.contextPath}/style.css"/>
     <link rel="stylesheet" href="//ajax.googleapis.com/ajax/libs/jqueryui/1.11.2/themes/smoothness/jquery-ui.css" />
@@ -57,10 +57,23 @@
     <div class="login">
         <c:choose>
             <c:when test="${pageContext.request.userPrincipal.name != null}">
-                <strong>${pageContext.request.userPrincipal.name}</strong> (<a href="javascript:document.getElementById('logoutForm').submit()"><f:message key="auth.logout"/></a>)
+                <div class="userLabel"><f:message key="auth.menu.authUser"/>:</div>
+                <div class="username">${pageContext.request.userPrincipal.name}
+                <ul class="userMenu">
+                    <c:if test="${customerId != null}"><li><a href="${pageContext.request.contextPath}/customers/edit/${customerId}"><f:message key="auth.menu.editCustomer"/></a></li></c:if>
+                    <c:if test="${userId != null}"><li><a href="${pageContext.request.contextPath}/accounts/edit/${userId}"><f:message key="auth.menu.editAccount"/></a></li>
+                    <li id="${userId}_self">
+                        <a href="${pageContext.request.contextPath}/accounts/delete/${userId}" class="dialogDeletePrompt noPropagation"><f:message key="auth.menu.deleteAccount"/></a>
+                        <div class="dialogDelete" id="dialogDelete_${userId}_self" title="<f:message key="basic.delete" />?">
+                            <p><f:message key="auth.menu.deleteAccount.confirmation" /></p>
+                        </div>
+                    </li></c:if>
+                    <li><a href="javascript:document.getElementById('logoutForm').submit()"><f:message key="auth.menu.logout"/></a></li>
+                </ul>
+                </div>
             </c:when>
             <c:otherwise>
-                <a href="${pageContext.request.contextPath}/auth/login"><f:message key="auth.signin"/></a> / <a href="${pageContext.request.contextPath}/register"><f:message key="auth.signup"/></a>
+                <a href="${pageContext.request.contextPath}/auth/login"><f:message key="auth.signin"/></a> / <a href="${pageContext.request.contextPath}/accounts/new"><f:message key="auth.signup"/></a>
             </c:otherwise>
         </c:choose>
     </div>
