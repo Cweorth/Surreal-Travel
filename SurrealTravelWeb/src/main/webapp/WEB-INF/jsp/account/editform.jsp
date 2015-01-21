@@ -4,6 +4,8 @@
 <%@ taglib prefix="form" uri="http://www.springframework.org/tags/form" %>
 <%@ taglib prefix="sec" uri="http://www.springframework.org/security/tags" %>
 
+<sec:authorize var="isAdmin" access="hasRole('ROLE_ADMIN')"/>
+
 <form:hidden path="customer"/>
 <table border="0" cellpadding="0" cellspacing="0" class="tableForm">
     <tr>
@@ -15,7 +17,6 @@
     
     <c:choose>
         <c:when test="${editWrapper.reqpasswd}">
-            <sec:authorize var="isAdmin" access="hasRole('ROLE_ADMIN')"/>
             <tr>
                 <td class="left">* 
                     <c:choose>
@@ -45,14 +46,14 @@
         </tr>
     </c:if>
     <tr>
-        <td class="left"><c:if test="${!editWrapper.modperm}">* </c:if><f:message key="account.password"/>:</td>
+        <td class="left"><c:if test="${!editWrapper.modperm}">* </c:if><f:message key="account.password.new"/>:</td>
         <td>
             <form:password path="passwd1" cssClass="text"/>
             <form:errors path="passwd1" cssClass="formError"/>
         </td>
     </tr>
     <tr>
-        <td class="left"><c:if test="${!editWrapper.modperm}">* </c:if><f:message key="account.retype"/>:</td>
+        <td class="left"><c:if test="${!editWrapper.modperm}">* </c:if><f:message key="account.password.retype"/>:</td>
         <td>
             <form:password path="passwd2" cssClass="text"/>
             <form:errors path="passwd2" cssClass="formError"/>
@@ -82,5 +83,12 @@
 <br/>
 
 <button type="button" class="submit" onclick="javascript:this.form.submit();"><f:message key="basic.submit" /></button>
-<button type="button" class="cancel" onclick="javascript:redirect('${pageContext.request.contextPath}/accounts');"><f:message key="basic.cancel" /></button>
+<c:choose>
+    <c:when test="${isAdmin}">
+        <button type="button" class="cancel" onclick="javascript:redirect('${pageContext.request.contextPath}/accounts');"><f:message key="basic.cancel" /></button>
+    </c:when>
+    <c:otherwise>
+        <button type="button" class="cancel" onclick="javascript:redirect('${pageContext.request.contextPath}/');"><f:message key="basic.cancel" /></button>
+    </c:otherwise>
+</c:choose>
 

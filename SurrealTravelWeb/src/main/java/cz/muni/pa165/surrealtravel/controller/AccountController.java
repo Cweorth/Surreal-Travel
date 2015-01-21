@@ -299,12 +299,19 @@ public class AccountController {
             account.setPlainPassword("----");
         }
         
+        AccountDTO newAccount = null;
         try {
-            accountService.updateAccount(account);
+            newAccount = accountService.updateAccount(account);
         } catch(NullPointerException | IllegalArgumentException e) {
             logger.error(e.getMessage());
             resultStatus  = "failure";
-            messageSuffix = "error";
+            messageSuffix = ".error";
+        }
+        
+        // if an administrator renounces his administrator rights, log him off
+        if ((newAccount != null) && (isSelf(account)) && (!newAccount.getRoles().contains(UserRole.ROLE_ADMIN))) {
+            SecurityContextHolder.getContext().setAuthentication(null);
+            messageSuffix = ".loggedOut";
         }
         
         String messageKey = "account.message.edit" + messageSuffix;

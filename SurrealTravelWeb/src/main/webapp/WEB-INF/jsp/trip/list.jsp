@@ -18,8 +18,9 @@
     <jsp:attribute name="content">
         <sec:authorize access="hasRole('ROLE_STAFF')">
             <button class="new" onclick="javascript:redirect('${pageContext.request.contextPath}/trips/new');"><f:message key="trip.add"/></button>
+            <br/>
             <c:if test="${not empty reserved}">
-                <br/><br/>
+                <br/>
                 <jsp:include page="/WEB-INF/include/note.jsp">
                     <jsp:param name="key" value="trip.message.undeletable"/>
                 </jsp:include>

@@ -4,6 +4,8 @@
 <%@ taglib prefix="form" uri="http://www.springframework.org/tags/form" %>
 <%@ taglib prefix="sec" uri="http://www.springframework.org/security/tags" %>
 
+<sec:authorize var="isAdmin" access="hasRole('ROLE_ADMIN')"/>
+
 <table border="0" cellpadding="0" cellspacing="0" class="tableForm">
     <tr>
         <td class="left"><f:message key="account.username"/>:</td>
@@ -12,14 +14,13 @@
         </td>
     </tr>
     <tr>
-        <sec:authorize var="isAdmin" access="hasRole('ROLE_ADMIN')"/>
         <td class="left">* 
             <c:choose>
                 <c:when test="${isAdmin}">
                     <f:message key="account.password.admin"/>
                 </c:when>
                 <c:otherwise>
-                    <f:message key="account.password.old"/>
+                    <f:message key="account.password"/>
                 </c:otherwise>
             </c:choose>:
         </td>
@@ -31,5 +32,12 @@
 </table>
 
 <button type="button" class="submit" onclick="javascript:this.form.submit();"><f:message key="basic.submit" /></button>
-<button type="button" class="cancel" onclick="javascript:redirect('${pageContext.request.contextPath}/accounts');"><f:message key="basic.cancel" /></button>
+<c:choose>
+    <c:when test="${isAdmin}">
+        <button type="button" class="cancel" onclick="javascript:redirect('${pageContext.request.contextPath}/accounts');"><f:message key="basic.cancel" /></button>
+    </c:when>
+    <c:otherwise>
+        <button type="button" class="cancel" onclick="javascript:redirect('${pageContext.request.contextPath}/');"><f:message key="basic.cancel" /></button>
+    </c:otherwise>
+</c:choose>
 

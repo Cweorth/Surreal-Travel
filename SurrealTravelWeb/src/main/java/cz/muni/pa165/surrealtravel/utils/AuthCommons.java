@@ -29,7 +29,7 @@ public class AuthCommons {
      */
     public static boolean hasRole(UserRole role) {
         Authentication auth = SecurityContextHolder.getContext().getAuthentication();
-        if(!auth.isAuthenticated()) return false;
+        if ((auth == null) || !auth.isAuthenticated()) return false;
         
         // note: not-authenticated user would have role "ROLE_ANONYMOUS" - default SpringSec behaviour
         for(GrantedAuthority ga : auth.getAuthorities())
