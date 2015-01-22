@@ -117,4 +117,19 @@ public class AccountServiceTest extends AbstractServiceTest{
         assertEquals(accounts, retrieved); 
     }
     
+    @Test
+    public void updateAccountTest(){
+        AccountDTO tripToUpdate = accounts.get(0);
+        Account entity = mapper.map(tripToUpdate, Account.class);
+        service.updateAccount(tripToUpdate);
+        verify(dao, times(1)).updateAccount(entity);
+    }
+    
+    @Test
+    public void deleteAccountByIdTest(){
+        AccountDTO acc = accounts.get(0);
+        long id = acc.getId();
+        service.deleteAccountById(id);
+        verify(dao, times(1)).deleteAccountById(id);
+    }
 }
