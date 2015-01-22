@@ -16,6 +16,10 @@
 
 <t:layout title="${title}">
     <jsp:attribute name="content">
+        <c:if test="${not empty excursion}">
+            <b><f:message key="trip.filter"/></b>: <c:out value="${excursion.destination}"/>
+            <br/><br/>
+        </c:if>
         <sec:authorize access="hasRole('ROLE_STAFF')">
             <button class="new" onclick="javascript:redirect('${pageContext.request.contextPath}/trips/new');"><f:message key="trip.add"/></button>
             <br/>
@@ -104,7 +108,7 @@
                 </c:when>
                 <c:otherwise>
                     <tr>
-                        <td colspan="4" class="noresult"><f:message key="basic.noresult"/></td>
+                        <td colspan="9" class="noresult"><f:message key="basic.noresult"/></td>
                     </tr>
                 </c:otherwise>
             </c:choose>

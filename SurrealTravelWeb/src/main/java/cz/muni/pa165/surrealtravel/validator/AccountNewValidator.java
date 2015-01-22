@@ -54,7 +54,7 @@ public class AccountNewValidator implements Validator {
             if (! matcher.matches()) {
                 errors.rejectValue("account.username", "account.validator.username.format");
             } else if (accountService.getAccountByUsername(wrapper.getAccount().getUsername()) != null) {
-                errors.rejectValue("username", "account.validator.username.used");
+                errors.rejectValue("account.username", "account.validator.username.used");
             }
         }
     }

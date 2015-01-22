@@ -44,8 +44,22 @@
                         <td><c:out value="${excursion.duration}"/></td>
                         <td><c:out value="${excursion.price}"/></td>
                         <td>
-                            <sec:authorize access="hasRole('ROLE_STAFF')">
-                                <ul class="rowMenu">
+                            <ul class="rowMenu">
+                                <c:choose>
+                                    <c:when test="${excursionsOccurence.get(count.index) == 0}">
+                                        <jsp:include page="/WEB-INF/include/entryListButton.jsp">
+                                            <jsp:param name="key" value="trips"/>
+                                            <jsp:param name="inactive" value="true"/>
+                                        </jsp:include>
+                                    </c:when>
+                                    <c:otherwise>
+                                        <jsp:include page="/WEB-INF/include/entryListButton.jsp">
+                                            <jsp:param name="key" value="trips"/>
+                                            <jsp:param name="url" value="${pageContext.request.contextPath}/trips?eid=${excursion.id}" />
+                                        </jsp:include>
+                                    </c:otherwise>
+                                </c:choose>
+                                <sec:authorize access="hasRole('ROLE_STAFF')">
                                     <jsp:include page="/WEB-INF/include/entryEditButton.jsp">
                                         <jsp:param name="url" value="${pageContext.request.contextPath}/excursions/edit/${excursion.id}" />
                                     </jsp:include>
@@ -62,8 +76,8 @@
                                             </jsp:include>
                                         </c:otherwise>
                                     </c:choose>
-                                </ul>
-                            </sec:authorize>
+                                </sec:authorize>
+                            </ul>
                         </td>
                     </tr>
                 </c:forEach>

@@ -1,3 +1,4 @@
+<%@page import="java.util.EnumSet"%>
 <%@ page import="cz.muni.pa165.surrealtravel.dto.UserRole"         %>
 <%@ page import="cz.muni.pa165.surrealtravel.utils.AccountWrapper" %>
 <%@ page contentType="text/html;charset=UTF-8" pageEncoding="utf-8" trimDirectiveWhitespaces="true" session="false" %>
@@ -10,6 +11,10 @@
     
 <%
     AccountWrapper wrapper = (AccountWrapper) request.getAttribute("editWrapper");
+    if (wrapper.getAccount().getRoles() == null) {
+        wrapper.getAccount().setRoles(EnumSet.noneOf(UserRole.class));
+    }
+    
     request.setAttribute("accountIsAdmin", wrapper.getAccount().getRoles().contains(UserRole.ROLE_ADMIN));
 %>
 
@@ -39,6 +44,13 @@
     </c:if>
     
     <form:form action="${pageContext.request.contextPath}/accounts/edit" modelAttribute="editWrapper">
+        <c:if test="${not empty editWrapper.account.customer}">
+            <form:hidden path="account.customer.id"/>
+            <form:hidden path="account.customer.name"/>
+            <c:if test="${not empty editWrapper.account.customer.address}">
+                <form:hidden path="account.customer.address"/>
+            </c:if>
+        </c:if>
         <form:hidden path="account.id" />
         <form:hidden path="account.password"/>
         <form:hidden path="reqpasswd"/>

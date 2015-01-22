@@ -19,7 +19,7 @@
         </td>
     </tr>
     <tr>
-        <td class="left">* <f:message key="account.retype"/>:</td>
+        <td class="left">* <f:message key="account.password.retype"/>:</td>
         <td>
             <form:password path="passwd2" cssClass="text"/>
             <form:errors path="passwd2" cssClass="formError"/>

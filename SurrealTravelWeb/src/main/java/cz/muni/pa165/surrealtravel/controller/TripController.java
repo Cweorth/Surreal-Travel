@@ -38,6 +38,7 @@ import org.springframework.web.bind.annotation.ModelAttribute;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
+import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.servlet.mvc.support.RedirectAttributes;
 import org.springframework.web.util.UriComponentsBuilder;
 
@@ -63,7 +64,7 @@ public class TripController {
     @Autowired
     private MessageSource messageSource;
     
-    @InitBinder
+    @InitBinder(value = {"tripdata"})
     protected void initBinder(WebDataBinder binder) {
         binder.setValidator(new TripValidator());
         
@@ -74,12 +75,27 @@ public class TripController {
     /**
      * Default page that lists all customers
      * @param model
+     * @param eid
      * @return redirect
      */
     @RequestMapping(method = RequestMethod.GET)
-    public String listTrips(ModelMap model) {
-        List<TripDTO> allTrips = tripService.getAllTrips();
+    public String listTrips(ModelMap model, @RequestParam(value = "eid", required = false) String eid) {
+        List<TripDTO> allTrips = new ArrayList<>();
         List<TripDTO> reserved = new ArrayList<>();
+        
+        // if filtered by excursions
+        if (eid != null) try {
+            ExcursionDTO excursion = excursionService.getExcursionById(Long.valueOf(eid));
+            if (excursion != null) {
+                allTrips.addAll(tripService.getTripsWithExcursion(excursion));
+                model.addAttribute("excursion", excursion);
+            }
+        } catch (NumberFormatException ex) {
+            // leave it be
+        } else {
+            allTrips.addAll(tripService.getAllTrips());
+        }
+        
         model.addAttribute("trips", allTrips);
         
         // STAFF can delete accounts, so let's list reserved trips also

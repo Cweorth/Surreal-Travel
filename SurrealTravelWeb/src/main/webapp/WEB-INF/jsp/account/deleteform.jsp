@@ -31,6 +31,7 @@
     </tr>
 </table>
 
+<br/>
 <button type="button" class="submit" onclick="javascript:this.form.submit();"><f:message key="basic.submit" /></button>
 <c:choose>
     <c:when test="${isAdmin}">
