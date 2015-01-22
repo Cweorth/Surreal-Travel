@@ -11,7 +11,7 @@
         <br>
         <div class="label"><f:message key="auth.password"/>:</div>
         <input type="password" name="password" class="text">
-
+        <br><br>
         <button type="button" class="submit" onclick="javascript:this.form.submit();"><f:message key="basic.submit" /></button>
         <input type="hidden" name="${_csrf.parameterName}" value="${_csrf.token}" />
     </form>
