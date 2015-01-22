@@ -60,14 +60,20 @@
                 <div class="userLabel"><f:message key="auth.menu.authUser"/>:</div>
                 <div class="username">${pageContext.request.userPrincipal.name}
                 <ul class="userMenu">
-                    <c:if test="${customerId != null}"><li><a href="${pageContext.request.contextPath}/customers/edit/${customerId}"><f:message key="auth.menu.editCustomer"/></a></li></c:if>
-                    <c:if test="${userId != null}"><li><a href="${pageContext.request.contextPath}/accounts/edit/${userId}"><f:message key="auth.menu.editAccount"/></a></li>
-                    <li id="${userId}_self">
-                        <a href="${pageContext.request.contextPath}/accounts/delete/${userId}" class="dialogDeletePrompt noPropagation"><f:message key="auth.menu.deleteAccount"/></a>
-                        <div class="dialogDelete" id="dialogDelete_${userId}_self" title="<f:message key="basic.delete" />?">
-                            <p><f:message key="auth.menu.deleteAccount.confirmation" /></p>
-                        </div>
-                    </li></c:if>
+                    <c:if test="${customerId != null}">
+                        <li><a href="${pageContext.request.contextPath}/customers/edit/${customerId}"><f:message key="auth.menu.editCustomer"/></a></li>
+                    </c:if>
+                    <c:if test="${userId != null}">
+                        <li><a href="${pageContext.request.contextPath}/accounts/edit/${userId}"><f:message key="auth.menu.editAccount"/></a></li>
+                        <sec:authorize access="not hasRole('ROLE_ROOT')">
+                            <li id="${userId}_self">
+                                <a href="${pageContext.request.contextPath}/accounts/delete/${userId}" class="dialogDeletePrompt noPropagation"><f:message key="auth.menu.deleteAccount"/></a>
+                                <div class="dialogDelete" id="dialogDelete_${userId}_self" title="<f:message key="basic.delete" />?">
+                                    <p><f:message key="auth.menu.deleteAccount.confirmation" /></p>
+                                </div>
+                            </li>
+                            </sec:authorize>
+                    </c:if>
                     <li><a href="javascript:document.getElementById('logoutForm').submit()"><f:message key="auth.menu.logout"/></a></li>
                 </ul>
                 </div>
