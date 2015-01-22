@@ -92,9 +92,15 @@ public class DefaultAccountService implements AccountService {
     @Override
     @Transactional
     @Secured("ROLE_USER")
-    public AccountDTO updateAccount(AccountDTO account) {
+    public void updateAccount(AccountDTO account) {
         Objects.requireNonNull(account, "Account data transfer object is null.");
         checkRoles(account);
+        
+        // user can edit only his own account
+        if (   !SecurityContextHolder.getContext().getAuthentication().getAuthorities().contains(new SimpleGrantedAuthority("ROLE_ADMIN"))
+            && !SecurityContextHolder.getContext().getAuthentication().getName().equals(account.getUsername())) {
+            throw new IllegalArgumentException("Insufficient rights to edit the given account");
+        }        
         
         // check that username was not changed
         AccountDTO original = getAccountById(account.getId());
@@ -115,8 +121,7 @@ public class DefaultAccountService implements AccountService {
             throw new IllegalArgumentException("Cannot change root's permissions!");
         }
         
-        Account updated = accountDao.updateAccount(mapper.map(account, Account.class));
-        return mapper.map(updated, AccountDTO.class);
+        accountDao.updateAccount(mapper.map(account, Account.class));
     }
     
     @Override

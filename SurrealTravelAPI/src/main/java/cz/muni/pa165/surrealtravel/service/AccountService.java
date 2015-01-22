@@ -48,7 +48,7 @@ public interface AccountService {
      * @param account 
      * @return the modified account
      */
-    public AccountDTO updateAccount(AccountDTO account);
+    public void updateAccount(AccountDTO account);
     
     /**
      * Remove account by id.
