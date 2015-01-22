@@ -41,7 +41,7 @@ This file concerns user roles and their permissions in the Surreal-Travel applic
      3. no password required for ```USER``` and ```STAFF```,
      4. administrator's password required for ```ADMIN```
   5. remove any account without ```ROOT``` role
-     1. password requirements same as in ```6.3```,
+     1. password requirements same as in ```6.4```,
   6. create, edit and remove customers **not referenced** by any account,
 
 #### 7. ```ROOT``` rights (exceptions)
