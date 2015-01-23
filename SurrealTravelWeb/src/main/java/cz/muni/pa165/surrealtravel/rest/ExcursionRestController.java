@@ -1,16 +1,21 @@
 package cz.muni.pa165.surrealtravel.rest;
 
-import cz.muni.pa165.surrealtravel.rest.exceptions.EntityNotFoundException;
-import cz.muni.pa165.surrealtravel.rest.exceptions.EntityNotDeletedException;
-import cz.muni.pa165.surrealtravel.rest.exceptions.InvalidEntityException;
 import cz.muni.pa165.surrealtravel.dto.ExcursionDTO;
+import cz.muni.pa165.surrealtravel.rest.exceptions.EntityNotDeletedException;
+import cz.muni.pa165.surrealtravel.rest.exceptions.EntityNotFoundException;
+import cz.muni.pa165.surrealtravel.rest.exceptions.InvalidEntityException;
 import cz.muni.pa165.surrealtravel.service.ExcursionService;
 import java.util.List;
+import javax.servlet.http.HttpServletRequest;
+import javax.servlet.http.HttpServletResponse;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.MediaType;
+import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
+import org.springframework.security.core.Authentication;
+import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
@@ -67,13 +72,16 @@ public class ExcursionRestController {
      */
     @RequestMapping(value="/new", method=RequestMethod.POST, consumes = MediaType.APPLICATION_JSON_VALUE)
     @ResponseStatus(value = HttpStatus.CREATED)
-    public @ResponseBody ExcursionDTO addExcursion(@RequestBody ExcursionDTO excursion){
+    public @ResponseBody ExcursionDTO addExcursion(@RequestBody ExcursionDTO excursion, HttpServletRequest request, HttpServletResponse response){
         logger.info("Creating a new excursion");
-        
+
         try {
+            login();
             excursionService.addExcursion(excursion);
         } catch (NullPointerException | IllegalArgumentException ex) {
             throw new InvalidEntityException("The excursion is not valid", ex);
+        } finally {
+            logout();
         }
         
         return excursion;
@@ -91,9 +99,12 @@ public class ExcursionRestController {
         logger.info("Updating an excursion with id " + id);
         
         try {
+            login();
             excursionService.updateExcursion(excursion);
         } catch (NullPointerException | IllegalArgumentException ex) {
             throw new InvalidEntityException("The excursion is not valid", ex);
+        } finally {
+            logout();
         }
         
         return excursion;
@@ -114,12 +125,31 @@ public class ExcursionRestController {
         }
         
         try {
+            login();
             excursionService.deleteExcursionById(id);
         } catch (Exception ex) {
             logger.error("The excursion with id " + id + " cannot be deleted");
             throw new EntityNotDeletedException("Excursion", id, ex);
+        } finally {
+            logout();
         }
         
         return excursion;
+    }
+    
+    /**
+     * Do auth to access protected service methods.
+     */
+    private void login() {
+        UsernamePasswordAuthenticationToken authRequest = new UsernamePasswordAuthenticationToken("staff", "staff");
+        SecurityContextHolder.getContext().setAuthentication(authRequest);
+    }
+    
+    /**
+     * Revoke authentication.
+     */
+    private void logout() {
+        Authentication auth = SecurityContextHolder.getContext().getAuthentication();
+        if(auth != null) auth.setAuthenticated(false);
     }
 }
