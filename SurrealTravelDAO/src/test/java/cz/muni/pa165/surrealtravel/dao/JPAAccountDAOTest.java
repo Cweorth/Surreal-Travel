@@ -41,7 +41,25 @@ public class JPAAccountDAOTest  extends AbstractPersistenceTest {
  
     
     
-   
+     @Test(expected = NullPointerException.class)
+     public void testAddAccountNull(){
+         accountDao.addAccount(null);
+     }
+     
+     @Test
+     public void addAccountNullCustomer(){
+        Account act= new Account();
+        act.setCustomer(null);
+        act.setPassword("pass");
+        act.setPlainPassword("pass");
+        act.setUsername("Karel");
+        Set<UserRole> r= new HashSet<>();
+        r.add(UserRole.ROLE_USER);
+        act.setRoles(r);
+        
+        accountDao.addAccount(act);
+     }
+     
     @Test
     public void testAddAccount() {
         Customer customer = mkcustomer("Some girls", "there");
@@ -76,6 +94,11 @@ public class JPAAccountDAOTest  extends AbstractPersistenceTest {
         assertEquals(act, retriew);
     }
     
+    @Test(expected = NullPointerException.class)
+    public void getAccountByUsernameNull(){
+       accountDao.getAccountByUsername(null);
+    }
+    
     @Test
     public void getAccountByUsername() {
         Customer customer = mkcustomer("Some dudes", "here");
@@ -94,6 +117,11 @@ public class JPAAccountDAOTest  extends AbstractPersistenceTest {
         assertEquals(act, retrieved);
         
         
+    }
+    
+    @Test(expected = NullPointerException.class)
+    public void getAccountByCustomerNull(){
+        accountDao.getAccountByCustomer(null);
     }
     
     @Test
@@ -117,7 +145,7 @@ public class JPAAccountDAOTest  extends AbstractPersistenceTest {
             assertEquals(act, retrieved.get(0));
         }
     }
-    
+       
     @Test
     public void getAllAccounts() {
       List<Account> list= prepareAccountBatch();
@@ -131,7 +159,7 @@ public class JPAAccountDAOTest  extends AbstractPersistenceTest {
           Assert.assertTrue(retrieved.contains(account));
       }
         
-    }
+    }  
     
     @Test
      public void deleteAccountById() {
@@ -141,6 +169,11 @@ public class JPAAccountDAOTest  extends AbstractPersistenceTest {
          Long id= acts.get(0).getId();
          accountDao.deleteAccountById(id);
          Assert.assertFalse(accountDao.getAllAccounts().contains(acts.get(0)));    
+    }
+    
+    @Test(expected = NullPointerException.class)
+    public void updateAccountNull(){
+        accountDao.updateAccount(null);
     }
      
     @Test 
