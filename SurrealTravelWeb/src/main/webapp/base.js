@@ -50,6 +50,10 @@ $(document).ready(function() {
         closeText: ""
     });
     
+    $( ".bulletinBoard" ).accordion({
+        heightStyle: "content"
+    });
+    
     toggleCustomer(customerCheckPath);
    
 });
