@@ -6,9 +6,10 @@
 
 <%@ tag pageEncoding="utf-8" dynamic-attributes="dynattrs" trimDirectiveWhitespaces="true" %>
 <%@ taglib prefix="f" uri="http://java.sun.com/jsp/jstl/fmt" %>
-<%@ attribute name="body" required="true" %>
+<%@attribute  name="title" required="false" %>
+<%@ attribute name="body"  required="true"  %>
 
-<h3><f:message key="basic.introduction.board"/></h3>
+<h3>${title}</h3>
 
 <div class="bulletinBoard">
     ${body}

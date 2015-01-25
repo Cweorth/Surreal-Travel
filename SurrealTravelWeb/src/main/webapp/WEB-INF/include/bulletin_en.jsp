@@ -1,7 +1,11 @@
 <%@page contentType="text/html" pageEncoding="UTF-8"%>
 <%@ taglib prefix="t" tagdir="/WEB-INF/tags" %>
+<%@ taglib prefix="f" uri="http://java.sun.com/jsp/jstl/fmt" %>
 
 <t:bulletin>
+    <jsp:attribute name="title">
+        <f:message key="basic.introduction.board"/>
+    </jsp:attribute>
     <jsp:attribute name="body">
         <h4>Travel agency Surreal Travel is hiring new bus drivers!</h4>
         <div>
