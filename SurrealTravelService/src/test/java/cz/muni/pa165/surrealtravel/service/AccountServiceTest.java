@@ -5,18 +5,18 @@ import cz.muni.pa165.surrealtravel.dao.AccountDAO;
 import cz.muni.pa165.surrealtravel.dto.AccountDTO;
 import cz.muni.pa165.surrealtravel.dto.UserRole;
 import cz.muni.pa165.surrealtravel.entity.Account;
-import java.util.ArrayList;
 import java.util.Arrays;
+import java.util.ArrayList;
 import java.util.EnumSet;
 import java.util.List;
+import org.junit.Test;
 import static org.junit.Assert.assertEquals;
 import static org.junit.Assert.assertNotNull;
 import static org.junit.Assert.assertTrue;
-import org.junit.Test;
 import org.mockito.InjectMocks;
 import org.mockito.Matchers;
-import static org.mockito.Matchers.any;
 import org.mockito.Mock;
+import static org.mockito.Matchers.any;
 import static org.mockito.Mockito.times;
 import static org.mockito.Mockito.verify;
 import static org.mockito.Mockito.when;
@@ -35,7 +35,7 @@ public class AccountServiceTest extends AbstractServiceTest{
     private final List<AccountDTO>      accounts;
         
     /**
-     * Constructor.
+     *
      */
     public AccountServiceTest() {
         super();
@@ -64,10 +64,10 @@ public class AccountServiceTest extends AbstractServiceTest{
     
     @Test
     public void addAccountTest(){
-        for(AccountDTO account : accounts) {
+         for(AccountDTO account : accounts) {
             service.addAccount(account);
         }
-        verify(dao, times(accounts.size())).addAccount(any(Account.class));
+         verify(dao, times(accounts.size())).addAccount(any(Account.class));
     }
     
     @Test
