@@ -44,7 +44,7 @@ public class AccountNewValidator implements Validator {
         if (! (errors.hasFieldErrors("passwd1") && errors.hasFieldErrors("passwd2"))) {
             if (! StringUtils.equals(wrapper.getPasswd1(), wrapper.getPasswd2())) {
                 errors.rejectValue("passwd2", "account.validator.password.mismatch");
-            } else if ((wrapper.getPasswd1().length() < 5) || (wrapper.getPasswd1().length() > 32)) {
+            } else if ((wrapper.getPasswd1().length() < 4) || (wrapper.getPasswd1().length() > 32)) {
                 errors.rejectValue("passwd2", "account.validator.password.length");
             }
         }

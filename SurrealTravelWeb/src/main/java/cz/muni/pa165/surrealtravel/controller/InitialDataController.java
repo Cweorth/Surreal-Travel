@@ -251,6 +251,13 @@ public class InitialDataController {
             accountService.addAccount(pewpew);
         }
         
+        AccountDTO rest = new AccountDTO();
+        rest.setUsername("rest");
+        rest.setPlainPassword("dummy-plain-password");
+        rest.setPassword(encoder.encode("rest"));
+        rest.setRoles(EnumSet.of(UserRole.ROLE_USER));
+        accountService.addAccount(rest);
+        
         SecurityContextHolder.getContext().getAuthentication().setAuthenticated(false);
     }
 }

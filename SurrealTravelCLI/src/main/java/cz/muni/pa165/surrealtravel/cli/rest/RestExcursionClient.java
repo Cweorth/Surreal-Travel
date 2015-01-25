@@ -64,7 +64,7 @@ public class RestExcursionClient {
         } catch(HttpClientErrorException ex) {
             switch (ex.getStatusCode()) {
                 case NOT_FOUND: throw new RESTAccessException("The excursion with ID " + id + " was not found.");
-                default:        throw new RESTAccessException(ex);
+                default:        throw new RESTAccessException(ex.getStatusCode(), ex.getStatusText());
             }
         } catch(RestClientException ex) {
             throw new RESTAccessException(ex);
@@ -87,7 +87,8 @@ public class RestExcursionClient {
         } catch(HttpClientErrorException ex) {
             switch (ex.getStatusCode()) {
                 case BAD_REQUEST: throw new RESTAccessException("The excursion is not valid.");
-                default:          throw new RESTAccessException(ex);
+                case FORBIDDEN:   throw new RESTAccessException("Permission denied, check your credentials");
+                default:          throw new RESTAccessException(ex.getStatusCode(), ex.getStatusText());
             }
         } catch(RestClientException ex) {
             throw new RESTAccessException(ex);
@@ -112,7 +113,8 @@ public class RestExcursionClient {
         } catch(HttpClientErrorException ex) {
             switch (ex.getStatusCode()) {
                 case BAD_REQUEST: throw new RESTAccessException("A constraint prevented this excursion from modification.");
-                default:          throw new RESTAccessException(ex);
+                case FORBIDDEN:   throw new RESTAccessException("Permission denied, check your credentials");
+                default:          throw new RESTAccessException(ex.getStatusCode(), ex.getStatusText());
             }
         } catch(RestClientException ex) {
             throw new RESTAccessException(ex);
@@ -135,7 +137,8 @@ public class RestExcursionClient {
         } catch(HttpClientErrorException ex) {
             switch (ex.getStatusCode()) {
                 case BAD_REQUEST: throw new RESTAccessException("The excursion cannot be deleted because of integrity constraints.");
-                default:          throw new RESTAccessException(ex);
+                case FORBIDDEN:   throw new RESTAccessException("Permission denied, check your credentials");
+                default:          throw new RESTAccessException(ex.getStatusCode(), ex.getStatusText());
             }
         } catch(RestClientException ex) {
             throw new RESTAccessException(ex);

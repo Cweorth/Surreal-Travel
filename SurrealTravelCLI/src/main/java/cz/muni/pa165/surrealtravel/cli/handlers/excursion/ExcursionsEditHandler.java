@@ -25,19 +25,19 @@ public class ExcursionsEditHandler implements CommandHandler {
     @Option(name = "--id", metaVar = "id", usage = "specify the excursion id", required = true)
     private long id;
     
-    @Option(name = "--description", metaVar = "description", usage = "specify the excursion description [string]")
+    @Option(name = "--description", aliases = {"-c"}, metaVar = "description", usage = "specify the excursion description [string]")
     private String description;
     
-    @Option(name = "--destination", metaVar = "destination", usage = "specify the excursion destination [string]")
+    @Option(name = "--destination", aliases = {"-t"}, metaVar = "destination", usage = "specify the excursion destination [string]")
     private String destination;
     
-    @Option(name = "--duration", metaVar = "duration", usage = "specify the duration of excursion [integer]")
+    @Option(name = "--duration", aliases = {"-d"}, metaVar = "duration", usage = "specify the duration of excursion [integer]")
     private Integer duration;
     
-    @Option(name = "--excursionDate", metaVar = "date", handler = DateOptionHandler.class, usage = "specify the excursion date [yyyy/MM/dd]")
+    @Option(name = "--excursionDate", aliases = {"-e"}, metaVar = "date", handler = DateOptionHandler.class, usage = "specify the excursion date [yyyy/MM/dd]")
     private Date excursionDate;
     
-    @Option(name = "--price", handler = BigDecimalOptionHandler.class, metaVar = "price", usage = "specify the excursion price [integer]")
+    @Option(name = "--price", aliases = {"-p"}, handler = BigDecimalOptionHandler.class, metaVar = "price", usage = "specify the excursion price [integer]")
     private BigDecimal price;
 
     @Override

@@ -7,7 +7,7 @@ import org.springframework.web.bind.annotation.ResponseStatus;
  * @author Roman Lacko [396157]
  */
 @ResponseStatus(value = HttpStatus.NOT_FOUND, reason = "Entity not found")
-public class EntityNotFoundException extends RuntimeException {
+public class EntityNotFoundException extends RestAPIException {
 
     public EntityNotFoundException(String entityName, long id) {
         super(entityName + " with id " + id + " does not exist");

@@ -7,7 +7,7 @@ import org.springframework.web.bind.annotation.ResponseStatus;
  * @author Roman Lacko [396157]
  */
 @ResponseStatus(value = HttpStatus.BAD_REQUEST, reason = "The entity cannot be deleted")
-public class EntityNotDeletedException extends RuntimeException {
+public class EntityNotDeletedException extends RestAPIException {
 
     public EntityNotDeletedException(String entityName, long id) {
         super(entityName + " with id " + id + " cannot be deleted");

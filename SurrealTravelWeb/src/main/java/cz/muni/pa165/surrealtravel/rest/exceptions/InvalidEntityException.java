@@ -7,7 +7,7 @@ import org.springframework.web.bind.annotation.ResponseStatus;
  * @author Roman Lacko [396157]
  */
 @ResponseStatus(value = HttpStatus.BAD_REQUEST, reason = "Invalid entity")
-public class InvalidEntityException extends RuntimeException {
+public class InvalidEntityException extends RestAPIException {
     
     public InvalidEntityException() 
     { }

@@ -73,7 +73,7 @@ public class RestTripClient {
         } catch (HttpClientErrorException ex) {
             switch (ex.getStatusCode()) {
                 case NOT_FOUND: throw new RESTAccessException("The trip with id " + id + " was not found", ex);
-                default:        throw new RESTAccessException(ex);
+                default:        throw new RESTAccessException(ex.getStatusCode(), ex.getStatusText());
             }
         } catch (RestClientException ex) {
             throw new RESTAccessException(ex);
@@ -97,7 +97,8 @@ public class RestTripClient {
             switch (ex.getStatusCode()) {
                 case BAD_REQUEST: throw new RESTAccessException("The trip is not valid", ex);
                 case NOT_FOUND:   throw new RESTAccessException("The trip contains invalid excursion ID", ex);
-                default:          throw new RESTAccessException(ex);
+                case FORBIDDEN:   throw new RESTAccessException("Permission denied, check your credentials");
+                default:          throw new RESTAccessException(ex.getStatusCode(), ex.getStatusText());
             }
         } catch (RestClientException ex) {
             throw new RESTAccessException(ex);
@@ -123,7 +124,8 @@ public class RestTripClient {
             switch (ex.getStatusCode()) {
                 case BAD_REQUEST: throw new RESTAccessException("A constraint prevented this trip from modification", ex);
                 case NOT_FOUND:   throw new RESTAccessException("The trip contains invalid excursion ID", ex);
-                default:          throw new RESTAccessException(ex);
+                case FORBIDDEN:   throw new RESTAccessException("Permission denied, check your credentials");
+                default:          throw new RESTAccessException(ex.getStatusCode(), ex.getStatusText());
             }
         } catch (RestClientException ex) {
             throw new RESTAccessException(ex);
@@ -146,7 +148,8 @@ public class RestTripClient {
         } catch (HttpClientErrorException ex) {
             switch (ex.getStatusCode()) {
                 case BAD_REQUEST: throw new RESTAccessException("The trip cannot be deleted because of integrity constraints", ex);
-                default:          throw new RESTAccessException(ex);
+                case FORBIDDEN:   throw new RESTAccessException("Permission denied, check your credentials");
+                default:          throw new RESTAccessException(ex.getStatusCode(), ex.getStatusText());
             }
         } catch (RestClientException ex) {
             throw new RESTAccessException(ex);

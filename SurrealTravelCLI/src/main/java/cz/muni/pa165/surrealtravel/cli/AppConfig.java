@@ -19,6 +19,7 @@ public class AppConfig {
     
     private static final RestExcursionClient excursionClient;
     private static final RestTripClient      tripClient;
+    private static final RestTemplate        template;
     
     private static URL base;
 
@@ -33,7 +34,7 @@ public class AppConfig {
         MappingJackson2HttpMessageConverter converter = new MappingJackson2HttpMessageConverter();
         converter.setSupportedMediaTypes(Arrays.asList(MediaType.APPLICATION_JSON));
 
-        RestTemplate template = new RestTemplate();
+        template = new RestTemplate();
         template.getMessageConverters().add(converter);
 
         excursionClient = new RestExcursionClient(template);
@@ -47,5 +48,6 @@ public class AppConfig {
  
     public static RestExcursionClient getExcursionClient() { return excursionClient; }
     public static RestTripClient      getTripClient()      { return tripClient;      }
+    public static RestTemplate        getTemplate()        { return template;        }
     
 }

@@ -22,19 +22,19 @@ public class ExcursionsAddHandler implements CommandHandler {
        
     private final static Logger logger = LoggerFactory.getLogger(ExcursionsAddHandler.class);
     
-    @Option(name = "--description", metaVar = "description", usage = "specify the excursion description [string]", required = true)
+    @Option(name = "--description", aliases = {"-c"}, metaVar = "description", usage = "specify the excursion description [string]", required = true)
     private String description;
     
-    @Option(name = "--destination", metaVar = "destination", usage = "specify the excursion destination [string]", required = true)
+    @Option(name = "--destination", aliases = {"-s"}, metaVar = "destination", usage = "specify the excursion destination [string]", required = true)
     private String destination;
     
-    @Option(name = "--duration", metaVar = "duration", usage = "specify the duration of excursion [integer]")
+    @Option(name = "--duration", aliases = {"-d"}, metaVar = "duration", usage = "specify the duration of excursion [integer]")
     private int duration;
     
-    @Option(name = "--excursionDate", metaVar = "date", handler = DateOptionHandler.class, usage = "specify the excursion date [yyyy/MM/dd]", required = true)
+    @Option(name = "--excursionDate", aliases = {"-e"}, metaVar = "date", handler = DateOptionHandler.class, usage = "specify the excursion date [yyyy/MM/dd]", required = true)
     private Date excursionDate;
     
-    @Option(name = "--price", handler = BigDecimalOptionHandler.class, metaVar = "price", usage = "specify the excursion price [integer]", required = true)
+    @Option(name = "--price", aliases = {"-p"}, handler = BigDecimalOptionHandler.class, metaVar = "price", usage = "specify the excursion price [integer]", required = true)
     private BigDecimal price;
 
     @Override

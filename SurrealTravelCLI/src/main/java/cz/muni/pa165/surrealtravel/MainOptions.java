@@ -35,14 +35,21 @@ public class MainOptions {
     @Option(name = "--debug", forbids = "-v",
             usage = "enables debug messaged")
     private boolean debug;
+    
+    @Option(name = "--username", aliases = {"-U"}, metaVar = "[username]",
+            usage = "provide custom credentials (some commands may ignore this option)")
+    private String username;
+    
+    // this is not an option
+    private String password;
 
-    @Option(name = "--url", metaVar = "url", usage = "specify base URL")
+    @Option(name = "--url", metaVar = "[url]", usage = "specify base URL")
     public void setURL(URL url) {
         LoggerFactory.getLogger(MainOptions.class).info("Changing URL to \"" + url.toString() + "\"");
         AppConfig.setBase(url);
     }    
     
-    @Argument(index = 0, required = true, metaVar = "command", handler = SubCommandHandler.class,
+    @Argument(index = 0, hidden = true, required = true, metaVar = "command", handler = SubCommandHandler.class,
             usage = "main command")
     @SubCommands({
         @SubCommand(name = "excursions-list",   impl = ExcursionsListHandler.class),
@@ -84,6 +91,12 @@ public class MainOptions {
 
     public boolean isDebug()               { return debug;       }
     public void    setDebug(boolean debug) { this.debug = debug; }
+    
+    public String getUsername()                { return username;          }
+    public void   setUserName(String username) { this.username = username; }
+    
+    public String getPassword()                { return password;          }
+    public void   setPassword(String password) { this.password = password; }
     
     //</editor-fold>
     

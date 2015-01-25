@@ -13,7 +13,7 @@ my $debug   = exists ($hargs{"--debug"});
 my $verbose = exists ($hargs{"--verbose"});
 
 # Compile source if there is no "./target" directory
-system("mvn package") unless (-d "./target/");
+system("mvn compile install") unless (-d "./target/");
 
 # Quote arguments with spaces
 map { $_ = "\'$_\'" if $_ =~ /\s/ } (@ARGV);
@@ -23,5 +23,5 @@ my $q       = $debug ? "-e" : ($verbose ? "" : "--quiet");
 my $xargs   = $args . " " . join(" ", @ARGV);
 
 # Call maven
-system("java -jar target/SurrealTravelCLI-1.0-SNAPSHOT.jar $xargs");
+system("mvn $q exec:java -Dexec.args=\"$xargs\"");
 

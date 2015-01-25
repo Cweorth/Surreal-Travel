@@ -1,19 +1,26 @@
 package cz.muni.pa165.surrealtravel;
 
+import cz.muni.pa165.surrealtravel.cli.AppConfig;
 import cz.muni.pa165.surrealtravel.cli.handlers.CommandHandler;
 import cz.muni.pa165.surrealtravel.cli.handlers.trip.*;
 import cz.muni.pa165.surrealtravel.cli.handlers.excursion.*;
+import cz.muni.pa165.surrealtravel.cli.rest.AuthHeaderInterceptor;
 import cz.muni.pa165.surrealtravel.cli.rest.RESTAccessException;
 import java.io.PrintStream;
+import java.util.ArrayList;
 import java.util.EnumMap;
+import java.util.List;
 import java.util.Map;
 import java.util.Set;
 import org.apache.log4j.Appender;
 import org.apache.log4j.LogManager;
 import org.kohsuke.args4j.CmdLineException;
 import org.kohsuke.args4j.CmdLineParser;
+import org.kohsuke.args4j.OptionHandlerFilter;
+import org.kohsuke.args4j.spi.OptionHandler;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
+import org.springframework.http.client.ClientHttpRequestInterceptor;
 import org.springframework.web.client.ResourceAccessException;
 
 /**
@@ -24,20 +31,34 @@ public class Program {
     
     private final static Logger logger = LoggerFactory.getLogger(Program.class);
     
+    private static void printHeader(PrintStream ps) {
+        ps.println("========================");
+        ps.println("|  Surreal-Travel CLI  |");
+        ps.println("========================");
+    }
+    
     /**
      * Shows program help
      * @param ps        target print stream
      */
     public static void printHelp(PrintStream ps) {
+        printHeader(ps);
+        ps.println();
+        
         CmdLineParser parser = new CmdLineParser(new MainOptions());
+        String example = parser.printExample(new OptionHandlerFilter() {
+            @Override
+            public boolean select(OptionHandler arg0) {
+                return !"command".equals(arg0.option.metaVar());
+            }
+        });
         
-        ps.print("usage: ");
-        parser.printSingleLineUsage(ps);
+        ps.println("usage: " + example +" COMMAND");
         ps.println();
-        ps.print("use -? [--command-help] to show help for each subcommand");
+        ps.println("hint:  use -?  LIST     to list available commands");
+        ps.println("hint:  use -? [COMMAND] to show help for the command");
         ps.println();
-        ps.println();
-        
+
         parser.printUsage(ps);        
     }
     
@@ -47,6 +68,9 @@ public class Program {
      * @param handler   command handler
      */
     public static void printCommandUsage(PrintStream ps, CommandHandler handler) {
+        printHeader(ps);
+        ps.println();
+        
         CmdLineParser parser = new CmdLineParser(handler);
         
         ps.println(handler.getCommand() + ": " + handler.getDescription());
@@ -114,7 +138,9 @@ public class Program {
             if (options.getCommandHelp() != null) {
                 Set<Command> commands = handlers.keySet();
 
-                if (options.getCommandHelp().equalsIgnoreCase("LIST")) {                
+                if (options.getCommandHelp().equalsIgnoreCase("LIST")) {
+                    printHeader(System.out);
+                    System.out.println();
                     System.out.println("Available commands:");
                     System.out.println("(use --command-help command to show help)");
                     for (Command cmd : commands) {
@@ -139,10 +165,34 @@ public class Program {
             }
             //</editor-fold>
 
+            //<editor-fold desc="[  Password Interceptor  ]" defaultstate="collapsed">
+            if (options.getUsername() != null) {
+                logger.debug("Inquiring password");
+                printHeader(System.out);
+                System.out.println();
+                System.out.println("Please provide your credentials");
+                System.out.println("Username: " + options.getUsername());
+                System.out.print  ("Password: ");
+                char[] password = System.console().readPassword();
+                System.out.println();
+                logger.debug("Setting AuthHeaderInterceptor");
+                
+                List<ClientHttpRequestInterceptor> interceptors = AppConfig.getTemplate().getInterceptors();
+                if (interceptors == null) {
+                    interceptors = new ArrayList<>();
+                }
+                
+                interceptors.add(new AuthHeaderInterceptor(options.getUsername(), String.valueOf(password)));
+                AppConfig.getTemplate().setInterceptors(interceptors);
+                                
+                logger.debug("Interceptor configured");
+            }
+            //</editor-fold>
+            
             if (!handlers.containsKey(options.getCommand())) {
                 throw new RuntimeException("No handler for command " + options.getCommand());
             }
-        
+
             logger.debug("Running command handler");
             options.getCmd().run(options);
 
