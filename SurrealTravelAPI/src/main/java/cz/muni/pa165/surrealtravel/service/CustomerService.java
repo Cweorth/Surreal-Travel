@@ -11,13 +11,13 @@ public interface CustomerService {
     
     /**
      * Create new customer entry.
-     * @param customer 
+     * @param customer  the customer to be added.
      */
     public void addCustomer(CustomerDTO customer);
     
     /**
      * Get customer DTO by id.
-     * @param id
+     * @param id        the id of an customer to find.
      * @return the customer
      */
     public CustomerDTO getCustomerById(long id);
@@ -30,14 +30,14 @@ public interface CustomerService {
     
     /**
      * Update customer entry for the given DTO.
-     * @param customer
+     * @param customer  the customer to update.
      * @return the updated customer
      */
     public CustomerDTO updateCustomer(CustomerDTO customer);
     
     /**
      * Delete customer entry for the given DTO.
-     * @param id 
+     * @param id        the id of an customer to delete.
      */
     public void deleteCustomerById(long id);
     

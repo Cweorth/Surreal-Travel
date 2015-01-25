@@ -11,13 +11,13 @@ public interface ExcursionService {
     
     /**
      * Create new excursion.
-     * @param excursionDTO
+     * @param excursion      the excursion to add
      */
-    void addExcursion(ExcursionDTO excursionDTO);
+    void addExcursion(ExcursionDTO excursion);
     
     /**
      * Get excursion DTO by id.
-     * @param id
+     * @param id        the id of an excursion to find.
      * @return the excursion
      */
     ExcursionDTO getExcursionById(long id);
@@ -30,13 +30,13 @@ public interface ExcursionService {
     
     /**
      * Update excursion entry for the given DTO.
-     * @param excursionDTO 
+     * @param excursion      the excursion to update.
      */
-    void updateExcursion(ExcursionDTO excursionDTO);
+    void updateExcursion(ExcursionDTO excursion);
     
     /**
      * Delete excursion entry for the given id.
-     * @param id 
+     * @param id        the id of an excursion to delete.
      */
     void deleteExcursionById(long id);
 }

@@ -13,7 +13,7 @@ public interface ReservationService {
 
     /**
      * Save the reservation.
-     * @param reservationDTO the reservation to save
+     * @param reservationDTO the reservation to add.
      */
     
     void addReservation(ReservationDTO reservationDTO);
@@ -26,7 +26,7 @@ public interface ReservationService {
 
     /**
      * Get a list of all reservations for the given {@code customer}
-     * @param customerDTO the customer for we need the reservations
+     * @param customerDTO the customer we need reservations for.
      * @return the list of reservations
      */
     List<ReservationDTO> getAllReservationsByCustomer(CustomerDTO customerDTO);
@@ -47,13 +47,13 @@ public interface ReservationService {
 
     /**
      * Update the reservation.
-     * @param reservationDTO the reservation to update
+     * @param reservationDTO the reservation to update.
      */
     void updateReservation(ReservationDTO reservationDTO);
     
     /**
      * Remove the reservation with the given {@code id}.
-     * @param id the id to search for
+     * @param id the id to search for.
      */
     void deleteReservationById(long id);
 }
