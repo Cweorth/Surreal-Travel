@@ -10,6 +10,7 @@ import java.util.List;
 import java.util.Objects;
 import org.dozer.DozerBeanMapper;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.security.access.annotation.Secured;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
@@ -69,6 +70,7 @@ public class DefaultTripService implements TripService {
      */
     @Override
     @Transactional
+    @Secured("ROLE_STAFF")
     public void addTrip(TripDTO trip) {
         Objects.requireNonNull(trip, "trip");
         Trip entity = toEntity.apply(trip);
@@ -116,6 +118,7 @@ public class DefaultTripService implements TripService {
      */
     @Override
     @Transactional
+    @Secured("ROLE_STAFF")
     public void updateTrip(TripDTO trip) {
         Objects.requireNonNull(trip, "trip");
         tripDao.updateTrip(toEntity.apply(trip));
@@ -127,6 +130,7 @@ public class DefaultTripService implements TripService {
      */
     @Override
     @Transactional
+    @Secured("ROLE_STAFF")
     public void deleteTripById(long id) {
         tripDao.deleteTripById(id);
     }

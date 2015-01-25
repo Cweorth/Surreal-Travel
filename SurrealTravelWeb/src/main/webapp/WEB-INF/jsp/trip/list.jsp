@@ -76,13 +76,13 @@
                                         <c:choose>
                                             <c:when test="${(not empty reserved) && reserved.contains(trip)}">
                                                 <jsp:include page="/WEB-INF/include/entryDeleteButton.jsp">
-                                                    <jsp:param name="id"  value="${trip.id}" />
-                                                    <jsp:param name="url" value="${pageContext.request.contextPath}/trips/delete/${trip.id}" />
+                                                    <jsp:param name="inactive" value="true" />
                                                 </jsp:include>
                                             </c:when>
                                             <c:otherwise>
                                                 <jsp:include page="/WEB-INF/include/entryDeleteButton.jsp">
-                                                    <jsp:param name="inactive" value="true" />
+                                                    <jsp:param name="id"  value="${trip.id}" />
+                                                    <jsp:param name="url" value="${pageContext.request.contextPath}/trips/delete/${trip.id}" />
                                                 </jsp:include>
                                             </c:otherwise>
                                         </c:choose>

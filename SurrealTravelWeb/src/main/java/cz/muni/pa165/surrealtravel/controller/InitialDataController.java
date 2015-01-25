@@ -185,7 +185,12 @@ public class InitialDataController {
         /* 16 */mkexcursion(mkdate(17, 10, 2015),  2, "Surprise Excursion 1",                  "Location 1",  1300),
         /* 17 */mkexcursion(mkdate(24, 11, 2015),  7, "Surprise Excursion 2",                  "Location 2",  3200),
         /* 18 */mkexcursion(mkdate( 5, 12, 2015),  4, "Surprise Excursion 3",                  "Location 3",  1499),
-        /* 19 */mkexcursion(mkdate(19, 12, 2015),  3, "Surprise Excursion (iPad owners only)", "Location 4", 24399)
+        /* 19 */mkexcursion(mkdate(19, 12, 2015),  3, "Surprise Excursion (iPad owners only)", "Location 4", 24399),
+        
+        // Alpha Centauri Bb
+        /* 20 */mkexcursion(mkdate(20,  2, 2139),  2, "Interdimensional Drift",                "Bb Capital",   499),
+        /* 21 */mkexcursion(mkdate(25,  2, 2139),  3, "Tachyon Mountains Hiking",              "Bb Capital",   799),
+        /* 22 */mkexcursion(mkdate(10,  3, 2139),  2, "Muon Cubicuboctahedron",                "Star Planes",  539)
         );
         
         for (ExcursionDTO excursion : excursions) {
@@ -197,13 +202,14 @@ public class InitialDataController {
         //----------------------------------------------------------------------
         
         trips = Arrays.asList(
-        /* 00 */mktrip(mkdate(15, 10, 2941), mkdate(25, 10, 2941), "Erebor",                      50,  7399,           0),
-        /* 01 */mktrip(mkdate(30,  1, 3017), mkdate(15,  7, 3019), "Middle-Earth",               100, 14999, range(2, 9)),
-        /* 02 */mktrip(mkdate(12,  3, 3019), mkdate( 5,  5, 3019), "Gondor",                     100,  3999,       6,  8),
-        /* 03 */mktrip(mkdate( 6,  1,    2), mkdate(12,  1,    2), "Ancient Westeros",            75,  1999,          10),
-        /* 04 */mktrip(mkdate( 1,  1,  299), mkdate(16,  3,  299), "Westeros",                   150,  4590,      12, 13),
-        /* 05 */mktrip(mkdate(15,  8,  299), mkdate(15, 11,  299), "Essos",                       60,  2400,      14, 15),
-        /* 06 */mktrip(mkdate(15, 10, 2015), mkdate(30, 12, 2015), "Wherever The Wind Takes Me", 100, 9999, range(16, 19))
+        /* 00 */mktrip(mkdate(15, 10, 2941), mkdate(25, 10, 2941), "Erebor",                      50,  7399,            0 ),
+        /* 01 */mktrip(mkdate(30,  1, 3017), mkdate(15,  7, 3019), "Middle-Earth",               100, 14999, range( 2,  9)),
+        /* 02 */mktrip(mkdate(12,  3, 3019), mkdate( 5,  5, 3019), "Gondor",                     100,  3999,        6,  8 ),
+        /* 03 */mktrip(mkdate( 6,  1,    2), mkdate(12,  1,    2), "Ancient Westeros",            75,  1999,           10 ),
+        /* 04 */mktrip(mkdate( 1,  1,  299), mkdate(16,  3,  299), "Westeros",                   150,  4590,       12, 13 ),
+        /* 05 */mktrip(mkdate(15,  8,  299), mkdate(15, 11,  299), "Essos",                       60,  2400,       14, 15 ),
+        /* 06 */mktrip(mkdate(15, 10, 2015), mkdate(30, 12, 2015), "Wherever The Wind Takes Me", 100,  9999, range(16, 19)),
+        /* 07 */mktrip(mkdate(19,  2, 2139), mkdate(23,  3, 2139), "Alpha Centauri Bb",          400,   699,   20, 21, 22 )
         );
         
         for (TripDTO trip : trips) {
