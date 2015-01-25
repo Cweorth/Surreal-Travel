@@ -28,29 +28,29 @@ import static org.mockito.Mockito.when;
  * @author Jan Klimeš [374259]
  */
 public class ExcursionServiceTest extends AbstractServiceTest {
-    
+
     @Mock
     private ExcursionDAO dao;
-    
+
     @Mock
     private TripDAO tripDao;
-    
+
     @InjectMocks
     private DefaultExcursionService service;
-    
+
     public ExcursionServiceTest() {
         super();
     }
-    
+
     @Test(expected = NullPointerException.class)
     public void testAddExcursionNull() {
         service.addExcursion(null);
     }
-    
+
     @Test
-    public void testAddExcursion() { 
+    public void testAddExcursion() {
         List<ExcursionDTO> excursions = prepareDummyExcursions(3);
-        
+
         for(ExcursionDTO excursion : excursions) {
             try {
                 service.addExcursion(excursion);
@@ -58,7 +58,7 @@ public class ExcursionServiceTest extends AbstractServiceTest {
                 Assert.fail();
             }
         }
-        
+
         verify(dao, times(excursions.size())).addExcursion(any(Excursion.class));
     }
 
@@ -66,31 +66,31 @@ public class ExcursionServiceTest extends AbstractServiceTest {
     @Test
     public void testGetExcursionById() {
         long uniqueId = 3L;
-        
+
         List<ExcursionDTO> excursions = prepareDummyExcursions(5);
-        
+
         ExcursionDTO expected = excursions.get(3);
         Excursion entity = mapper.map(expected, Excursion.class);
-       
+
         when(dao.getExcursionById(uniqueId)).thenReturn(entity);
         ExcursionDTO retrieved = service.getExcursionById(uniqueId);
-        
+
         verify(dao, times(1)).getExcursionById(Matchers.eq(uniqueId));
         assertNotNull(retrieved);
         assertEquals(uniqueId, retrieved.getId());
         assertEquals(expected, retrieved);
     }
-    
+
     @Test
     public void testGetAllExcursions() {
         List<ExcursionDTO> expected = prepareDummyExcursions(5);
         List<Excursion> entities = new ArrayList<>();
         for(ExcursionDTO e : expected)
             entities.add(mapper.map(e, Excursion.class));
-        
+
         when(dao.getAllExcursions()).thenReturn(entities);
         List<ExcursionDTO> retrieved = service.getAllExcursions();
-        
+
         verify(dao, times(1)).getAllExcursions();
         assertTrue(retrieved.size() == expected.size());
         assertEquals(expected, retrieved);
@@ -100,13 +100,13 @@ public class ExcursionServiceTest extends AbstractServiceTest {
     public void testUpdateExcursionNull() {
         service.updateExcursion(null);
     }
-    
+
     @Test
     public void testUpdateExcursion() {
         ExcursionDTO toUpdate = prepareDummyExcursion();
         Excursion entity = mapper.map(toUpdate, Excursion.class);
         when(tripDao.getTripsWithExcursion(entity)).thenReturn(new ArrayList<Trip>());
-        
+
         service.updateExcursion(toUpdate);
         verify(dao, times(1)).updateExcursion(entity);
     }
@@ -118,19 +118,19 @@ public class ExcursionServiceTest extends AbstractServiceTest {
         service.deleteExcursionById(id);
         verify(dao, times(1)).deleteExcursionById(id);
     }
-    
+
     /**
      * Utility method. Create 1 ExcursionDTO object.
-     * @return 
+     * @return
      */
     private ExcursionDTO prepareDummyExcursion() {
         return prepareDummyExcursions(1).get(0);
     }
-    
+
     /**
      * Utility method. Create amount of ExcursionDTO objects.
      * @param amount
-     * @return 
+     * @return
      */
     private List<ExcursionDTO> prepareDummyExcursions(int amount) {
         ExcursionDTO[] excursions = {
@@ -140,17 +140,17 @@ public class ExcursionServiceTest extends AbstractServiceTest {
             mkexcursion(new Date(), 1, "whatever", "hell", new BigDecimal(666)),
             mkexcursion(new Date(), 4, "whatever", "brno", new BigDecimal(500))
         };
-        
+
         for(int i = 0; i < excursions.length - 1; i++)
             excursions[i].setId(i);
-        
+
         if(amount > excursions.length) amount = excursions.length;
-        
+
         List<ExcursionDTO> list = new ArrayList<>();
         for(int i = 0; i < amount; i++)
             list.add(excursions[i]);
-        
+
         return list;
     }
-    
+
 }

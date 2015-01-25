@@ -1,4 +1,4 @@
-<%-- 
+<%--
     Document   : successMessage
     Author     : Jan Klimeš
 --%>

@@ -17,13 +17,13 @@ public enum Command {
     TRIPS_ADD("trips-add"),
     TRIPS_EDIT("trips-edit"),
     TRIPS_DELETE("trips-delete");
-    
+
     private final String cmd;
-    
+
     Command(String cmd) {
         this.cmd = Objects.requireNonNull(cmd);
     }
-    
+
     @Override
     public String toString() {
         return cmd;

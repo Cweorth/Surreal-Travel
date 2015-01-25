@@ -16,30 +16,30 @@ import org.springframework.web.bind.annotation.RequestParam;
 @Controller
 @RequestMapping(value = "/auth")
 public class AuthController {
-    
+
     @Autowired
     private MessageSource messageSource;
-    
+
     /**
      * Standard login page. Error message handling.
      * @param error
      * @param model
      * @param locale
-     * @return 
+     * @return
      */
     @RequestMapping(value = "/login", method = RequestMethod.GET)
     public String login(@RequestParam(value = "error", required = false) String error, ModelMap model, Locale locale) {
         if(error != null) model.addAttribute("failureMessage", messageSource.getMessage("auth.wrongCredentials", null, locale));
         return "auth/login";
     }
-    
+
     /**
      * Page displaying logout message.
-     * @return 
+     * @return
      */
     @RequestMapping(value = "/logout", method = RequestMethod.GET)
     public String logout() {
         return "auth/logout";
     }
-    
+
 }

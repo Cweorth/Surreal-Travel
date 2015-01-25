@@ -1,4 +1,4 @@
-<%-- 
+<%--
     Document   : logout
     Author     : Jan Klimeš
 --%>
@@ -12,9 +12,9 @@
 
 <t:layout title="${title}">
 <jsp:attribute name="content">
-    
+
     <p><f:message key="auth.logout.success"/></p>
-    
+
 </jsp:attribute>
 </t:layout>
 

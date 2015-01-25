@@ -22,44 +22,44 @@ import org.springframework.web.client.RestTemplate;
  * @author Roman Lacko [396157]
  */
 public class RestTripClient {
-    
+
     private final static Logger logger = LoggerFactory.getLogger(RestTripClient.class);
     private final RestTemplate template;
-    
+
     private String getAddress(String suffix) {
         URL address;
-        
+
         try {
             address = new URL(AppConfig.getBase(), suffix);
         } catch (MalformedURLException ex) {
             throw new RESTAccessException("Malformed URL", ex);
         }
-        
+
         logger.info("retrieving from " + address.toString());
         return address.toString();
     }
-    
+
     public RestTripClient(RestTemplate template) {
         this.template = Objects.requireNonNull(template, "template");
     }
-    
+
     /**
      * Returns the list of all trips
      * @return the list of all trips
      */
     public List<TripDTO> getAllTrips() {
         ResponseEntity<TripDTO[]> response;
-        
+
         try {
             response = template.getForEntity(getAddress("trips"), TripDTO[].class);
         } catch (RestClientException ex) {
             throw new RESTAccessException(ex);
         }
-        
+
         logger.info(response.toString());
         return Arrays.asList(response.getBody());
     }
-    
+
     /**
      * Returns the trip with the given {@code id}.
      * @param  id       The {@code id} of the trip.
@@ -67,7 +67,7 @@ public class RestTripClient {
      */
     public TripDTO getTrip(long id) {
         ResponseEntity<TripDTO> response;
-        
+
         try {
             response = template.getForEntity(getAddress("trips/get/" + id), TripDTO.class);
         } catch (HttpClientErrorException ex) {
@@ -78,19 +78,19 @@ public class RestTripClient {
         } catch (RestClientException ex) {
             throw new RESTAccessException(ex);
         }
-        
-        logger.info(response.toString());        
+
+        logger.info(response.toString());
         return response.getBody();
     }
-    
+
     /**
      * Adds a new trip.
      * @param  trip     The trip to add.
      * @return          Instance of the trip with a new ID.
      */
-    public TripDTO addTrip(TripDTO trip) {       
+    public TripDTO addTrip(TripDTO trip) {
         ResponseEntity<TripDTO> response;
-        
+
         try {
             response = template.postForEntity(getAddress("trips/new"), trip, TripDTO.class);
         } catch (HttpClientErrorException ex) {
@@ -107,7 +107,7 @@ public class RestTripClient {
         logger.info(response.toString());
         return response.getBody();
     }
-    
+
     /**
      * Modifies the trip.
      * @param  trip     The trip to update.
@@ -116,7 +116,7 @@ public class RestTripClient {
     public TripDTO editTrip(TripDTO trip) {
         ResponseEntity<TripDTO> response;
         HttpEntity<TripDTO>     request;
-        
+
         try {
             request  = new HttpEntity<>(trip, new HttpHeaders());
             response = template.exchange(getAddress("trips/edit/" + trip.getId()), HttpMethod.PUT, request, TripDTO.class);
@@ -130,11 +130,11 @@ public class RestTripClient {
         } catch (RestClientException ex) {
             throw new RESTAccessException(ex);
         }
-        
+
         logger.info(response.toString());
         return response.getBody();
     }
-    
+
     /**
      * Deletes the trip with the given {@code id}.
      * @param  id       The {@code id} of the trip to delete.
@@ -142,7 +142,7 @@ public class RestTripClient {
      */
     public TripDTO deleteTrip(long id) {
         ResponseEntity<TripDTO> response;
-        
+
         try {
             response = template.exchange(getAddress("trips/delete/" + id), HttpMethod.DELETE, null, TripDTO.class);
         } catch (HttpClientErrorException ex) {
@@ -154,9 +154,9 @@ public class RestTripClient {
         } catch (RestClientException ex) {
             throw new RESTAccessException(ex);
         }
-        
-        logger.info(response.toString());        
+
+        logger.info(response.toString());
         return response.getBody();
     }
-    
+
 }

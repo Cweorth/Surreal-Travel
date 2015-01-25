@@ -20,23 +20,23 @@ import org.springframework.transaction.annotation.Transactional;
  */
 @Service(value = "tripService")
 public class DefaultTripService implements TripService {
-    
+
     //<editor-fold desc="Extensions" defaultstate="collapsed">
-    
+
     private interface Function<T,U> {
         U apply(T x);
     }
-    
+
     private <T,U> List<U> map(Function<T,U> f, List<T> s) {
         List<U> r = new ArrayList<>(s.size());
         for(T x : s) r.add(f.apply(x));
         return r;
     }
-    
+
     //</editor-fold>
-    
+
     //--[  Private  ]-----------------------------------------------------------
-    
+
     @Autowired
     private DozerBeanMapper mapper;
     @Autowired
@@ -45,25 +45,25 @@ public class DefaultTripService implements TripService {
     private final Function<Trip,        TripDTO>   toDTO;
     private final Function<TripDTO,     Trip>      toEntity;
     private final Function<ExcursionDTO,Excursion> excToEntity;
-    
+
     //--[  Constructors  ]------------------------------------------------------
-    
+
     public DefaultTripService() {
         toDTO = new Function<Trip,TripDTO>() {
             @Override public TripDTO apply(Trip x) { return mapper.map(x, TripDTO.class); }
         };
-        
+
         toEntity = new Function<TripDTO,Trip>() {
             @Override public Trip apply(TripDTO x) { return mapper.map(x, Trip.class); }
         };
-        
+
         excToEntity = new Function<ExcursionDTO, Excursion>() {
             @Override public Excursion apply(ExcursionDTO x) { return mapper.map(x, Excursion.class); }
         };
     }
-    
+
     //--[  Methods  ]-----------------------------------------------------------
-    
+
     /**
      * Saves the {@code trip}.
      * @param trip           The trip to save.
@@ -77,7 +77,7 @@ public class DefaultTripService implements TripService {
         tripDao.addTrip(entity);
         trip.setId(entity.getId());
     }
-    
+
     /**
      * Finds a trip with the specified {@code id}.
      * @param id             The ID to look for.
@@ -89,7 +89,7 @@ public class DefaultTripService implements TripService {
         Trip trip = tripDao.getTripById(id);
         return trip == null ? null : toDTO.apply(trip);
     }
-    
+
     /**
      * Finds all trips that contain the specified {@code excursion}.
      * @param excursion      The excursion to look for.
@@ -101,7 +101,7 @@ public class DefaultTripService implements TripService {
         Objects.requireNonNull(excursion, "exucrsion");
         return map(toDTO, tripDao.getTripsWithExcursion(excToEntity.apply(excursion)));
     }
-    
+
     /**
      * Yields a list of all trips.
      * @return               A list of all trips.
@@ -111,7 +111,7 @@ public class DefaultTripService implements TripService {
     public List<TripDTO> getAllTrips() {
         return map(toDTO, tripDao.getAllTrips());
     }
-    
+
     /**
      * Updates the {@code trip}.
      * @param trip           The trip to update.
@@ -123,7 +123,7 @@ public class DefaultTripService implements TripService {
         Objects.requireNonNull(trip, "trip");
         tripDao.updateTrip(toEntity.apply(trip));
     }
-    
+
     /**
      * Removes a trip by its {@code id}.
      * @param id             The id of a trip to remove.
@@ -134,17 +134,17 @@ public class DefaultTripService implements TripService {
     public void deleteTripById(long id) {
         tripDao.deleteTripById(id);
     }
-    
+
     //<editor-fold defaultstate="collapsed" desc="[  Setters  ]">
-    
+
     public void setMapper(DozerBeanMapper mapper) {
         this.mapper = mapper;
     }
-    
+
     public void setTripdao(TripDAO tripdao) {
         this.tripDao = tripdao;
     }
-    
+
     //</editor-fold>
-    
+
 }

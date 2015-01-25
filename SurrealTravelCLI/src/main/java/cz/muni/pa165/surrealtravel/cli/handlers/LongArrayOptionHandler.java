@@ -16,23 +16,23 @@ public class LongArrayOptionHandler extends OptionHandler<Long> {
     public LongArrayOptionHandler(CmdLineParser parser, OptionDef option, Setter<Long> setter) {
         super(parser, option, setter);
     }
-    
+
     @Override
     public String getDefaultMetaVariable() {
         return "Long[]";
     }
-    
+
     @Override
     public int parseArguments(Parameters params) throws CmdLineException {
         int counter=0;
-        
+
         while (counter < params.size()) {
             String param = params.getParameter(counter);
-            
+
             if (param.startsWith("-")) {
                 break;
             }
-            
+
             try {
                 for (String p : param.split(" ")) {
                     setter.addValue(Long.valueOf(p));
@@ -40,10 +40,10 @@ public class LongArrayOptionHandler extends OptionHandler<Long> {
             } catch (NumberFormatException ex) {
                 throw new CmdLineException(owner, ex.getLocalizedMessage(), ex);
             }
-            
+
             ++counter;
         }
-        
+
         return counter;
     }
 }

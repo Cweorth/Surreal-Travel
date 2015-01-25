@@ -1,4 +1,4 @@
-<%-- 
+<%--
     Document   : deleteform
     Author     : Roman Lacko [396157]
 --%>
@@ -19,7 +19,7 @@
         </td>
     </tr>
     <tr>
-        <td class="left">* 
+        <td class="left">*
             <c:choose>
                 <c:when test="${isAdmin}">
                     <f:message key="account.password.admin"/>

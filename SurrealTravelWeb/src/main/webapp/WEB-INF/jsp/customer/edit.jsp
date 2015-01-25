@@ -1,4 +1,4 @@
-<%-- 
+<%--
     Document   : edit
     Author     : Jan Klimeš
 --%>
@@ -14,14 +14,14 @@
 
 <t:layout title="${title}">
 <jsp:attribute name="content">
-    
+
     <jsp:include page="/WEB-INF/include/requiredNotification.jsp" />
 
     <form:form action="${pageContext.request.contextPath}/customers/edit" modelAttribute="customerDTO">
         <form:hidden path="id" />
         <jsp:include page="form.jsp" />
     </form:form>
-    
+
 </jsp:attribute>
 </t:layout>
 

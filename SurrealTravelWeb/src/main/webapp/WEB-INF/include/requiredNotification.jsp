@@ -1,4 +1,4 @@
-<%-- 
+<%--
     Document   : requiredNotification
     Author     : Jan Klimeš
 --%>
@@ -7,7 +7,7 @@
 <%@ taglib prefix="f" uri="http://java.sun.com/jsp/jstl/fmt" %>
 
 <div class="ui-widget" style="margin-bottom: 5px">
-    <div style="padding: 0pt 0.7em;" class="ui-state-highlight ui-corner-all"> 
+    <div style="padding: 0pt 0.7em;" class="ui-state-highlight ui-corner-all">
         <p><span style="float: left; margin-right: 0.3em;" class="ui-icon ui-icon-info"></span>
             <strong><f:message key="basic.requiredFields.important" />:</strong> <strong>*</strong> <f:message key="basic.requiredFields.message" />.</p>
     </div>

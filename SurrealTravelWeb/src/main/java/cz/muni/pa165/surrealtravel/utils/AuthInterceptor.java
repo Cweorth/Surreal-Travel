@@ -18,36 +18,36 @@ import org.springframework.web.servlet.handler.HandlerInterceptorAdapter;
  * @author Jan Klimeš [374259]
  */
 public class AuthInterceptor extends HandlerInterceptorAdapter {
-    
+
     @Autowired
     private AccountService accountService;
-    
+
     @Override
     public void postHandle(HttpServletRequest request, HttpServletResponse response, Object handler, ModelAndView modelAndView) throws Exception {
         if(modelAndView != null && AuthCommons.isAuthenticated()) {
 
             AccountDTO account = accountService.getAccountByUsername(AuthCommons.getUsername());
             if(account == null) return;
-            
+
             modelAndView.addObject("userId", account.getId());
             if(account.getCustomer() != null) modelAndView.addObject("customerId", account.getCustomer().getId());
-            
+
             if(!AuthCommons.hasRole(UserRole.ROLE_STAFF)) {
 
-                // ROLE_USER but not ROLE_STAFF 
+                // ROLE_USER but not ROLE_STAFF
                 if(account.getCustomer() == null)
                     modelAndView.addObject("roleUserNoCustomer", true); // no Customer, hide reservation and customer links
 
-            } 
-            
+            }
+
             if(AuthCommons.hasRole(UserRole.ROLE_STAFF) && !AuthCommons.hasRole(UserRole.ROLE_ADMIN)) {
 
                 // ROLE_STAFF but not ROLE_ADMIN
                 if(account.getCustomer() == null)
                     modelAndView.addObject("roleStaffNoCustomer", true); // no Customer, hide customer links
-                
+
             }
-            
+
         }
     }
 

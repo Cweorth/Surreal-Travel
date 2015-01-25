@@ -44,98 +44,98 @@ import org.springframework.web.util.UriComponentsBuilder;
 @Controller
 @RequestMapping("/accounts")
 public class AccountController {
-    
+
     private final static Logger                logger  = LoggerFactory.getLogger(AccountController.class);
     private final static BCryptPasswordEncoder encoder = new BCryptPasswordEncoder(12);
-    
+
     @Autowired
     private AccountService accountService;
-    
+
     @Autowired
     private CustomerService customerService;
-    
+
     @Autowired
     private ReservationService reservationService;
-    
+
     @Autowired
     private MessageSource messageSource;
-    
+
     //--[  Convenience methods  ]-----------------------------------------------
-    
+
     //<editor-fold desc="[  Roles  ]" defaultstate="collapsed">
-    
+
     private boolean iAmUser() {
         return AuthCommons.hasRole(UserRole.ROLE_USER);
     }
-    
+
     private boolean isUser(AccountDTO account) {
         return account.getRoles().contains(UserRole.ROLE_USER);
     }
-    
+
     private boolean iAmAdmin() {
         return AuthCommons.hasRole(UserRole.ROLE_ADMIN);
     }
-    
+
     private boolean isAdmin(AccountDTO account) {
         return account.getRoles().contains(UserRole.ROLE_ADMIN);
     }
-    
+
     private boolean iAmRoot() {
         return AuthCommons.hasRole(UserRole.ROLE_ROOT);
     }
-    
+
     private boolean isRoot(AccountDTO account) {
         return account.getRoles().contains(UserRole.ROLE_ROOT);
     }
-    
+
     private boolean isSelf(AccountDTO account) {
         return Objects.equals(account.getUsername(), AuthCommons.getUsername());
     }
-    
+
     //</editor-fold>
-    
+
     //--[  Init binders  ]------------------------------------------------------
-    
+
     @InitBinder(value = "newWrapper")
     public void initBinderNew(WebDataBinder binder) {
         binder.setValidator(new AccountNewValidator(accountService));
     }
-    
+
     @InitBinder(value = "editWrapper")
     public void initBinderEdit(WebDataBinder binder) {
         binder.addValidators(new AccountPasswordValidator(), new AccountEditValidator());
     }
-    
+
     @InitBinder(value = "deleteWrapper")
     public void initBinderDelete(WebDataBinder binder) {
         binder.addValidators(new AccountPasswordValidator());
     }
-    
+
     //--[  Controller Methods  ]------------------------------------------------
-    
+
     @Secured("ROLE_ADMIN")
     @RequestMapping(method = RequestMethod.GET)
     public String listAccounts(ModelMap model) {
         model.addAttribute("accounts", accountService.getAllAccounts());
         return "account/list";
     }
-    
+
     @RequestMapping(value = "/new", method = RequestMethod.GET)
     public String newAccount(ModelMap model, UriComponentsBuilder uriBuilder) {
         // only guest or admin can access this page
         if (iAmUser() && !iAmAdmin()) {
             return AuthCommons.forceDenied(uriBuilder);
         }
-        
+
         AccountDTO account = new AccountDTO();
         account.setCustomer(new CustomerDTO());
         model.addAttribute("newWrapper", new AccountWrapper(account));
         return "account/new";
     }
-    
+
     @RequestMapping(value = "/new", method = RequestMethod.POST)
     public String newAccount(
-            @Validated @ModelAttribute("newWrapper") AccountWrapper wrapper, 
+            @Validated @ModelAttribute("newWrapper") AccountWrapper wrapper,
             BindingResult        bindingResult,
             RedirectAttributes   redirectAttributes,
             UriComponentsBuilder uriBuilder,
@@ -144,21 +144,21 @@ public class AccountController {
         if (iAmUser() && !iAmAdmin()) {
             return AuthCommons.forceDenied(uriBuilder);
         }
-        
+
         if (bindingResult.hasErrors()) {
             logFormErrors(bindingResult);
             return "account/new";
         }
-        
+
         AccountDTO account = wrapper.getAccount();
         if (! wrapper.isCustomer()) {
             account.setCustomer(null);
         }
-        
+
         account.setPassword(encoder.encode(wrapper.getPasswd1()));
         account.setPlainPassword(wrapper.getPasswd1());
         account.setRoles(EnumSet.of(UserRole.ROLE_USER));
-        
+
         String resultStatus = "success";
         try {
             if (account.getCustomer() != null) {
@@ -185,17 +185,17 @@ public class AccountController {
             Locale               locale,
             UriComponentsBuilder uriBuilder) {
         AccountDTO account = null;
-        
+
         try {
             account = accountService.getAccountById(id);
         } catch(Exception e) {
             logger.error(e.getMessage());
-        }       
-        
+        }
+
         if (account == null) {
             return "redirect:" + uriBuilder.path("/404").build();
         }
-        
+
         //======================================================================
         // the security specification for this operation is quite complex,
         // see Security.md for clarification
@@ -209,19 +209,19 @@ public class AccountController {
             // ... so I should be punished by error like a crook that I am :D
             return AuthCommons.forceDenied(uriBuilder);
         }
-        
+
         // require my password?
         boolean password    = isSelf(account) || isAdmin(account);
-        
+
         // can change target's permissions?
         boolean permissions = iAmAdmin() && !isRoot(account);
-        
+
         // fool the authentication by setting admin's password to this account
         if (password && !isSelf(account)) {
             AccountDTO myself = accountService.getAccountByUsername(AuthCommons.getUsername());
             account.setPassword(myself.getPassword());
         }
-        
+
         AccountWrapper wrapper = new AccountWrapper(account);
         wrapper.setReqpasswd(password);
         wrapper.setModperm(permissions);
@@ -229,39 +229,39 @@ public class AccountController {
         model.addAttribute("allRoles",    EnumSet.complementOf(EnumSet.of(UserRole.ROLE_ROOT)));
         return "account/edit";
     }
-    
+
     @Secured("ROLE_USER")
     @RequestMapping(value = "/edit", method = RequestMethod.POST)
     public String editAccount(
-        @Validated @ModelAttribute("editWrapper") AccountWrapper wrapper, 
-        BindingResult        bindingResult, 
-        RedirectAttributes   redirectAttributes, 
+        @Validated @ModelAttribute("editWrapper") AccountWrapper wrapper,
+        BindingResult        bindingResult,
+        RedirectAttributes   redirectAttributes,
         UriComponentsBuilder uriBuilder,
         ModelMap             model,
         Locale               locale) {
-        
+
         if (bindingResult.hasErrors()) {
             logFormErrors(bindingResult);
             model.addAttribute("allRoles", EnumSet.complementOf(EnumSet.of(UserRole.ROLE_ROOT)));
             return "account/edit";
         }
-        
+
         String     resultStatus  = "success";
         String     messageSuffix = "";
         AccountDTO account       = wrapper.getAccount();
-        
+
         // Same as previous
         if (    !iAmRoot()
             && (!iAmAdmin() || isRoot(account))
             && (!iAmUser()  || !isSelf(account))) {
             return AuthCommons.forceDenied(uriBuilder);
-        }  
-        
+        }
+
         if (! wrapper.isCustomer()) {
             // for some reason, null account.customer gets replaced by new CustomerDTO()
             wrapper.getAccount().setCustomer(null);
         }
-        
+
         // make sure that neither customer nor username changed
         AccountDTO original     = accountService.getAccountById(wrapper.getAccount().getId());
         if (  ! Objects.equals(original.getCustomer(), account.getCustomer())
@@ -272,14 +272,14 @@ public class AccountController {
             logger.info("About to throw an exception");
             throw new IllegalArgumentException("Prohibited fields changed in the account!");
         }
-        
+
         // make sure that root's permissions are intact
         if (     isRoot(account)
             && ! Objects.equals(original.getRoles(), account.getRoles())) {
             logger.error("Root permissions were modified");
             throw new IllegalArgumentException("Cannot modify root's permissions!");
         }
-        
+
         // make sure that only administrator can change roles
         if (  ! Objects.equals(original.getRoles(), account.getRoles())
            && ! iAmAdmin()) {
@@ -288,7 +288,7 @@ public class AccountController {
             logger.info("About to throw an exception... that will show him!");
             throw new IllegalArgumentException("Illegal modification of user roles!");
         }
-        
+
         if (StringUtils.isNotBlank(wrapper.getPasswd1())) {
             account.setPlainPassword(wrapper.getPasswd1());
             account.setPassword(encoder.encode(wrapper.getPasswd1()));
@@ -296,7 +296,7 @@ public class AccountController {
             // hack to pass the password length constraint, the value will be ignored
             account.setPlainPassword("----");
         }
-        
+
         try {
             accountService.updateAccount(account);
         } catch(NullPointerException | IllegalArgumentException e) {
@@ -304,19 +304,19 @@ public class AccountController {
             resultStatus  = "failure";
             messageSuffix = ".error";
         }
-        
+
         // if an administrator renounces his administrator rights, log him off
         if ((isSelf(account)) && (!account.getRoles().contains(UserRole.ROLE_ADMIN))) {
             SecurityContextHolder.getContext().setAuthentication(null);
             messageSuffix = ".loggedOut";
         }
-        
+
         String messageKey = "account.message.edit" + messageSuffix;
-        redirectAttributes.addFlashAttribute(resultStatus + "Message", 
+        redirectAttributes.addFlashAttribute(resultStatus + "Message",
                 messageSource.getMessage(messageKey, new Object[]{ wrapper.getAccount().getUsername() }, locale));
         return "redirect:" + uriBuilder.path(iAmAdmin() ? "/accounts" : "/").queryParam("notification", resultStatus).build();
     }
-    
+
     @Secured("ROLE_USER")
     @RequestMapping(value = "/delete/{id}", method = RequestMethod.GET)
     public String deleteAccount(
@@ -326,23 +326,23 @@ public class AccountController {
             Locale               locale,
             UriComponentsBuilder uriBuilder) {
         AccountDTO account = null;
-        
+
         try {
             account = accountService.getAccountById(id);
         } catch(Exception e) {
             logger.error(e.getMessage());
         }
-        
+
         if (account == null) {
             return "redirect:" + uriBuilder.path("/404").build();
         }
-          
+
         // we cannot delete root,
         // only admin and the user with the specified ID can access this page
         if (isRoot(account) || (!iAmAdmin() && !isSelf(account))) {
             return AuthCommons.forceDenied(uriBuilder);
         }
-                
+
         // does the user need to provide credentials?
         if (!isSelf(account) && !isAdmin(account)) {
             // fast-forward delete
@@ -350,30 +350,30 @@ public class AccountController {
             String messageKey   = "account.message.delete" + (resultStatus.equals("success") ? "" : ".error");
             String message      = messageSource.getMessage(messageKey, new Object[]{ account.getUsername() }, locale);
             redirectAttributes.addFlashAttribute(resultStatus + "Message", message);
-            return "redirect:" + uriBuilder.path(iAmAdmin() ? "/accounts" : "/").queryParam("notification", resultStatus).build(); 
+            return "redirect:" + uriBuilder.path(iAmAdmin() ? "/accounts" : "/").queryParam("notification", resultStatus).build();
         }
-        
+
         // fool the authentication by setting admin's password to this account
         if (!isSelf(account)) {
             AccountDTO myself = accountService.getAccountByUsername(AuthCommons.getUsername());
             account.setPassword(myself.getPassword());
         }
-        
+
         AccountWrapper wrapper = new AccountWrapper(account);
         wrapper.setReqpasswd(true);
         model.addAttribute("deleteWrapper", wrapper);
         return "account/delete";
     }
-    
+
     @Secured("ROLE_USER")
     @RequestMapping(value = "/delete", method = RequestMethod.POST)
     public String deleteAccount(
-        @Validated @ModelAttribute("deleteWrapper") AccountWrapper wrapper, 
-        BindingResult        bindingResult, 
-        RedirectAttributes   redirectAttributes, 
+        @Validated @ModelAttribute("deleteWrapper") AccountWrapper wrapper,
+        BindingResult        bindingResult,
+        RedirectAttributes   redirectAttributes,
         UriComponentsBuilder uriBuilder,
         Locale               locale) {
-        
+
         if (bindingResult.hasErrors()) {
             logFormErrors(bindingResult);
             return "account/delete";
@@ -384,17 +384,17 @@ public class AccountController {
         String     messageKey   = "account.message.delete" + (resultStatus.equals("success") ? "" : ".error");
         String     message      = messageSource.getMessage(messageKey, new Object[]{ account.getUsername() }, locale);
         redirectAttributes.addFlashAttribute(resultStatus + "Message", message);
-        return "redirect:" + uriBuilder.path(iAmAdmin() ? "/accounts" : "/").queryParam("notification", resultStatus).build();        
+        return "redirect:" + uriBuilder.path(iAmAdmin() ? "/accounts" : "/").queryParam("notification", resultStatus).build();
     }
-    
+
     // common method for account deletion
     private String doDeleteAccount(AccountDTO account) {
         String resultStatus = "success";
-        
+
         try {
             logger.debug("Deleting account");
             accountService.deleteAccountById(account.getId());
-            
+
             // if user has removed his own account, invalidate session
             String username = AuthCommons.getUsername();
             if (username.equals(account.getUsername())) {
@@ -405,20 +405,20 @@ public class AccountController {
             logger.error(e.getClass().getName() + " :: " + e.getMessage());
             resultStatus = "failure";
         }
-        
+
         return resultStatus;
     }
-    
+
     private void logFormErrors(BindingResult bindingResult) {
         logger.debug("Encountered following errors when validating form.");
-        
+
         for (ObjectError ge : bindingResult.getGlobalErrors()) {
             logger.debug("ObjectError: {}", ge);
         }
-        
+
         for (FieldError fe : bindingResult.getFieldErrors()) {
             logger.debug("FieldError: {}", fe);
         }
     }
-    
+
 }

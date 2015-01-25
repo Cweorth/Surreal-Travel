@@ -12,7 +12,7 @@ import java.util.Objects;
  * @author Roman Lacko [396157]
  */
 public class TripModelData extends TripDTO {
-    
+
     private List<ExcursionDTO> allExcursions;
     private List<Long>         excursionIDs;
 
@@ -32,7 +32,7 @@ public class TripModelData extends TripDTO {
     public TripModelData(TripDTO trip, List<ExcursionDTO> allExcursions) {
         Objects.requireNonNull(trip, "trip");
         Objects.requireNonNull(allExcursions, "allExcursions");
-        
+
         setId(trip.getId());
         setDestination(trip.getDestination());
         setDateFrom(trip.getDateFrom());
@@ -40,7 +40,7 @@ public class TripModelData extends TripDTO {
         setCapacity(trip.getCapacity());
         setBasePrice(trip.getBasePrice());
         setExcursions(new ArrayList<>(trip.getExcursions()));
-        
+
         this.allExcursions = new ArrayList<>(allExcursions);
         this.excursionIDs  = new ArrayList<>();
     }
@@ -58,7 +58,7 @@ public class TripModelData extends TripDTO {
         trip.setCapacity(getCapacity());
         trip.setBasePrice(getBasePrice());
         trip.setExcursions(getExcursions());
-        
+
         return trip;
     }
 
@@ -77,5 +77,5 @@ public class TripModelData extends TripDTO {
     public void setExcursionIDs(List<Long> excursionIDs) {
         this.excursionIDs = excursionIDs;
     }
-    
+
 }

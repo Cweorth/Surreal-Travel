@@ -1,7 +1,7 @@
 customerCheckPath = "form input[id='customer'][type='checkbox']";
 
 $(document).ready(function() {
-    
+
     var notification = $.getQuery('notification');
     if(notification === "success") {
         showSuccessMessage();
@@ -14,7 +14,7 @@ $(document).ready(function() {
             primary: "ui-icon-document"
         }
     });
-    
+
     $( "button.submit" ).button({
         icons: {
             primary: "ui-icon-check"
@@ -22,13 +22,13 @@ $(document).ready(function() {
     }).click(function() {
         showStatus();
     });
-    
+
     $( "button.cancel" ).button({
         icons: {
             primary: "ui-icon-cancel"
         }
     });
-    
+
     $( ".datepicker" ).datepicker({
         showAnim: "fadeIn",
         showOtherMonths: true,
@@ -36,11 +36,11 @@ $(document).ready(function() {
         changeMonth: true,
         changeYear: true
     });
-    
+
     // localize datepicker
     if((window.navigator.userLanguage || window.navigator.language) === "cs")
         $( ".datepicker" ).datepicker($.datepicker.regional[ "cs" ]);
-    
+
     $( ".dialogDelete" ).dialog({
         height: 200,
         resizable: false,
@@ -49,16 +49,16 @@ $(document).ready(function() {
         closeOnEscape: true,
         closeText: ""
     });
-    
+
     $( ".bulletinBoard" ).accordion({
         heightStyle: "content"
     });
-    
+
     toggleCustomer(customerCheckPath);
-   
+
 });
 
-$(document).on("change", "form .selectAjax", function(e){ 
+$(document).on("change", "form .selectAjax", function(e){
     $.ajax({
         type: "GET",
         url: "/pa165/reservations/ajaxGetExcursions/"  + $(this).val(),
@@ -70,14 +70,14 @@ $(document).on("change", "form .selectAjax", function(e){
     });
 });
 
-$(document).on("click", ".dialogDeletePrompt", function(e){ 
+$(document).on("click", ".dialogDeletePrompt", function(e){
 
     e.preventDefault();
 
     url = $(this).attr('href');
     id = $(this).parent('li').attr('id');
     element = $('#dialogDelete_' + id);
-    
+
     var buttons = element.dialog("option", "buttons");
 
     if(jQuery.isEmptyObject(buttons)) {
@@ -90,9 +90,9 @@ $(document).on("click", ".dialogDeletePrompt", function(e){
             }
         });
     }
-    
+
     element.dialog( "option", "open", function() {
-        
+
         $('.ui-dialog-buttonpane').find('button:contains("yes")').button({
             icons: {
                 primary: 'ui-icon-check'

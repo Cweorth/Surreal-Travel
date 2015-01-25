@@ -9,7 +9,7 @@ import org.springframework.web.bind.annotation.ResponseStatus;
 @ResponseStatus(value = HttpStatus.FORBIDDEN, reason = "Invalid username or password")
 public class PermissionDeniedException extends RestAPIException {
 
-    public PermissionDeniedException() 
+    public PermissionDeniedException()
     {}
 
     public PermissionDeniedException(String message) {
@@ -23,5 +23,5 @@ public class PermissionDeniedException extends RestAPIException {
     public PermissionDeniedException(Throwable cause) {
         super(cause);
     }
-    
+
 }

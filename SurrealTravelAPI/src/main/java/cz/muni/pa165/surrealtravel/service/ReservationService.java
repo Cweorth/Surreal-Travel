@@ -15,7 +15,7 @@ public interface ReservationService {
      * Save the reservation.
      * @param reservationDTO the reservation to add.
      */
-    
+
     void addReservation(ReservationDTO reservationDTO);
 
     /**
@@ -50,7 +50,7 @@ public interface ReservationService {
      * @param reservationDTO the reservation to update.
      */
     void updateReservation(ReservationDTO reservationDTO);
-    
+
     /**
      * Remove the reservation with the given {@code id}.
      * @param id the id to search for.

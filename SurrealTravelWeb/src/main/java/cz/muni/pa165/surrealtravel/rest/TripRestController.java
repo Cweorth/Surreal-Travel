@@ -40,7 +40,7 @@ public class TripRestController {
 
     @Autowired
     private ExcursionService excursionService;
-    
+
     @Autowired
     private RestAuthCommons restAuth;
 

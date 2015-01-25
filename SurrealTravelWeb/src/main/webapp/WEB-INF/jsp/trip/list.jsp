@@ -1,4 +1,4 @@
-<%-- 
+<%--
     Document   : list
     Created on : Nov 25, 2014, 4:09:14 PM
     Author     : Roman Lacko [396157]
@@ -101,7 +101,7 @@
                                     <td/>
                                     <td><c:out value="${excursion.description}"/></td>
                                     <td/>
-                                </tr> 
+                                </tr>
                             </c:forEach>
                         </c:if>
                     </c:forEach>

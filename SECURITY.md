@@ -59,7 +59,7 @@ This file concerns user roles and their permissions in the Surreal-Travel applic
 | ```ROOT```  | ```CELD``` | ```CELR``` | ```CELR``` | ```CELR``` | ```PELD```  |
 
 Position system: ```CELD``` where
-   * ```C``` - create, ```E``` - edit, ```L``` - list, ```D``` - delete, ```-``` - not allowed, 
+   * ```C``` - create, ```E``` - edit, ```L``` - list, ```D``` - delete, ```-``` - not allowed,
    * ```R``` - restricted delete (not referenced entity), ```P``` restricted create (must be a customer),
    * lowercase = operation allowed only on an entity owned by the user,
    * uppercase = operation allowed on all entities (in case of accounts only on **LOWER or SAME** role),

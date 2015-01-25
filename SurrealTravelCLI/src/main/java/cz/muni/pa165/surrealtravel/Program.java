@@ -28,15 +28,15 @@ import org.springframework.web.client.ResourceAccessException;
  * @author Roman Lacko [396157]
  */
 public class Program {
-    
+
     private final static Logger logger = LoggerFactory.getLogger(Program.class);
-    
+
     private static void printHeader(PrintStream ps) {
         ps.println("========================");
         ps.println("|  Surreal-Travel CLI  |");
         ps.println("========================");
     }
-    
+
     /**
      * Shows program help
      * @param ps        target print stream
@@ -44,7 +44,7 @@ public class Program {
     public static void printHelp(PrintStream ps) {
         printHeader(ps);
         ps.println();
-        
+
         CmdLineParser parser = new CmdLineParser(new MainOptions());
         String example = parser.printExample(new OptionHandlerFilter() {
             @Override
@@ -52,16 +52,16 @@ public class Program {
                 return !"command".equals(arg0.option.metaVar());
             }
         });
-        
+
         ps.println("usage: " + example +" COMMAND");
         ps.println();
         ps.println("hint:  use -?  LIST     to list available commands");
         ps.println("hint:  use -? [COMMAND] to show help for the command");
         ps.println();
 
-        parser.printUsage(ps);        
+        parser.printUsage(ps);
     }
-    
+
     /**
      * Shows command help
      * @param ps        target print stream
@@ -70,33 +70,33 @@ public class Program {
     public static void printCommandUsage(PrintStream ps, CommandHandler handler) {
         printHeader(ps);
         ps.println();
-        
+
         CmdLineParser parser = new CmdLineParser(handler);
-        
+
         ps.println(handler.getCommand() + ": " + handler.getDescription());
         ps.print("command usage: ");
-        
+
         parser.printSingleLineUsage(ps);
         ps.println();
         ps.println();
-        
+
         parser.printUsage(ps);
     }
-    
+
     /**
      * Program entry method
      * @param args      CLI arguments
      */
     public static void main(String[] args) {
         logger.debug("Starting application");
-        
-        try {       
+
+        try {
             logger.debug("Parsing command-line arguments");
             MainOptions   options = new MainOptions();
             CmdLineParser parser  = new CmdLineParser(options);
-            
+
             parser.parseArgument(args);
-        
+
             Map<Command, CommandHandler> handlers = new EnumMap<>(Command.class);
             handlers.put(Command.EXCURSIONS_ADD,    new ExcursionsAddHandler());
             handlers.put(Command.EXCURSIONS_DELETE, new ExcursionsDeleteHandler());
@@ -108,7 +108,7 @@ public class Program {
             handlers.put(Command.TRIPS_EDIT,        new TripsEditHandler());
             handlers.put(Command.TRIPS_GET,         new TripsGetHandler());
             handlers.put(Command.TRIPS_LIST,        new TripsListHandler());
-            
+
             //<editor-fold desc="[  Debug & Verbose handling  ]" defaultstate="collapsed">
             if (options.isVerbose() || options.isDebug()) {
                 logger.debug("entering log-verbose mode");
@@ -127,7 +127,7 @@ public class Program {
                 logger.debug("log-verbose mode enabled");
             }
             //</editor-fold>
-                        
+
             //<editor-fold desc="[  Help handling  ]" defaultstate="collapsed">
             if (options.isHelp()) {
                 printHelp(System.out);
@@ -176,19 +176,19 @@ public class Program {
                 char[] password = System.console().readPassword();
                 System.out.println();
                 logger.debug("Setting AuthHeaderInterceptor");
-                
+
                 List<ClientHttpRequestInterceptor> interceptors = AppConfig.getTemplate().getInterceptors();
                 if (interceptors == null) {
                     interceptors = new ArrayList<>();
                 }
-                
+
                 interceptors.add(new AuthHeaderInterceptor(options.getUsername(), String.valueOf(password)));
                 AppConfig.getTemplate().setInterceptors(interceptors);
-                                
+
                 logger.debug("Interceptor configured");
             }
             //</editor-fold>
-            
+
             if (!handlers.containsKey(options.getCommand())) {
                 throw new RuntimeException("No handler for command " + options.getCommand());
             }
@@ -204,15 +204,15 @@ public class Program {
             System.exit(2);
         } catch (RESTAccessException ex) {
             logger.error("Rest access exception", ex);
-            
+
             Throwable cause = ex.getCause();
-            
+
             if ((cause != null) && cause.getClass().equals(ResourceAccessException.class)) {
                 System.err.println("OPERATION FAILED: Unable to connect to the resource");
             } else {
                 System.err.println("OPERATION FAILED: " + ex.getMessage());
             }
-            
+
             System.err.println("For the details, please see the log file.");
             System.exit(3);
         } catch (RuntimeException ex) { // this is bad, but can't be helped

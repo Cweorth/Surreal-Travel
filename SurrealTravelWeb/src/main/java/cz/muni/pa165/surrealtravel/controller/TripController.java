@@ -49,29 +49,29 @@ import org.springframework.web.util.UriComponentsBuilder;
 @Controller
 @RequestMapping("/trips")
 public class TripController {
-    
+
     final static Logger logger = LoggerFactory.getLogger(TripController.class);
-    
-    @Autowired 
+
+    @Autowired
     private TripService tripService;
-    
+
     @Autowired
     private ExcursionService excursionService;
-    
+
     @Autowired
     private ReservationService reservationService;
-    
+
     @Autowired
     private MessageSource messageSource;
-    
+
     @InitBinder(value = {"tripdata"})
     protected void initBinder(WebDataBinder binder) {
         binder.setValidator(new TripValidator());
-        
+
         CustomDateEditor editor = new CustomDateEditor(new SimpleDateFormat("MM/dd/yyyy"), true);
         binder.registerCustomEditor(Date.class, editor);
     }
-    
+
     /**
      * Default page that lists all customers
      * @param model
@@ -82,7 +82,7 @@ public class TripController {
     public String listTrips(ModelMap model, @RequestParam(value = "eid", required = false) String eid) {
         List<TripDTO> allTrips = new ArrayList<>();
         List<TripDTO> reserved = new ArrayList<>();
-        
+
         // if filtered by excursions
         if (eid != null) try {
             ExcursionDTO excursion = excursionService.getExcursionById(Long.valueOf(eid));
@@ -95,25 +95,25 @@ public class TripController {
         } else {
             allTrips.addAll(tripService.getAllTrips());
         }
-        
+
         model.addAttribute("trips", allTrips);
-        
+
         // STAFF can delete accounts, so let's list reserved trips also
         if (AuthCommons.hasRole(UserRole.ROLE_STAFF)) {
             Set<TripDTO>         reservedSet  = new HashSet<>();
             List<ReservationDTO> reservations = reservationService.getAllReservations();
-            
+
             for (ReservationDTO reservation : reservations) {
                 reservedSet.add(reservation.getTrip());
             }
-            
+
             reserved.addAll(reservedSet);
         }
-        
+
         model.addAttribute("reserved", reserved);
         return "trip/list";
     }
-    
+
     /**
      * Redirects to a NewTrip form
      * @param model
@@ -125,7 +125,7 @@ public class TripController {
         model.addAttribute("tripdata", new TripModelData(new TripDTO(), excursionService.getAllExcursions()));
         return "trip/new";
     }
-    
+
     /**
      * Processes the POST request for creating a new trip
      * @param data
@@ -137,22 +137,22 @@ public class TripController {
      */
     @Secured("ROLE_STAFF")
     @RequestMapping(value = "/new", method = RequestMethod.POST)
-    public String newTrip(@Validated @ModelAttribute("tripdata") TripModelData data, 
-            BindingResult bindingResult, 
-            RedirectAttributes redirectAttributes, 
-            UriComponentsBuilder uriBuilder, 
+    public String newTrip(@Validated @ModelAttribute("tripdata") TripModelData data,
+            BindingResult bindingResult,
+            RedirectAttributes redirectAttributes,
+            UriComponentsBuilder uriBuilder,
             Locale locale) {
-        
+
         List<ExcursionDTO> excursions = excursionService.getAllExcursions();
         data.setAllExcursions(excursions);
-        
+
         if (bindingResult.hasErrors() || !checkExcursions(data, excursions, bindingResult, locale)) {
             logFormErrors(bindingResult);
             return "trip/new";
         }
-        
+
         String resultStatus = "success";
-        
+
         try {
             tripService.addTrip(data.unwrap());
         } catch(NullPointerException | IllegalArgumentException e) {
@@ -164,7 +164,7 @@ public class TripController {
         redirectAttributes.addFlashAttribute(resultStatus + "Message", messageSource.getMessage(messageKey, new Object[]{data.getDestination()}, locale));
         return "redirect:" + uriBuilder.path("/trips").queryParam("notification", resultStatus).build();
     }
-    
+
     /**
      * Redirects to a EditTrip form
      * @param id
@@ -178,26 +178,26 @@ public class TripController {
     @RequestMapping(value = "/edit/{id}", method = RequestMethod.GET)
     public String editTripForm(@PathVariable long id, ModelMap model, RedirectAttributes redirectAttributes, Locale locale, UriComponentsBuilder uriBuilder) {
         TripDTO trip = null;
-        
+
         try {
             trip = tripService.getTripById(id);
         } catch(Exception e) {
             logger.error(e.getMessage());
         }
-        
+
         if(trip == null) {
             return "trip/list";
         }
-        
+
         TripModelData tripdata = new TripModelData(trip, excursionService.getAllExcursions());
         for(ExcursionDTO excursion : trip.getExcursions()) {
             tripdata.getExcursionIDs().add(excursion.getId());
         }
-        
+
         model.addAttribute("tripdata", tripdata);
         return "trip/edit";
     }
-    
+
     /**
      * Processes the POST request for updating a trip
      * @param data
@@ -210,29 +210,29 @@ public class TripController {
     @Secured("ROLE_STAFF")
     @RequestMapping(value = "/edit", method = RequestMethod.POST)
     public String editTrip(@Validated @ModelAttribute("tripdata") TripModelData data, BindingResult bindingResult, RedirectAttributes redirectAttributes, UriComponentsBuilder uriBuilder, Locale locale) {
-        
+
         List<ExcursionDTO> excursions = excursionService.getAllExcursions();
         data.setAllExcursions(excursions);
-        
+
         if (bindingResult.hasErrors() || !checkExcursions(data, excursions, bindingResult, locale)) {
             logFormErrors(bindingResult);
             return "trip/edit";
         }
-        
+
         String resultStatus = "success";
-        
-        try {           
+
+        try {
             tripService.updateTrip(data.unwrap());
         } catch(NullPointerException | IllegalArgumentException e) {
             logger.error(e.getMessage());
             resultStatus = "failure";
         }
-        
+
         String messageKey = "trip.message.edit" + (resultStatus.equals("success") ? "" : ".error");
         redirectAttributes.addFlashAttribute(resultStatus + "Message", messageSource.getMessage(messageKey, new Object[]{data.getDestination()}, locale));
         return "redirect:" + uriBuilder.path("/trips").queryParam("notification", resultStatus).build();
-    }    
-    
+    }
+
     /**
      * Removes the requested trip
      * @param id
@@ -246,7 +246,7 @@ public class TripController {
     public String deleteTrip(@PathVariable long id, RedirectAttributes redirectAttributes, UriComponentsBuilder uriBuilder, Locale locale) {
         String destination  = null;
         String resultStatus = "success";
-        
+
         try {
             TripDTO trip = tripService.getTripById(id);
             destination  = trip.getDestination();
@@ -255,15 +255,15 @@ public class TripController {
             logger.error(e.getClass().getName() + " :: " + e.getMessage());
             resultStatus = "failure";
         }
-        
+
         String messageKey = "trip.message.delete" + (resultStatus.equals("success") ? "" : ".error");
         redirectAttributes.addFlashAttribute(resultStatus + "Message", messageSource.getMessage(messageKey, new Object[]{ destination }, locale));
         return "redirect:" + uriBuilder.path("/trips").queryParam("notification", resultStatus).build();
-    }    
-    
+    }
+
     //--[  Excursion date constraint check  ]-----------------------------------
-    
-    private boolean checkExcursions(TripModelData data, List<ExcursionDTO> excursions, 
+
+    private boolean checkExcursions(TripModelData data, List<ExcursionDTO> excursions,
             BindingResult bindingResult, Locale locale) {
         if ((data.getExcursionIDs() != null) && !data.getExcursionIDs().isEmpty()) {
             Map<Long, ExcursionDTO> exmap = new HashMap<>(excursions.size());
@@ -280,7 +280,7 @@ public class TripController {
                 calendar.add(Calendar.DATE, ex.getDuration());
 
                 Date start = ex.getExcursionDate();
-                Date end   = calendar.getTime();                    
+                Date end   = calendar.getTime();
 
                 if (start.before(data.getDateFrom()) || end.after(data.getDateTo())) {
                     String message = messageSource.getMessage("trip.validator.invalidExcursion", new Object[]{ ex.getDestination() }, locale);
@@ -290,10 +290,10 @@ public class TripController {
                 data.addExcursion(ex);
             }
         }
-        
+
         return !bindingResult.hasErrors();
     }
-    
+
     private void logFormErrors(BindingResult bindingResult) {
         logger.debug("Encountered following errors when validating form.");
         for(ObjectError ge : bindingResult.getGlobalErrors()) {
@@ -302,5 +302,5 @@ public class TripController {
         for(FieldError fe : bindingResult.getFieldErrors()) {
             logger.debug("FieldError: {}", fe);
         }
-    }    
+    }
 }

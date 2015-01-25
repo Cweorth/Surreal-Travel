@@ -1,4 +1,4 @@
-<%-- 
+<%--
     Document   : entryListButton
     Author     : Jan Klimeš
 --%>

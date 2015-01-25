@@ -1,4 +1,4 @@
-<%-- 
+<%--
     Document   : bulletin_cs
     Author     : Jan Klimeš
 --%>

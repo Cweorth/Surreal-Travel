@@ -14,15 +14,15 @@ public class ErrorController {
     public String error403() {
         return "/err/403";
     }
-    
+
     @RequestMapping("/404")
     public String error404() {
         return "/err/404";
     }
-    
+
     @RequestMapping("/500")
     public String error500() {
         return "/err/500";
     }
-    
+
 }

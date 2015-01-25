@@ -1,4 +1,4 @@
-<%-- 
+<%--
     Document   : new
     Author     : Roman Lacko [396157]
 --%>
@@ -14,13 +14,13 @@
 
 <t:layout title="${title}">
 <jsp:attribute name="content">
-    
+
     <jsp:include page="/WEB-INF/include/requiredNotification.jsp" />
 
     <form:form action="${pageContext.request.contextPath}/accounts/new" modelAttribute="newWrapper">
         <jsp:include page="form.jsp"/>
     </form:form>
-    
+
 </jsp:attribute>
 </t:layout>
 

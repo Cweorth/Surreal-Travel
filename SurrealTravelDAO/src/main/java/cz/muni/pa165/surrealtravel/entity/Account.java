@@ -23,26 +23,26 @@ import javax.validation.constraints.Size;
  */
 @Entity
 public class Account implements Serializable {
-    
+
     @Id
     @GeneratedValue
     private long id;
-    
+
     @Column(nullable = false, unique = true)
     @Size(min = 4, max = 32)
     @Pattern(regexp = "[a-z0-9]+")
     private String username;
-    
+
     @Column(nullable = false)
     private String password; // hash of the password
-    
+
     @Transient
     @Size(min = 4, max = 32)
     private String plainPassword; // not persisted, used only for purposes of password length
-    
+
     @OneToOne
     private Customer customer;
-    
+
     @ElementCollection(targetClass = UserRole.class)
     @Enumerated(EnumType.STRING)
     @CollectionTable(name = "ACCOUNT_ROLES")

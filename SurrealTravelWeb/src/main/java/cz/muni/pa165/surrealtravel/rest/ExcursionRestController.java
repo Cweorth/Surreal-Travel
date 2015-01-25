@@ -31,15 +31,15 @@ import org.springframework.web.bind.annotation.RestController;
 @RestController
 @RequestMapping("/rest/excursions")
 public class ExcursionRestController {
-    
+
     private final static Logger logger = LoggerFactory.getLogger(cz.muni.pa165.surrealtravel.rest.ExcursionRestController.class);
-    
+
     @Autowired
     private ExcursionService excursionService;
-    
+
     @Autowired
     private RestAuthCommons restAuth;
-    
+
     /**
      * Default page - list all excursions.
      * @return list of excursions
@@ -49,7 +49,7 @@ public class ExcursionRestController {
         logger.info("Retrieving a list of excursions");
         return excursionService.getAllExcursions();
     }
-    
+
     /**
      * Get excursion by id.
      * @param id
@@ -59,14 +59,14 @@ public class ExcursionRestController {
     public @ResponseBody ExcursionDTO getExcursion(@PathVariable long id) {
         logger.info("Retrieving an excursion with id " + id);
         ExcursionDTO excursion = excursionService.getExcursionById(id);
-        
+
         if(excursion == null) {
             throw new EntityNotFoundException("Excursion", id);
         }
-        
+
         return excursion;
     }
-    
+
     /**
      * Create new excursion
      * @param excursion
@@ -90,10 +90,10 @@ public class ExcursionRestController {
         } finally {
             restAuth.logout();
         }
-        
+
         return excursion;
     }
-    
+
     /**
      * Modify excursion.
      * @param excursion
@@ -105,7 +105,7 @@ public class ExcursionRestController {
     @ResponseStatus(value = HttpStatus.ACCEPTED)
     public @ResponseBody ExcursionDTO updateExcursion(@PathVariable long id, @RequestBody ExcursionDTO excursion, HttpServletRequest request) {
         logger.info("Updating an excursion with id " + id);
-        
+
         try {
             restAuth.login(request);
             excursionService.updateExcursion(excursion);
@@ -117,10 +117,10 @@ public class ExcursionRestController {
         } finally {
             restAuth.logout();
         }
-        
+
         return excursion;
     }
-    
+
     /**
      * Delete excursion by id.
      * @param id
@@ -131,11 +131,11 @@ public class ExcursionRestController {
     public @ResponseBody ExcursionDTO deleteExcursion(@PathVariable long id, HttpServletRequest request) {
         logger.info("Deleting an excursion with id " + id);
         ExcursionDTO excursion = excursionService.getExcursionById(id);
-        
+
         if(excursion == null) {
             throw new EntityNotFoundException("Excursion", id);
         }
-        
+
         try {
             restAuth.login(request);
             excursionService.deleteExcursionById(id);
@@ -151,7 +151,7 @@ public class ExcursionRestController {
         } finally {
             restAuth.logout();
         }
-        
+
         return excursion;
     }
 }

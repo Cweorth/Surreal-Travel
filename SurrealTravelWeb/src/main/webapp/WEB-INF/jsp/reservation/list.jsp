@@ -1,4 +1,4 @@
-<%-- 
+<%--
     Document   : list
     Author     : Tomáš Kácel
 --%>
@@ -17,9 +17,9 @@
 <jsp:attribute name="content">
 
     <button class="new" onclick="javascript:redirect('${pageContext.request.contextPath}/reservations/new');"><f:message key="reservation.add"/></button>
-    
+
     <br><br>
-    
+
     <table cellspacing="0" cellpadding="3" border="0" class="tableEntry">
         <tr class="head">
             <td width="25">#</td>
@@ -75,7 +75,7 @@
                                 <td><c:out value="${excursion.price}"/></td>
                                 <td/>
                                 <td colspan="2"><c:out value="${excursion.description}"/></td>
-                            </tr> 
+                            </tr>
                         </c:forEach>
                     </c:if>
                 </c:forEach>
@@ -87,6 +87,6 @@
             </c:otherwise>
         </c:choose>
     </table>
-            
+
 </jsp:attribute>
 </t:layout>

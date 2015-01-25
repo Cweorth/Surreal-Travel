@@ -12,6 +12,6 @@
                 <value>dozer/dto-mappings.xml</value>
             </list>
         </property>
-    </bean>    
-    
+    </bean>
+
 </beans>

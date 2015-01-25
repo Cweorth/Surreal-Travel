@@ -8,13 +8,13 @@ import java.util.List;
  * @author Jan Klimeš [374259]
  */
 public interface CustomerDAO {
-    
+
     /**
      * Store new customer.
-     * @param customer 
+     * @param customer
      */
     public void addCustomer(Customer customer);
-    
+
     /**
      * Get the customer with the given id.
      * @param id
@@ -27,18 +27,18 @@ public interface CustomerDAO {
      * @return the list of customers
      */
     public List<Customer> getAllCustomers();
-    
+
     /**
      * Modify the customer.
-     * @param customer 
+     * @param customer
      * @return the modified customer
      */
     public Customer updateCustomer(Customer customer);
-    
+
     /**
      * Remove customer by id.
-     * @param id 
+     * @param id
      */
     public void deleteCustomerById(long id);
-    
+
 }

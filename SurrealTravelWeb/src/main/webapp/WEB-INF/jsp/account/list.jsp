@@ -1,4 +1,4 @@
-<%-- 
+<%--
     Document   : list
     Author     : Roman Lacko [396157]
 --%>
@@ -82,7 +82,7 @@
                                                     <jsp:param name="inactive" value="true" />
                                                 </jsp:include>
                                             </c:otherwise>
-                                        </c:choose>                                            
+                                        </c:choose>
                                     </ul>
                                 </c:if>
                             </td>

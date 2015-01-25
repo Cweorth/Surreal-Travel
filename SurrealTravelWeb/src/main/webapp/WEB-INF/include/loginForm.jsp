@@ -1,4 +1,4 @@
-<%-- 
+<%--
     Document   : loginForm
     Author     : Jan Klimeš
 --%>
@@ -20,5 +20,5 @@
         <button type="button" class="submit" onclick="javascript:this.form.submit();"><f:message key="basic.submit" /></button>
         <input type="hidden" name="${_csrf.parameterName}" value="${_csrf.token}" />
     </form>
-    
+
 </sec:authorize>

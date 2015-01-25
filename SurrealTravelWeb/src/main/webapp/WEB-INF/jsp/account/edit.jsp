@@ -1,4 +1,4 @@
-<%-- 
+<%--
     Document   : edit
     Author     : Roman Lacko [396157]
 --%>
@@ -13,13 +13,13 @@
 <%@ taglib prefix="s" uri="http://www.springframework.org/tags" %>
 <%@ taglib prefix="form" uri="http://www.springframework.org/tags/form" %>
 <%@ taglib prefix="sec"  uri="http://www.springframework.org/security/tags" %>
-    
+
 <%
     AccountWrapper wrapper = (AccountWrapper) request.getAttribute("editWrapper");
     if (wrapper.getAccount().getRoles() == null) {
         wrapper.getAccount().setRoles(EnumSet.noneOf(UserRole.class));
     }
-    
+
     request.setAttribute("accountIsAdmin", wrapper.getAccount().getRoles().contains(UserRole.ROLE_ADMIN));
 %>
 
@@ -42,12 +42,12 @@
             <c:otherwise>
                 <jsp:include page="/WEB-INF/include/note.jsp">
                     <jsp:param name="key" value="account.message.editByAdmin"/>
-                </jsp:include>        
+                </jsp:include>
             </c:otherwise>
         </c:choose>
         <br/>
     </c:if>
-    
+
     <form:form action="${pageContext.request.contextPath}/accounts/edit" modelAttribute="editWrapper">
         <c:if test="${not empty editWrapper.account.customer}">
             <form:hidden path="account.customer.id"/>
@@ -62,7 +62,7 @@
         <form:hidden path="modperm"/>
         <jsp:include page="editform.jsp" />
     </form:form>
-    
+
 </jsp:attribute>
 </t:layout>
 

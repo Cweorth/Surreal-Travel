@@ -13,14 +13,14 @@ import org.springframework.stereotype.Repository;
  */
 @Repository(value = "excursionDao")
 public class JPAExcursionDAO implements ExcursionDAO {
-    
+
     @PersistenceContext
     private EntityManager entityManager;
 
     public EntityManager getEntityManager() {
         return entityManager;
     }
-    
+
     public void setEntityManager(EntityManager em) {
         this.entityManager = em;
     }
@@ -35,24 +35,24 @@ public class JPAExcursionDAO implements ExcursionDAO {
         if(excursion.getPrice() == null) throw new NullPointerException("Excursion object is not valid: price is null");
         if(excursion.getExcursionDate() == null) throw new NullPointerException("Excursion object is not valid: excursionDate is null");
         if(excursion.getDuration() < 0) throw new IllegalArgumentException("Excursion object is not valid: Duration < 0");
-        
+
         entityManager.persist(excursion);
-        
+
     }
-    
+
     @Override
     public Excursion getExcursionById(long id){
         if (id < 0) throw new IllegalArgumentException("The id has a negative value");
-                
+
         return entityManager.find(Excursion.class, id);
     }
-    
-    @Override 
+
+    @Override
     public List<Excursion> getAllExcursions(){
       return entityManager.createNamedQuery("Excursion.getAll", Excursion.class)
             .getResultList();
     }
-    
+
     @Override
     public Excursion updateExcursion(Excursion excursion){
         if(excursion == null) throw new NullPointerException("Excursion object is null.");
@@ -63,17 +63,17 @@ public class JPAExcursionDAO implements ExcursionDAO {
         if(excursion.getPrice().compareTo(BigDecimal.ZERO) < 0) throw new IllegalArgumentException("Excursion has a negative price");
         if(excursion.getPrice() == null) throw new NullPointerException("Excursion object is not valid: price is null");
         if(excursion.getExcursionDate() == null) throw new NullPointerException("Excursion object is not valid: excursionDate is null");
-        
+
         return entityManager.merge(excursion);
     }
-    
+
     @Override
     public void deleteExcursionById(long id){
         if (id < 0) throw new IllegalArgumentException("The id has a negative value");
-        
+
         entityManager.createQuery("DELETE FROM Excursion e WHERE e.id = :id")
              .setParameter("id", id)
              .executeUpdate();
-        
+
     }
 }

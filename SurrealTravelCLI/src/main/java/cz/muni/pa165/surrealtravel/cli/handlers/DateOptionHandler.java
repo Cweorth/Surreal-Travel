@@ -16,11 +16,11 @@ import org.kohsuke.args4j.spi.Setter;
  * @author Jan Klimeš [374259]
  */
 public class DateOptionHandler extends OptionHandler<Date> {
-    
+
     public DateOptionHandler(CmdLineParser parser, OptionDef option, Setter<? super Date> setter) {
         super(parser, option, setter);
     }
-    
+
     @Override
     public int parseArguments(Parameters params) throws CmdLineException {
         DateFormat formatter = new SimpleDateFormat("yy/MM/dd");
@@ -38,5 +38,5 @@ public class DateOptionHandler extends OptionHandler<Date> {
     public String getDefaultMetaVariable() {
         return null;
     }
-    
+
 }

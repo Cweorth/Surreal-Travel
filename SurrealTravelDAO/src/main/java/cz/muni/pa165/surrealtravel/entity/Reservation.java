@@ -73,7 +73,7 @@ public class Reservation implements Serializable {
 
     /**
      * Add new excursion to the collection.
-     * @param excursion 
+     * @param excursion
      */
     public void addExcursion(Excursion excursion) {
         if (excursion == null) {
@@ -84,7 +84,7 @@ public class Reservation implements Serializable {
 
     /**
      * Remove excursion.
-     * @param excursion 
+     * @param excursion
      */
     public void removeExcursion(Excursion excursion) {
         this.excursions.remove(excursion);

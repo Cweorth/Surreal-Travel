@@ -14,7 +14,7 @@ import java.util.Objects;
 public class TripDTO implements Serializable {
 
     //--[  Private  ]-----------------------------------------------------------
-    
+
     private long id;
 
     private Date dateFrom;
@@ -26,17 +26,17 @@ public class TripDTO implements Serializable {
     private int capacity;
 
     private BigDecimal basePrice;
-    
+
     private List<ExcursionDTO> excursions;
-    
+
     //--[  Constructors  ]------------------------------------------------------
-    
+
     public TripDTO() {
         excursions = new ArrayList<>();
     }
-    
+
     //--[  Methods  ]-----------------------------------------------------------
-    
+
     /**
      * Adds an excursion to the trip.
      * @param  excursion     The excursion to add.
@@ -44,7 +44,7 @@ public class TripDTO implements Serializable {
     public void addExcursion(ExcursionDTO excursion) {
         excursions.add(Objects.requireNonNull(excursion, "excursion"));
     }
-    
+
     /**
      * Removes an excursion from the trip.
      * @param  excursion     The excursion to remove.
@@ -52,23 +52,23 @@ public class TripDTO implements Serializable {
     public void removeExcursion(ExcursionDTO excursion) {
         excursions.remove(Objects.requireNonNull(excursion, "excursion"));
     }
-    
+
     /**
      * Calculates the total price of the trip including all the excursions.
      * @return The total price of the trip.
      */
     public BigDecimal getFullPrice() {
         BigDecimal price = basePrice;
-        
+
         for(ExcursionDTO e : excursions) {
             price = price.add(e.getPrice());
         }
-        
+
         return price;
     }
-    
+
     //<editor-fold desc="[  Getters | Setters  ]" defaultstate="collapsed">
-    
+
     public long getId() {
         return id;
     }
@@ -115,20 +115,20 @@ public class TripDTO implements Serializable {
 
     public void setBasePrice(BigDecimal basePrice) {
         this.basePrice = basePrice;
-    }    
+    }
 
     public List<ExcursionDTO> getExcursions() {
         return excursions;
     }
-    
+
     public void setExcursions(List<ExcursionDTO> excursions) {
         this.excursions = excursions;
-    }    
-    
+    }
+
     //</editor-fold>
-    
+
     //<editor-fold desc="[  Object methods     ]" defaultstate="collapsed">
-    
+
     @Override
     public int hashCode() {
         int hash = 3;
@@ -147,9 +147,9 @@ public class TripDTO implements Serializable {
         if ((obj == null) || (getClass() != obj.getClass())) {
             return false;
         }
-        
+
         final TripDTO other = (TripDTO) obj;
-        
+
         return (id       == other.id)
             && (capacity == other.capacity)
             && (Objects.equals(basePrice,   other.basePrice))
@@ -158,15 +158,15 @@ public class TripDTO implements Serializable {
             && (Objects.equals(destination, other.destination))
             && (Objects.equals(excursions,  other.excursions));
     }
-    
+
     @Override
     public String toString() {
-        return "Trip[id="      + id         + ", dateFrom="    + dateFrom 
-             + ", dateTo="     + dateTo     + ", destination=" + destination 
-             + ", capacity="   + capacity   + ", basePrice="   + basePrice 
+        return "Trip[id="      + id         + ", dateFrom="    + dateFrom
+             + ", dateTo="     + dateTo     + ", destination=" + destination
+             + ", capacity="   + capacity   + ", basePrice="   + basePrice
              + ", excursions=" + excursions + ']';
     }
-    
+
     //</editor-fold>
-    
+
 }

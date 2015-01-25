@@ -46,30 +46,30 @@ public class TripsAddHandler implements CommandHandler {
     public void setDateFrom(Date dateFrom) {
         this.dateFrom = dateFrom;
     }
-    
+
     public void setDateTo(Date dateTo) {
         this.dateTo = dateTo;
     }
-    
+
     public void setDestination(String destination) {
         this.destination = destination;
     }
-    
+
     public void setCapacity(int capacity) {
         this.capacity = capacity;
     }
-    
+
     public void setBasePrice(BigDecimal basePrice) {
         this.basePrice = basePrice;
     }
-    
+
     public void setExcursionIDs(List<Long> excursionIDs) {
         this.excursionIDs = excursionIDs;
     }
     //</editor-fold>
-    
+
     //--[  Interface implementation  ]------------------------------------------
-    
+
     @Override
     public Command getCommand() {
         return Command.TRIPS_ADD;
@@ -88,16 +88,16 @@ public class TripsAddHandler implements CommandHandler {
         trip.setDestination(destination);
         trip.setCapacity(capacity);
         trip.setBasePrice(basePrice);
-        
+
         if (excursionIDs != null) {
             for(long id : excursionIDs) {
                 ExcursionDTO excursion = AppConfig.getExcursionClient().getExcursion(id);
                 trip.getExcursions().add(excursion);
             }
         }
-        
+
         TripDTO newTrip = AppConfig.getTripClient().addTrip(trip);
-        
+
         System.out.println("The following trip was added:");
         CLITableTrip.print(newTrip, true);
     }

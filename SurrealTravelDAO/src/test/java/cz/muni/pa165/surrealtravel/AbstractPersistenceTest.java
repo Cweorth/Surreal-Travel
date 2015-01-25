@@ -26,31 +26,31 @@ import org.springframework.test.context.junit4.SpringJUnit4ClassRunner;
  */
 @RunWith(SpringJUnit4ClassRunner.class)
 @ContextConfiguration(locations = {"classpath:persistence/testContext.xml"})
-public abstract class AbstractPersistenceTest { 
-    
+public abstract class AbstractPersistenceTest {
+
     @PersistenceContext
     protected EntityManager         em;
-    
+
     protected static final Logger   logger = LogManager.getLogger("TestLogger");
-    
+
     @Rule
     public final TestName             testName   = new TestName();
     @Rule
     public final ExceptionLoggingRule excpLogger = new ExceptionLoggingRule(logger);
-    
+
     //--[  Methods  ]-----------------------------------------------------------
-    
+
     @Before
     public void setUp() {
         logger.info(String.format("==[(  %s  )]==============================================", testName.getMethodName()));
         logger.debug("[Setup] test started");
     }
-    
+
     @After
     public void tearDown() {
         logger.debug("[TearDown] test finished");
     }
-    
+
     /**
      * Convenience method for creating a date.
      * @param  day           The day of the date.
@@ -63,7 +63,7 @@ public abstract class AbstractPersistenceTest {
         calendar.set(year, month, day);
         return calendar.getTime();
     }
-    
+
     /**
      * Convenience method for creating a customer entity.
      * @param  name          Customer's name.
@@ -74,11 +74,11 @@ public abstract class AbstractPersistenceTest {
         Customer customer = new Customer();
         customer.setName(name);
         customer.setAddress(address);
-        
+
         logger.info(String.format("[mk] Created %s", customer.toString()));
         return customer;
     }
-    
+
     /**
      * Convenience method for creating an excursion entity.
      * @param  date          The date of the excursion.
@@ -95,11 +95,11 @@ public abstract class AbstractPersistenceTest {
         excursion.setDescription(description);
         excursion.setDestination(destination);
         excursion.setPrice(price);
-        
+
         logger.info(String.format("[mk] Created %s", excursion.toString()));
         return excursion;
     }
-    
+
     /**
      * Convenience method for creating a reservation.
      * @param  customer      A customer who makes this reservation.
@@ -110,11 +110,11 @@ public abstract class AbstractPersistenceTest {
         Reservation reservation = new Reservation();
         reservation.setCustomer(customer);
         reservation.setTrip(trip);
-        
+
         logger.info(String.format("[mk] Created %s", reservation.toString()));
         return reservation;
     }
-    
+
     /**
      * Convenience method for creating a trip.
      * @param  from          The date the trip starts.
@@ -131,23 +131,23 @@ public abstract class AbstractPersistenceTest {
         trip.setDestination(destination);
         trip.setCapacity(capacity);
         trip.setBasePrice(price);
-        
+
         logger.info(String.format("[mk] Created %s", trip.toString()));
         return trip;
     }
-    
+
     //<editor-fold desc="[  Getters | Setters  ]" defaultstate="collapsed">
 
     /*
     public void setEntityManagerFactory(EntityManagerFactory emf) {
         this.emf = Objects.requireNonNull(emf);
     }
-    
+
     public EntityManagerFactory getEntityManagerFactory() {
         return emf;
     }
     */
 
     //</editor-fold>
-    
+
 }

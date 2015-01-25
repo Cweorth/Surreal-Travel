@@ -15,12 +15,12 @@ import org.slf4j.LoggerFactory;
  * @author Jan Klimeš [374259]
  */
 public class ExcursionsDeleteHandler implements CommandHandler {
-    
+
     @Option(name = "--id", metaVar = "id", usage = "specify the excursion id", required = true)
     private long id;
-    
+
     private final static Logger logger = LoggerFactory.getLogger(ExcursionsDeleteHandler.class);
-    
+
     @Override
     public Command getCommand() {
         return Command.EXCURSIONS_DELETE;
@@ -34,10 +34,10 @@ public class ExcursionsDeleteHandler implements CommandHandler {
     @Override
     public void run(MainOptions options) {
         ExcursionDTO excursion = AppConfig.getExcursionClient().deleteExcursion(id);
-        
+
         logger.info("Printing deleted excursion object.");
         System.out.println("The following excursion was deleted:");
-        
+
         CLITableExcursion.print(excursion);
     }
 

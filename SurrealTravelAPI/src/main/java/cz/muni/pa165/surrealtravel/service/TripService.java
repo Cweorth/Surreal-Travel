@@ -48,5 +48,5 @@ public interface TripService {
      * @param trip           The trip to update.
      */
     void updateTrip(TripDTO trip);
-    
+
 }

@@ -12,32 +12,32 @@ import org.springframework.web.util.UriComponentsBuilder;
  * @author Jan Klimeš [374259]
  */
 public class AuthCommons {
-    
+
     /**
      * Check if authentication exists.
-     * @return 
+     * @return
      */
     public static boolean isAuthenticated() {
         Authentication auth = SecurityContextHolder.getContext().getAuthentication();
         return auth == null ? false : auth.isAuthenticated();
     }
-    
+
     /**
      * Check if user has specified role.
      * @param role
-     * @return 
+     * @return
      */
     public static boolean hasRole(UserRole role) {
         Authentication auth = SecurityContextHolder.getContext().getAuthentication();
         if ((auth == null) || !auth.isAuthenticated()) return false;
-        
+
         // note: not-authenticated user would have role "ROLE_ANONYMOUS" - default SpringSec behaviour
         for(GrantedAuthority ga : auth.getAuthorities())
             if(ga.getAuthority().equalsIgnoreCase(role.name())) return true;
-        
+
         return false;
     }
-    
+
     /**
      * Return username of authenticated user.
      * @return username or "anonymousUser" when not authenticated
@@ -46,28 +46,28 @@ public class AuthCommons {
         Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
         return authentication == null ? null : authentication.getName();
     }
-    
+
     /**
      * Return denied page. Can be invoked if users snoop where they should not. No Star Wars
      * pun intended.
      * @param uriBuilder
-     * @return 
+     * @return
      */
     public static String forceDenied(UriComponentsBuilder uriBuilder) {
         return "redirect:" + uriBuilder.path("/403").build();
     }
-    
+
     /**
      * Return denied page. Can be invoked if users snoop where they should not. No Star Wars
      * pun intended. Possibility for displaying a message.
      * @param uriBuilder
      * @param redirectAttributes
      * @param message
-     * @return 
+     * @return
      */
     public static String forceDenied(UriComponentsBuilder uriBuilder, RedirectAttributes redirectAttributes, String message) {
         redirectAttributes.addFlashAttribute("failureMessage", message);
         return "redirect:" + uriBuilder.path("/403").queryParam("notification", "failure").build();
     }
-    
+
 }

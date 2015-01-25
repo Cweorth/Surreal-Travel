@@ -19,24 +19,24 @@ import org.slf4j.LoggerFactory;
  * @author Jan Klimeš [374259]
  */
 public class ExcursionsEditHandler implements CommandHandler {
-    
+
     private final static Logger logger = LoggerFactory.getLogger(ExcursionsEditHandler.class);
-    
+
     @Option(name = "--id", metaVar = "id", usage = "specify the excursion id", required = true)
     private long id;
-    
+
     @Option(name = "--description", aliases = {"-c"}, metaVar = "description", usage = "specify the excursion description [string]")
     private String description;
-    
+
     @Option(name = "--destination", aliases = {"-t"}, metaVar = "destination", usage = "specify the excursion destination [string]")
     private String destination;
-    
+
     @Option(name = "--duration", aliases = {"-d"}, metaVar = "duration", usage = "specify the duration of excursion [integer]")
     private Integer duration;
-    
+
     @Option(name = "--excursionDate", aliases = {"-e"}, metaVar = "date", handler = DateOptionHandler.class, usage = "specify the excursion date [yyyy/MM/dd]")
     private Date excursionDate;
-    
+
     @Option(name = "--price", aliases = {"-p"}, handler = BigDecimalOptionHandler.class, metaVar = "price", usage = "specify the excursion price [integer]")
     private BigDecimal price;
 
@@ -55,39 +55,39 @@ public class ExcursionsEditHandler implements CommandHandler {
         ExcursionDTO excursion = AppConfig.getExcursionClient().getExcursion(id);
 
         boolean changed = false;
-        
+
         if(description != null) {
             excursion.setDescription(description);
             changed |= true;
         }
-        
+
         if(destination != null) {
             excursion.setDestination(destination);
             changed |= true;
         }
-        
+
         if(duration != null) {
             excursion.setDuration(duration);
             changed |= true;
         }
-        
+
         if(excursionDate != null) {
             excursion.setExcursionDate(excursionDate);
             changed |= true;
         }
-        
+
         if(price != null) {
             excursion.setPrice(price);
             changed |= true;
         }
-        
+
         if(!changed) throw new RuntimeException("No change in the excursion.");
-        
+
         excursion = AppConfig.getExcursionClient().editExcursion(excursion);
 
         logger.info("Printing modified excursion object (with new values).");
         System.out.println("The following excursion was modified:");
-        
+
         CLITableExcursion.print(excursion);
     }
 

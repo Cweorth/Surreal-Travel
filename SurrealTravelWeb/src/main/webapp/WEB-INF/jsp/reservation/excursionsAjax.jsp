@@ -1,4 +1,4 @@
-<%-- 
+<%--
     Document   : excursionsAjax
     Author     : Jan Klimeš
 --%>
@@ -28,7 +28,7 @@
                         <!--
                             Loading spring form element via ajax breaks their connection with spring,
                             it needs to have plain old HTML "backup" version.
-                        --> 
+                        -->
                         <c:choose>
                             <c:when test="${ajaxReload}">
                                 <input type="checkbox" value="${excursion.id}" name="excursions">

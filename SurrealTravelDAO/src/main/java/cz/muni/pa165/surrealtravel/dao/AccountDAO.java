@@ -9,27 +9,27 @@ import java.util.List;
  * @author Jan Klimeš [374259]
  */
 public interface AccountDAO {
-    
+
     /**
      * Store new account.
-     * @param account 
+     * @param account
      */
     public void addAccount(Account account);
-    
+
     /**
      * Get the account with the given id.
      * @param id
      * @return the account
      */
     public Account getAccountById(long id);
-    
+
     /**
      * Get the account with the given username.
      * @param username
      * @return the account (username is unique, only one result at most), null when not found
      */
     public Account getAccountByUsername(String username);
-    
+
     /**
      * Get the account with the given Customer attached. There may be more Accounts with the same customer.
      * @param customer
@@ -42,18 +42,18 @@ public interface AccountDAO {
      * @return the list of accounts
      */
     public List<Account> getAllAccounts();
-    
+
     /**
      * Modify the account.
-     * @param account 
+     * @param account
      * @return the modified account
      */
     public Account updateAccount(Account account);
-    
+
     /**
      * Remove account by id.
-     * @param id 
+     * @param id
      */
     public void deleteAccountById(long id);
-    
+
 }

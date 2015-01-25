@@ -10,33 +10,33 @@ import java.util.List;
 public interface ExcursionDAO {
     /**
      * Store new excursion.
-     * @param excursion 
+     * @param excursion
      */
     public void addExcursion(Excursion excursion);
-    
+
     /**
      * Get the excursion with the given id.
      * @param id
      * @return the excursion
      */
     public Excursion getExcursionById(long id);
-    
+
     /**
      * Get all excursions.
      * @return the excursion
      */
     public List<Excursion> getAllExcursions();
-    
+
     /**
      * Modify the excursion.
-     * @param excursion 
+     * @param excursion
      * @return the modified excursion
      */
     public Excursion updateExcursion(Excursion excursion);
-     
+
     /**
      * Remove excursion by ID.
      * @param id
-     */   
+     */
     public void deleteExcursionById(long id);
 }

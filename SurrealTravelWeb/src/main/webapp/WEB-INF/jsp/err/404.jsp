@@ -1,4 +1,4 @@
-<%-- 
+<%--
     Document   : 404
     Created on : Jan 25, 2015, 12:06:00 PM
     Author     : Roman Lacko [396157]
@@ -17,7 +17,7 @@
     <div align="center">
         <img src="${pageContext.request.contextPath}/image/404.gif" width="500" alt="The Planet"/>
     </div>
-    
+
     <c:choose>
         <c:when test="${fn:startsWith(pageContext.response.locale, 'cs')}">
             <jsp:include page="/WEB-INF/include/404_cs.jsp"/>

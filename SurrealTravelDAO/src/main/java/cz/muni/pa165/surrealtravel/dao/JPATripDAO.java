@@ -20,9 +20,9 @@ public class JPATripDAO implements TripDAO {
 
     @PersistenceContext
     private EntityManager entityManager;
-    
+
     //--[  Private methods  ]---------------------------------------------------
-    
+
     private void validate(Trip trip) {
         Objects.requireNonNull(trip,                  "trip");
         Objects.requireNonNull(trip.getDateFrom(),    "trip.dateFrom");
@@ -30,55 +30,55 @@ public class JPATripDAO implements TripDAO {
         Objects.requireNonNull(trip.getDestination(), "trip.destination");
         Objects.requireNonNull(trip.getBasePrice(),   "trip.basePrice");
         Objects.requireNonNull(trip.getExcursions(),  "trip.excursions");
-        
+
         if (trip.getDateFrom().after(trip.getDateTo())) {
             throw new IllegalArgumentException("The trip requires a time machine for it ends before it starts");
         }
-        
+
         if (trip.getBasePrice().compareTo(BigDecimal.ZERO) < 0) {
             throw new IllegalArgumentException("The trip has a negative base price");
         }
-        
+
         if (trip.getDestination().isEmpty()) {
             throw new IllegalArgumentException("The trip has an empty destination");
         }
-        
+
         for(Excursion excursion : trip.getExcursions()) {
             Date excursionStart = excursion.getExcursionDate();
             Calendar calendar   = Calendar.getInstance();
-            
+
             calendar.setTime(excursionStart);
             calendar.add(Calendar.DATE, excursion.getDuration());
-            
+
             Date excursionEnd   = calendar.getTime();
-            
+
             if (excursionStart.before(trip.getDateFrom()) || excursionEnd.after(trip.getDateTo())) {
                 throw new IllegalArgumentException(String.format("Date of excursion '%s' is outside of that of the trip", excursion.getDescription()));
             }
         }
     }
-      
+
     //--[  Methods  ]-----------------------------------------------------------
-    
+
     //<editor-fold desc="[  Getters | Setters  ]" defaultstate="collapsed">
-    
+
     public EntityManager getEntityManager() {
         return entityManager;
     }
-    
+
     public void setEntityManager(EntityManager entityManager) {
         Objects.requireNonNull(entityManager, "entityManager");
         this.entityManager = entityManager;
     }
-    
+
     //</editor-fold>
-    
+
     //--[  Overriden methods  ]-------------------------------------------------
-      
+
     @Override
     public void addTrip(Trip trip) {
         validate(trip);
-        
+
         entityManager.persist(trip);
     }
 
@@ -87,21 +87,21 @@ public class JPATripDAO implements TripDAO {
         if (id < 0) {
             throw new IllegalArgumentException("The id has a negative value");
         }
-        
+
         return entityManager.find(Trip.class, id);
     }
 
     @Override
     public List<Trip> getTripsWithExcursion(Excursion excursion) {
         Objects.requireNonNull(excursion, "excursion");
-        
+
         return entityManager.createQuery("SELECT t FROM Trip t JOIN t.excursions e WHERE e.id = :eid", Trip.class)
             .setParameter("eid", excursion.getId())
             .getResultList();
-    }    
-    
+    }
+
     @Override
-    public List<Trip> getAllTrips() {        
+    public List<Trip> getAllTrips() {
         return entityManager.createNamedQuery("Trip.getAll", Trip.class)
             .getResultList();
     }
@@ -117,10 +117,10 @@ public class JPATripDAO implements TripDAO {
         if (id < 0) {
             throw new IllegalArgumentException("The id has a negative value");
         }
-        
+
         entityManager.createNamedQuery("Trip.removeById")
             .setParameter("id", id)
             .executeUpdate();
     }
-    
+
 }

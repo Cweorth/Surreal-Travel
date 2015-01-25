@@ -16,11 +16,11 @@ import org.springframework.web.client.RestTemplate;
  * @author Roman Lacko [396157]
  */
 public class AppConfig {
-    
+
     private static final RestExcursionClient excursionClient;
     private static final RestTripClient      tripClient;
     private static final RestTemplate        template;
-    
+
     private static URL base;
 
     static {
@@ -30,7 +30,7 @@ public class AppConfig {
             LoggerFactory.getLogger(AppConfig.class).error("Initializer error", ex);
             throw new RuntimeException(ex);
         }
-        
+
         MappingJackson2HttpMessageConverter converter = new MappingJackson2HttpMessageConverter();
         converter.setSupportedMediaTypes(Arrays.asList(MediaType.APPLICATION_JSON));
 
@@ -40,14 +40,14 @@ public class AppConfig {
         excursionClient = new RestExcursionClient(template);
         tripClient      = new RestTripClient(template);
     }
-    
+
     //--[  Methods  ]-----------------------------------------------------------
-    
+
     public static URL  getBase()         { return base;                                           }
     public static void setBase(URL base) { AppConfig.base = Objects.requireNonNull(base, "base"); }
- 
+
     public static RestExcursionClient getExcursionClient() { return excursionClient; }
     public static RestTripClient      getTripClient()      { return tripClient;      }
     public static RestTemplate        getTemplate()        { return template;        }
-    
+
 }

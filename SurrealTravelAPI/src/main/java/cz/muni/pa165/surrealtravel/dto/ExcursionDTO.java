@@ -10,14 +10,14 @@ import java.util.Date;
  */
 
 public class ExcursionDTO implements Serializable{
-   
+
     private long id = 0;
     private Date excursionDate;
     private Integer duration;
     private String description;
     private String destination;
     private BigDecimal price;
-   
+
     public long getId() {
         return id;
     }
@@ -45,22 +45,22 @@ public class ExcursionDTO implements Serializable{
     public void setDescription(String description) {
         this.description = description;
     }
-    
+
     public String getDestination() {
         return destination;
     }
     public void setDestination(String destination) {
         this.destination = destination;
     }
-    
+
     public BigDecimal getPrice() {
         return price;
     }
     public void setPrice(BigDecimal price) {
         this.price = price;
     }
-    
-    
+
+
     @Override
     public int hashCode() {
         final int prime = 31;

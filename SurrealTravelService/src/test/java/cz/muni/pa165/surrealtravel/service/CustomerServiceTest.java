@@ -25,22 +25,22 @@ import org.mockito.runners.MockitoJUnitRunner;
  */
 @RunWith(MockitoJUnitRunner.class)
 public class CustomerServiceTest extends AbstractServiceTest {
-    
+
     @Mock
     private CustomerDAO dao;
-    
+
     @InjectMocks
     private DefaultCustomerService service;
-    
+
     public CustomerServiceTest() {
         super();
     }
-    
+
     @Test(expected = NullPointerException.class)
     public void testAddCustomerNull() {
         service.addCustomer(null);
     }
-    
+
     @Test
     public void testAddCustomer() {
         List<CustomerDTO> customers = makeCustomerDTO();
@@ -52,7 +52,7 @@ public class CustomerServiceTest extends AbstractServiceTest {
             }
         }
         verify(dao, times(customers.size())).addCustomer(any(Customer.class));
-      
+
     }
     @Test
     public void getCustomerById(){
@@ -60,7 +60,7 @@ public class CustomerServiceTest extends AbstractServiceTest {
         cus.setId(1L);
         List<CustomerDTO> customers = makeCustomerDTO();
         CustomerDTO exp= customers.get(0);
-        
+
         when(dao.getCustomerById(1L)).thenReturn(cus);
         CustomerDTO ret=service.getCustomerById(1L);
         verify(dao, times(1)).getCustomerById(Matchers.eq(1L));
@@ -68,7 +68,7 @@ public class CustomerServiceTest extends AbstractServiceTest {
         assertEquals(1L, ret.getId());
         assertEquals(exp, ret);
     }
-    
+
     @Test
     public void getAllCustomers(){
         List<CustomerDTO> customers = makeCustomerDTO();
@@ -92,7 +92,7 @@ public class CustomerServiceTest extends AbstractServiceTest {
         assertTrue(customers.size() == expected.size());
         assertEquals(expected, customers);
     }
-   
+
     @Test
     public void updateCustomer() {
         List<CustomerDTO> customers = makeCustomerDTO();
@@ -116,7 +116,7 @@ public class CustomerServiceTest extends AbstractServiceTest {
 
     private List<CustomerDTO> makeCustomerDTO() {
         List<CustomerDTO> list = new ArrayList<>();
-        
+
         CustomerDTO a = mkcustomer("Novak","Tramtaria 15");
         CustomerDTO b = mkcustomer("Novotny","Transilvania 58");
         CustomerDTO c = mkcustomer("polski","Budapest");
@@ -126,7 +126,7 @@ public class CustomerServiceTest extends AbstractServiceTest {
         list.add(a);
         list.add(b);
         list.add(c);
-       
+
         return list;
     }
 
@@ -136,5 +136,5 @@ public class CustomerServiceTest extends AbstractServiceTest {
         customer.setAddress("Tramtaria 15");
         return customer;
     }
-    
+
 }

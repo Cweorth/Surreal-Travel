@@ -1,4 +1,4 @@
-<%-- 
+<%--
     Document   : bulletin
     Created on : 24.1.2015, 17:24:24
     Author     : Jan Klimeš [374259]

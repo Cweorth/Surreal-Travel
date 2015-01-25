@@ -17,29 +17,29 @@ import org.slf4j.LoggerFactory;
  * @author Roman Lacko [396157]
  */
 public class MainOptions {
-    
+
     //--[  Options  ]-----------------------------------------------------------
-    
-    @Option(name = "-h", aliases = {"--help"}, help = true, 
+
+    @Option(name = "-h", aliases = {"--help"}, help = true,
             usage = "show program help")
     private boolean help;
-    
+
     @Option(name = "-?", aliases = {"--command-help"}, help = true, metaVar = "{command|LIST}",
             usage = "show command help or lists commands if \"LIST\" specified")
     private String commandHelp;
-    
+
     @Option(name = "-v", aliases = {"--verbose"}, forbids = "--debug",
             usage = "verbose mode")
     private boolean verbose;
-    
+
     @Option(name = "--debug", forbids = "-v",
             usage = "enables debug messaged")
     private boolean debug;
-    
+
     @Option(name = "--username", aliases = {"-U"}, metaVar = "[username]",
             usage = "provide custom credentials (some commands may ignore this option)")
     private String username;
-    
+
     // this is not an option
     private String password;
 
@@ -47,8 +47,8 @@ public class MainOptions {
     public void setURL(URL url) {
         LoggerFactory.getLogger(MainOptions.class).info("Changing URL to \"" + url.toString() + "\"");
         AppConfig.setBase(url);
-    }    
-    
+    }
+
     @Argument(index = 0, hidden = true, required = true, metaVar = "command", handler = SubCommandHandler.class,
             usage = "main command")
     @SubCommands({
@@ -62,27 +62,27 @@ public class MainOptions {
         @SubCommand(name = "trips-add",         impl = TripsAddHandler.class),
         @SubCommand(name = "trips-edit",        impl = TripsEditHandler.class),
         @SubCommand(name = "trips-delete",      impl = TripsDeleteHandler.class)
-    })   
+    })
     private CommandHandler cmd;
-    
+
     //--[  Methods  ]-----------------------------------------------------------
-    
+
     /**
      * Returns the main command
      * @return the main command
      */
     public Command getCommand() {
         return cmd.getCommand();
-    }    
-    
+    }
+
     //<editor-fold desc="[  Getters | Setters  ]" defaultstate="collapsed">
-    
+
     public boolean isHelp()              { return help;      }
     public void    setHelp(boolean help) { this.help = help; }
 
     public String getCommandHelp()                   { return commandHelp;             }
     public void   setCommandHelp(String commandHelp) { this.commandHelp = commandHelp; }
-    
+
     public boolean isVerbose()                 { return verbose;         }
     public void    setVerbose(boolean verbose) { this.verbose = verbose; }
 
@@ -91,13 +91,13 @@ public class MainOptions {
 
     public boolean isDebug()               { return debug;       }
     public void    setDebug(boolean debug) { this.debug = debug; }
-    
+
     public String getUsername()                { return username;          }
     public void   setUserName(String username) { this.username = username; }
-    
+
     public String getPassword()                { return password;          }
     public void   setPassword(String password) { this.password = password; }
-    
+
     //</editor-fold>
-    
+
 }

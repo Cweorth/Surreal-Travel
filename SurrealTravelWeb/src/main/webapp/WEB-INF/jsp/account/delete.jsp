@@ -1,4 +1,4 @@
-<%-- 
+<%--
     Document   : delete
     Author     : Roman Lacko [396157]
 --%>
@@ -17,7 +17,7 @@
 
 <t:layout title="${title}">
 <jsp:attribute name="content">
-    
+
     <jsp:include page="/WEB-INF/include/requiredNotification.jsp" />
     <c:if test="${isAdmin && (deleteWrapper.account.username ne username)}">
         <br/>
@@ -36,7 +36,7 @@
         <form:hidden path="account.customer.address"/>
         <jsp:include page="deleteform.jsp" />
     </form:form>
-    
+
 </jsp:attribute>
 </t:layout>
 

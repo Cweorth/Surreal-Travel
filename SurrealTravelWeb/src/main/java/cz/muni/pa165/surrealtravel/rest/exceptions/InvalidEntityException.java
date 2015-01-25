@@ -8,8 +8,8 @@ import org.springframework.web.bind.annotation.ResponseStatus;
  */
 @ResponseStatus(value = HttpStatus.BAD_REQUEST, reason = "Invalid entity")
 public class InvalidEntityException extends RestAPIException {
-    
-    public InvalidEntityException() 
+
+    public InvalidEntityException()
     { }
 
     public InvalidEntityException(String message) {
@@ -23,5 +23,5 @@ public class InvalidEntityException extends RestAPIException {
     public InvalidEntityException(Throwable cause) {
         super(cause);
     }
-    
+
 }

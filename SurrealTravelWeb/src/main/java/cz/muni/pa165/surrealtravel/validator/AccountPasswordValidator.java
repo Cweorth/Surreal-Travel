@@ -21,11 +21,11 @@ public class AccountPasswordValidator implements Validator {
     @Override
     public void validate(Object target, Errors errors) {
         AccountWrapper wrapper = (AccountWrapper) target;
-        
+
         if (wrapper.isReqpasswd()) {
             ValidationUtils.rejectIfEmptyOrWhitespace(errors, "account.plainPassword", "account.validator.password");
-            
-            if (   !errors.hasFieldErrors("account.plainPassword") 
+
+            if (   !errors.hasFieldErrors("account.plainPassword")
                 && !encoder.matches(wrapper.getAccount().getPlainPassword(), wrapper.getAccount().getPassword())) {
                 errors.rejectValue("account.plainPassword", "account.validator.password.invalid");
             }

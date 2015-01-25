@@ -9,7 +9,7 @@ import java.util.Set;
  * @author Jan Klimeš [374259]
  */
 public class AccountDTO implements Serializable {
-    
+
     private long id;
     private String username;
     private String password;
@@ -48,7 +48,7 @@ public class AccountDTO implements Serializable {
     public void setPlainPassword(String plainPassword) {
         this.plainPassword = plainPassword;
     }
-    
+
     public CustomerDTO getCustomer() {
         return customer;
     }

@@ -1,4 +1,4 @@
-<%-- 
+<%--
     Document   : new
     Author     : Petr Dvořák
 --%>
@@ -14,14 +14,14 @@
 
 <t:layout title="${title}">
 <jsp:attribute name="content">
-    
+
     <jsp:include page="/WEB-INF/include/requiredNotification.jsp" />
     <jsp:include page="/WEB-INF/include/dateFormatNotification.jsp" />
-    
+
     <form:form action="${pageContext.request.contextPath}/excursions/new" modelAttribute="excursionDTO">
         <jsp:include page="form.jsp" />
     </form:form>
-    
+
 </jsp:attribute>
 </t:layout>
 

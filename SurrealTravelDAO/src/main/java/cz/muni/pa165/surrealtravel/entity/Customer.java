@@ -18,14 +18,14 @@ import javax.persistence.NamedQuery;
 })
 @Entity
 public class Customer implements Serializable {
-    
+
     @Id
     @GeneratedValue
     private long id;
-    
+
     @Column(nullable = false)
     private String name;
-    
+
     @Column
     private String address;
 
@@ -83,6 +83,6 @@ public class Customer implements Serializable {
     @Override
     public String toString() {
         return "Customer[" + "id=" + id + ", name=" + name + ", address=" + address + ']';
-    } 
-    
+    }
+
 }

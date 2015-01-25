@@ -16,24 +16,24 @@ public class TripsGetHandler implements CommandHandler {
 
     @Option(name = "--id", metaVar = "id", usage = "the trip id", required = true)
     private long id;
-    
+
     @Option(name = "-e", aliases = {"--list-excursions"}, usage = "lists excursions in the trip")
-    private boolean listExcursions;    
-    
+    private boolean listExcursions;
+
     //--[  Methods  ]-----------------------------------------------------------
-    
+
     //<editor-fold defaultstate="collapsed" desc="[  Setters  ]">
     public void setId(long id) {
         this.id = id;
     }
-    
+
     public void setListExcursions(boolean listExcursions) {
         this.listExcursions = listExcursions;
     }
     //</editor-fold>
-    
+
     //--[  Interface implementation  ]------------------------------------------
-    
+
     @Override
     public Command getCommand() {
         return Command.TRIPS_GET;
@@ -47,8 +47,8 @@ public class TripsGetHandler implements CommandHandler {
     @Override
     public void run(MainOptions options) {
         TripDTO trip = AppConfig.getTripClient().getTrip(id);
-        
+
         CLITableTrip.print(trip, listExcursions);
     }
-    
+
 }

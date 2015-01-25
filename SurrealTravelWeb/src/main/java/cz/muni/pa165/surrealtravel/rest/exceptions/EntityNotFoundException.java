@@ -12,11 +12,11 @@ public class EntityNotFoundException extends RestAPIException {
     public EntityNotFoundException(String entityName, long id) {
         super(entityName + " with id " + id + " does not exist");
     }
-    
+
     public EntityNotFoundException(String entityName, long id, Throwable cause) {
         super(entityName + " with id " + id + " does not exist", cause);
     }
-    
+
     public EntityNotFoundException()
     { }
 
@@ -31,5 +31,5 @@ public class EntityNotFoundException extends RestAPIException {
     public EntityNotFoundException(Throwable cause) {
         super(cause);
     }
-    
+
 }

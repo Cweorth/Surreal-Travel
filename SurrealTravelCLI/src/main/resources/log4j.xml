@@ -1,7 +1,7 @@
 <?xml version="1.0" encoding="UTF-8" ?>
 <!DOCTYPE log4j:configuration PUBLIC "-//APACHE//DTD LOG4J 1.2//EN" "http://logging.apache.org/log4j/1.2/apidocs/org/apache/log4j/xml/doc-files/log4j.dtd">
 <log4j:configuration debug="null" xmlns:log4j='http://jakarta.apache.org/log4j/'>
-    
+
     <appender class="org.apache.log4j.RollingFileAppender" name="applog">
         <param name="append" value="false"/>
         <param name="file"   value="./SurrealTravelCLI.log"/>
@@ -9,7 +9,7 @@
             <param name="ConversionPattern" value="%d{yyyy-MM-dd HH:mm:ss} %-5p %c{1}:%L - %m%n" />
         </layout>
     </appender>
-        
+
     <appender class="org.apache.log4j.ConsoleAppender" name="console">
         <layout class="org.apache.log4j.PatternLayout">
             <param name="ConversionPattern" value="%d{yyyy-MM-dd HH:mm:ss} %-5p %c{1}:%L - %m%n" />
@@ -17,15 +17,15 @@
         <filter class="org.apache.log4j.varia.LevelRangeFilter">
             <param name="LevelMin" value="WARN"/>
         </filter>
-    </appender>   
- 
+    </appender>
+
     <logger name="DebugLogger" additivity="false">
         <appender-ref ref="console"/>
     </logger>
- 
+
     <root>
         <level value="DEBUG"/>
         <appender-ref ref="applog"/>
     </root>
-	
+
 </log4j:configuration>

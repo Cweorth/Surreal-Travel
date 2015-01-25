@@ -17,7 +17,7 @@ public class BigDecimalOptionHandler extends OptionHandler<BigDecimal> {
     public BigDecimalOptionHandler(CmdLineParser parser, OptionDef option, Setter<? super BigDecimal> setter) {
         super(parser, option, setter);
     }
-    
+
     @Override
     public int parseArguments(Parameters params) throws CmdLineException {
         try {
@@ -25,7 +25,7 @@ public class BigDecimalOptionHandler extends OptionHandler<BigDecimal> {
         } catch (NumberFormatException ex) {
             throw new CmdLineException(owner, "\"" + params.getParameter(0) + "\" is not a valid value for BigDecimal", ex);
         }
-        
+
         return 1;
     }
 
@@ -33,5 +33,5 @@ public class BigDecimalOptionHandler extends OptionHandler<BigDecimal> {
     public String getDefaultMetaVariable() {
         return null;
     }
-    
+
 }

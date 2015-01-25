@@ -5,7 +5,7 @@ package cz.muni.pa165.surrealtravel.rest.exceptions;
  */
 public class RestAPIException extends RuntimeException {
 
-    public RestAPIException() 
+    public RestAPIException()
     { }
 
     public RestAPIException(String message) {
@@ -19,5 +19,5 @@ public class RestAPIException extends RuntimeException {
     public RestAPIException(Throwable cause) {
         super(cause);
     }
-    
+
 }

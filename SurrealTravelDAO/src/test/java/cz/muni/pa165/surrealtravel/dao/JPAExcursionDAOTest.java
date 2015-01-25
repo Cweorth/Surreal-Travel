@@ -18,10 +18,10 @@ import org.springframework.transaction.annotation.Transactional;
  * @author Roman Lacko [396157]
  */
 public class JPAExcursionDAOTest extends AbstractPersistenceTest {
-    
+
     @Autowired
     private ExcursionDAO    dao;
-    
+
     private List<Excursion> createTestExcursions() {
         return Arrays.asList(
             mkexcursion(mkdate(20, 10, 2941), 2, "Battle of Five Armies",   "Erebor",      new BigDecimal(500)),
@@ -32,49 +32,49 @@ public class JPAExcursionDAOTest extends AbstractPersistenceTest {
             mkexcursion(mkdate(25, 03, 3019), 2, "Downfall of Barad-dûr",   "Mordor",      new BigDecimal(300))
         );
     }
-    
+
     private void insertTestExcursions() {
         logger.info("adding test excursions");
-        
+
         for(Excursion excursion : createTestExcursions()) {
             dao.addExcursion(excursion);
         }
     }
-    
+
     //<editor-fold desc="[  Functional extensions  ]" defaultstate="collapsed">
-    
+
     interface Function<T,U> {
         public U apply(T x);
     }
-    
-    interface Predicate<T> extends Function<T, Boolean> 
+
+    interface Predicate<T> extends Function<T, Boolean>
     { }
-    
+
     private <T> List<T> filter(Predicate<T> p, List<T> source) {
         List<T> result = new ArrayList<>();
         for(T x : source) { if (p.apply(x)) { result.add(x); } }
         return result;
     }
-    
+
     //</editor-fold>
-    
+
     class DestEquals implements Predicate<Excursion> {
-        private final String dest;        
-        
-        public DestEquals(String dest) 
+        private final String dest;
+
+        public DestEquals(String dest)
         { this.dest = Objects.requireNonNull(dest, "elem"); }
-        
+
         @Override
-        public Boolean apply(Excursion x) 
+        public Boolean apply(Excursion x)
         { return (x != null) && Objects.equals(x.getDestination(), dest); }
     }
-   
+
     @Test(expected = NullPointerException.class)
     @Transactional
     public void testAddNullExcursionToDAO() {
         dao.addExcursion(null);
     }
-    
+
     @Test
     @Transactional
     public void testInvalidExcursions() {
@@ -88,7 +88,7 @@ public class JPAExcursionDAOTest extends AbstractPersistenceTest {
             mkexcursion(mkdate(27, 03, 3019),  2, "The Siege of Erebor",     "",             new BigDecimal(600)),
             mkexcursion(mkdate(02, 03, 3019),  1, "Destruction of Isengard", "Isengard",     null)
         );
-        
+
         for(int ix = 0; ix < invalidExcursions.size(); ++ix) {
             try {
                 dao.addExcursion(invalidExcursions.get(ix));
@@ -96,87 +96,87 @@ public class JPAExcursionDAOTest extends AbstractPersistenceTest {
                 // OK
                 continue;
             }
-            
+
             Assert.fail(String.format("An exception should have been thrown for index %d [%s]", ix, invalidExcursions.get(ix)));
         }
     }
-    
+
     @Test
     @Transactional
     public void testExcursionPersistence() {
         insertTestExcursions();
-        
+
         long result = em.createQuery("SELECT COUNT(e) FROM Excursion e", Long.class)
                         .getSingleResult();
-        
+
         Assert.assertEquals(createTestExcursions().size(), result);
     }
-    
+
     @Test(expected = IllegalArgumentException.class)
     @Transactional
     public void testGetExcursionByIdInvalid() {
         dao.getExcursionById(-1);
     }
-    
+
     @Test
     @Transactional
     public void testGetExcursionById() {
         insertTestExcursions();
-        
-        List<Excursion> managedExcursions = 
+
+        List<Excursion> managedExcursions =
             em.createQuery("SELECT e FROM Excursion e", Excursion.class)
               .getResultList();
-        
+
         for(Excursion expected : managedExcursions) {
             Excursion excursion = dao.getExcursionById(expected.getId());
             Assert.assertEquals(expected, excursion);
         }
     }
-    
+
     @Test
     @Transactional
     public void testGetAllExcursionsEmpty() {
         Assert.assertEquals(new ArrayList<Excursion>(), dao.getAllExcursions());
     }
-    
+
     @Test
     @Transactional
     public void testGetAllExcursions() {
         insertTestExcursions();
-        
+
         List<Excursion> expl = createTestExcursions();
         List<Excursion> actl = dao.getAllExcursions();
         Assert.assertEquals(expl.size(), actl.size());
-        
+
         for(int ix = 0; ix < actl.size(); ++ix) {
             expl.get(ix).setId(actl.get(ix).getId());
         }
-        
+
         Assert.assertEquals(new HashSet(expl), new HashSet(actl));
     }
-    
+
     @Test(expected = NullPointerException.class)
     @Transactional
     public void testUpdateExcursionNull() {
         dao.updateExcursion(null);
     }
-    
+
     @Test
     @Transactional
     public void testUpdateExcursionInvalid() {
         insertTestExcursions();
-        
+
         List<Excursion> excursions = createTestExcursions();
-        
+
         Assert.assertTrue("Checking excursions count", excursions.size() >= 6);
-        
+
         excursions.get(0).setDescription(null);
         excursions.get(1).setDestination(null);
         excursions.get(2).setDuration(-1);
         excursions.get(3).setExcursionDate(null);
         excursions.get(4).setPrice(null);
         excursions.get(5).setPrice(new BigDecimal(-200));
-        
+
         for(int ix = 0; ix < excursions.size(); ++ix) {
             try {
                 dao.updateExcursion(excursions.get(ix));
@@ -184,38 +184,38 @@ public class JPAExcursionDAOTest extends AbstractPersistenceTest {
                 // OK
                 continue;
             }
-            
+
             Assert.fail(String.format("An exception should have been thrown for index %d  [%s]", ix, excursions.get(ix)));
         }
     }
-    
+
     @Test
     @Transactional
     public void testUpdateExcursion() {
         insertTestExcursions();
-        
+
         List<Excursion> original = filter(new DestEquals("Mordor"), dao.getAllExcursions());
-        
+
         for(Excursion excursion : original) {
             excursion.setDuration(20);
             dao.updateExcursion(excursion);
         }
-        
+
         List<Excursion> updated = filter(new DestEquals("Mordor"), dao.getAllExcursions());
-        
+
         for(Excursion excursion : updated) {
             Assert.assertEquals(20, (int) excursion.getDuration());
         }
     }
-    
+
     @Test
     @Transactional
     public void testDeleteExcursionById() {
         insertTestExcursions();
         Excursion excursion = createTestExcursions().get(1);
-        
+
         dao.deleteExcursionById(excursion.getId());
-       
+
         Assert.assertFalse(dao.getAllExcursions().contains(excursion));
     }
 }

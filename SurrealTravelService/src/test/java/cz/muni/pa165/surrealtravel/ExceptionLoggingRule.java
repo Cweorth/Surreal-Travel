@@ -13,7 +13,7 @@ import org.junit.runners.model.Statement;
 public class ExceptionLoggingRule implements TestRule {
 
     private final Logger logger;
-    
+
     private Statement mkstatement(final Statement base) {
         return new Statement() {
             @Override
@@ -27,14 +27,14 @@ public class ExceptionLoggingRule implements TestRule {
             }
         };
     }
-    
+
     public ExceptionLoggingRule(Logger logger) {
         this.logger = Objects.requireNonNull(logger);
     }
-    
+
     @Override
     public Statement apply(Statement stmnt, Description d) {
         return mkstatement(stmnt);
     }
-    
+
 }

@@ -12,14 +12,14 @@ public class EntityNotDeletedException extends RestAPIException {
     public EntityNotDeletedException(String entityName, long id) {
         super(entityName + " with id " + id + " cannot be deleted");
     }
-    
+
     public EntityNotDeletedException(String entityName, long id, Throwable cause) {
         super(entityName + " with id " + id + " cannot be deleted", cause);
     }
-    
+
     public EntityNotDeletedException()
     { }
-    
+
     public EntityNotDeletedException(String message) {
         super(message);
     }
@@ -31,5 +31,5 @@ public class EntityNotDeletedException extends RestAPIException {
     public EntityNotDeletedException(Throwable cause) {
         super(cause);
     }
-    
+
 }

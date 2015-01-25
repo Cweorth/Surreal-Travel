@@ -1,4 +1,4 @@
-<%-- 
+<%--
     Document   : 500
     Created on : Jan 25, 2015, 1:07:18 PM
     Author     : Roman Lacko [396157]
@@ -17,7 +17,7 @@
     <div align="center">
         <img src="${pageContext.request.contextPath}/image/500.gif" width="500" alt="Aliens"/>
     </div>
-    
+
     <c:choose>
         <c:when test="${fn:startsWith(pageContext.response.locale, 'cs')}">
             <jsp:include page="/WEB-INF/include/500_cs.jsp"/>

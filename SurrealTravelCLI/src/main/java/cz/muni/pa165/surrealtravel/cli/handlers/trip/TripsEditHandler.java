@@ -20,10 +20,10 @@ import org.kohsuke.args4j.Option;
  * @author Roman Lacko [396157]
  */
 public class TripsEditHandler implements CommandHandler {
-    
+
     @Option(name = "--id", metaVar = "id", required = true, usage = "the ID of the trip to edit")
     private long id;
-    
+
     @Option(name = "--from", aliases = {"-f"}, handler = DateOptionHandler.class, metaVar = "date", usage = "trip start [yyyy/MM/dd]")
     private Date dateFrom;
 
@@ -41,7 +41,7 @@ public class TripsEditHandler implements CommandHandler {
 
     @Option(name = "--excursions", aliases = {"-e"}, handler = LongArrayOptionHandler.class, metaVar = "ids...", usage = "indices of excursions for this trip")
     private List<Long> excursionIDs;
-    
+
     @Option(name = "--no-excursions", forbids = "--excursions", usage = "remove all excursions")
     private boolean noExcursions;
 
@@ -58,37 +58,37 @@ public class TripsEditHandler implements CommandHandler {
     @Override
     public void run(MainOptions options) {
         TripDTO trip = AppConfig.getTripClient().getTrip(id);
-        
+
         boolean changed = false;
-        
+
         if (dateFrom     != null) { changed |= true; trip.setDateFrom(dateFrom); }
         if (dateTo       != null) { changed |= true; trip.setDateTo(dateTo);     }
         if (destination  != null) { changed |= true; trip.setDestination(destination); }
         if (capacity     != null) { changed |= true; trip.setCapacity(capacity); }
         if (basePrice    != null) { changed |= true; trip.setBasePrice(basePrice); }
-        
+
         if (excursionIDs != null) {
             changed |= true;
-            
+
             for(long eid : excursionIDs) {
                 ExcursionDTO excursion = AppConfig.getExcursionClient().getExcursion(eid);
                 trip.getExcursions().add(excursion);
             }
         }
-        
+
         if (noExcursions) {
             changed |= true;
             trip.getExcursions().clear();
         }
-        
+
         if (! changed) {
             throw new RuntimeException("No change in the trip");
         }
-        
+
         AppConfig.getTripClient().editTrip(trip);
         System.out.println("The following trip was modified:");
         CLITableTrip.print(trip, true);
     }
-    
-    
+
+
 }

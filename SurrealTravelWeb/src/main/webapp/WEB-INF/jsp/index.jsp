@@ -1,4 +1,4 @@
-<%-- 
+<%--
     Document   : index
     Author     : Jan Klimeš
 --%>
@@ -15,14 +15,14 @@
 <jsp:attribute name="content">
     <h2><f:message key="basic.introduction.title"/></h2>
     <div class="ui-widget">
-        <div style="padding: 0pt 0.7em;" class="ui-state-highlight ui-corner-all"> 
+        <div style="padding: 0pt 0.7em;" class="ui-state-highlight ui-corner-all">
             <p><span style="float: left; margin-right: 0.3em;" class="ui-icon ui-icon-info"></span>
             <f:message key="basic.introduction"/></p>
         </div>
     </div>
-        
+
     <br><br>
-    
+
     <c:choose>
         <c:when test="${fn:startsWith(pageContext.response.locale, 'cs')}">
             <jsp:include page="/WEB-INF/include/bulletin_cs.jsp" />

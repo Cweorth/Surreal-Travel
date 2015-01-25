@@ -9,33 +9,33 @@ import java.util.List;
  * @author Roman Lacko [396157]
  */
 public interface TripDAO {
-    
+
     /**
      * Persists a new trip.
      * @param  trip          The trip to persist.
      */
     public void addTrip(Trip trip);
-    
+
     /**
      * Returns the trip with the specified {@code id}.
      * @param  id            The ID number of the trip to fetch.
      * @return               The trip.
      */
     public Trip getTripById(long id);
-    
+
     /**
      * Returns all trips that contain a given {@code excursion}.
      * @param  excursion     The excursion to look for.
      * @return               A list of trips.
      */
     public List<Trip> getTripsWithExcursion(Excursion excursion);
-    
+
     /**
      * Returns all trips.
      * @return               All trips.
      */
     public List<Trip> getAllTrips();
-    
+
     /**
      * Updates the trip.
      * @param  trip          The trip to update.

@@ -16,7 +16,7 @@ public class TripsDeleteHandler implements CommandHandler {
 
     @Option(name = "--id", metaVar = "id", required = true, usage = "the ID of the trip to delete")
     private long id;
-    
+
     @Override
     public Command getCommand() {
         return Command.TRIPS_DELETE;
@@ -30,9 +30,9 @@ public class TripsDeleteHandler implements CommandHandler {
     @Override
     public void run(MainOptions options) {
         TripDTO trip = AppConfig.getTripClient().deleteTrip(id);
-        
+
         System.out.println("The following trip was deleted:");
         CLITableTrip.print(trip, false);
     }
-    
+
 }

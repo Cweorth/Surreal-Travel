@@ -1,4 +1,4 @@
-<%-- 
+<%--
     Document   : layout
     Created on : 22.11.2014, 12:10:23
     Author     : Jan Klimeš [374259]
@@ -85,11 +85,11 @@
             </c:otherwise>
         </c:choose>
     </div>
-    <br style="clear: both;"> 
+    <br style="clear: both;">
 </div>
-    
+
 <div class="body">
-    
+
     <h1><c:out value="${title}"/></h1>
 
     <div id="content">
@@ -97,7 +97,7 @@
     </div>
 
 </div>
-    
+
 <sec:authorize access="hasRole('ROLE_USER')">
     <form action="<c:url value='/auth/doLogout' />" method="post" id="logoutForm"><input type="hidden" name="${_csrf.parameterName}" value="${_csrf.token}" /></form>
 </sec:authorize>

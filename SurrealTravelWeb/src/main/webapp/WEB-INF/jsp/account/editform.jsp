@@ -1,4 +1,4 @@
-<%-- 
+<%--
     Document   : editform
     Author     : Roman Lacko [396157]
 --%>
@@ -19,11 +19,11 @@
             <form:input path="account.username" cssClass="text" readonly="true"/>
         </td>
     </tr>
-    
+
     <c:choose>
         <c:when test="${editWrapper.reqpasswd}">
             <tr>
-                <td class="left">* 
+                <td class="left">*
                     <c:choose>
                         <c:when test="${isAdmin}">
                             <f:message key="account.password.admin"/>
@@ -84,7 +84,7 @@
         </c:otherwise>
     </c:choose>
 </table>
-        
+
 <br/>
 
 <button type="button" class="submit" onclick="javascript:this.form.submit();"><f:message key="basic.submit" /></button>

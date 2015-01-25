@@ -101,7 +101,7 @@ public class ReservationDTO {
         if (getClass() != obj.getClass()) {
             return false;
         }
-        
+
         final ReservationDTO other = (ReservationDTO) obj;
         if (this.id != other.id) {
             return false;

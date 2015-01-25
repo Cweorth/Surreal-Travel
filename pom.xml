@@ -6,7 +6,7 @@
     <name>SurrealTravel</name>
     <version>1.0-SNAPSHOT</version>
     <packaging>pom</packaging>
-    
+
     <modules>
         <module>SurrealTravelDAO</module>
         <module>SurrealTravelService</module>
@@ -14,7 +14,7 @@
         <module>SurrealTravelAPI</module>
         <module>SurrealTravelCLI</module>
     </modules>
-    
+
     <properties>
         <project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
         <org.slf4j.version>1.7.6</org.slf4j.version>
@@ -22,5 +22,5 @@
         <org.apache.derby.version>10.11.1.1</org.apache.derby.version>
         <spring.security.version>3.2.5.RELEASE</spring.security.version>
     </properties>
-        
+
 </project>

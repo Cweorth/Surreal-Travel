@@ -1,4 +1,4 @@
-<%-- 
+<%--
     Document   : new
     Created on : Nov 26, 2014, 4:09:14 PM
     Author     : Roman Lacko [396157]
@@ -14,14 +14,14 @@
 
 <t:layout title="${title}">
 <jsp:attribute name="content">
-    
+
     <jsp:include page="/WEB-INF/include/requiredNotification.jsp" />
     <jsp:include page="/WEB-INF/include/dateFormatNotification.jsp" />
 
     <form:form action="${pageContext.request.contextPath}/trips/new" modelAttribute="tripdata">
         <jsp:include page="form.jsp" />
     </form:form>
-    
+
 </jsp:attribute>
 </t:layout>
 

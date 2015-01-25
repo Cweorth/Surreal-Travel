@@ -47,18 +47,18 @@ public class Trip implements Serializable {
 
     @Column
     private BigDecimal basePrice;
-    
+
     @ManyToMany
     private List<Excursion> excursions;
-    
+
     //--[  Constructors  ]------------------------------------------------------
-    
+
     public Trip() {
         excursions = new ArrayList<>();
     }
-    
+
     //--[  Methods  ]-----------------------------------------------------------
-    
+
     /**
      * Adds an excursion to the trip.
      * @param  excursion     The excursion to add.
@@ -66,7 +66,7 @@ public class Trip implements Serializable {
     public void addExcursion(Excursion excursion) {
         excursions.add(Objects.requireNonNull(excursion, "excursion"));
     }
-    
+
     /**
      * Removes an excursion from the trip.
      * @param  excursion     The excursion to remove.
@@ -74,23 +74,23 @@ public class Trip implements Serializable {
     public void removeExcursion(Excursion excursion) {
         excursions.remove(Objects.requireNonNull(excursion, "excursion"));
     }
-    
+
     /**
      * Calculates the total price of the trip including all the excursions.
      * @return The total price of the trip.
      */
     public BigDecimal getFullPrice() {
         BigDecimal price = basePrice;
-        
+
         for(Excursion e : excursions) {
             price = price.add(e.getPrice());
         }
-        
+
         return price;
     }
-    
+
     //<editor-fold desc="[  Getters | Setters  ]" defaultstate="collapsed">
-    
+
     public long getId() {
         return id;
     }
@@ -137,20 +137,20 @@ public class Trip implements Serializable {
 
     public void setBasePrice(BigDecimal basePrice) {
         this.basePrice = basePrice;
-    }    
+    }
 
     public List<Excursion> getExcursions() {
         return excursions;
     }
-    
+
     public void setExcursions(List<Excursion> excursions) {
         this.excursions = excursions;
-    }    
-    
+    }
+
     //</editor-fold>
-    
+
     //<editor-fold desc="[  Object methods     ]" defaultstate="collapsed">
-    
+
     @Override
     public int hashCode() {
         int hash = 3;
@@ -169,9 +169,9 @@ public class Trip implements Serializable {
         if ((obj == null) || (getClass() != obj.getClass())) {
             return false;
         }
-        
+
         final Trip other = (Trip) obj;
-        
+
         return (id       == other.id)
             && (capacity == other.capacity)
             && (Objects.equals(basePrice,   other.basePrice))
@@ -180,15 +180,15 @@ public class Trip implements Serializable {
             && (Objects.equals(destination, other.destination))
             && (Objects.equals(excursions,  other.excursions));
     }
-    
+
     @Override
     public String toString() {
-        return "Trip[id="      + id         + ", dateFrom="    + dateFrom 
-             + ", dateTo="     + dateTo     + ", destination=" + destination 
-             + ", capacity="   + capacity   + ", basePrice="   + basePrice 
+        return "Trip[id="      + id         + ", dateFrom="    + dateFrom
+             + ", dateTo="     + dateTo     + ", destination=" + destination
+             + ", capacity="   + capacity   + ", basePrice="   + basePrice
              + ", excursions=" + excursions + ']';
     }
-    
+
     //</editor-fold>
-    
+
 }

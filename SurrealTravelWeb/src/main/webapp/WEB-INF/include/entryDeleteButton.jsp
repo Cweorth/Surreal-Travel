@@ -1,4 +1,4 @@
-<%-- 
+<%--
     Document   : entryDeleteButton
     Author     : Jan Klimeš
 --%>

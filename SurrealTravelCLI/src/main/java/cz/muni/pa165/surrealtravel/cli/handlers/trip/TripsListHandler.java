@@ -14,22 +14,22 @@ import org.kohsuke.args4j.Option;
  * @author Roman Lacko [396157]
  */
 public class TripsListHandler implements CommandHandler {
-    
+
     @Option(name = "-e", aliases = {"--list-excursions"}, usage = "lists excursions in the trip")
     private boolean listExcursions;
-    
+
     //--[  Methods  ]-----------------------------------------------------------
-    
+
     //<editor-fold defaultstate="collapsed" desc="[  Setters  ]">
-    
+
     public void setListExcursions(boolean listExcursions) {
         this.listExcursions = listExcursions;
     }
-    
+
     //</editor-fold>
-    
+
     //--[  Interface implementation  ]------------------------------------------
-    
+
     @Override
     public Command getCommand() {
         return Command.TRIPS_LIST;
@@ -48,7 +48,7 @@ public class TripsListHandler implements CommandHandler {
             System.out.println("NO TRIPS FOUND.");
             return;
         }
-        
+
         CLITableTrip.print(trips, listExcursions);
     }
 

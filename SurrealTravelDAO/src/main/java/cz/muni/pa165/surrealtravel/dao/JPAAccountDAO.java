@@ -26,7 +26,7 @@ public class JPAAccountDAO implements AccountDAO {
     public void setEntityManager(EntityManager em) {
         this.em = em;
     }
-    
+
     @Override
     public void addAccount(Account account) {
         validate(account);
@@ -38,7 +38,7 @@ public class JPAAccountDAO implements AccountDAO {
         if(id < 0) throw new IllegalArgumentException("Id < 0");
         return em.find(Account.class, id);
     }
-    
+
     @Override
     public Account getAccountByUsername(String username) {
         Objects.requireNonNull(username, "Username is null.");
@@ -52,7 +52,7 @@ public class JPAAccountDAO implements AccountDAO {
         }
         return retrieved;
     }
-    
+
     @Override
     public List<Account> getAccountByCustomer(Customer customer) {
         Objects.requireNonNull(customer, "Customer object is null.");
@@ -77,10 +77,10 @@ public class JPAAccountDAO implements AccountDAO {
         em.createNativeQuery("DELETE FROM ACCOUNT_ROLES ar WHERE ar.account_id = :id").setParameter("id", id).executeUpdate();
         em.createQuery("DELETE FROM Account a WHERE a.id = :id").setParameter("id", id).executeUpdate();
     }
-    
+
     /**
      * Utility method - check validity of arg.
-     * @param account 
+     * @param account
      */
     private void validate(Account account) {
         if(account == null) throw new NullPointerException("Account object is null.");
@@ -90,5 +90,5 @@ public class JPAAccountDAO implements AccountDAO {
         if(account.getPassword() == null) throw new NullPointerException("Password is null.");
         if(account.getPassword().isEmpty()) throw new IllegalArgumentException("Password is empty string.");
     }
-    
+
 }

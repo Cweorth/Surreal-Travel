@@ -42,27 +42,27 @@ import org.springframework.web.util.UriComponentsBuilder;
 @RequestMapping("/reservations")
 public class ReservationController {
     final static Logger logger = LoggerFactory.getLogger(ReservationController.class);
-     
+
     @Autowired
     private ReservationService reservationService;
-     
+
     @Autowired
     private TripService tripService;
-     
+
     @Autowired
     private CustomerService customerService;
-    
+
     @Autowired
     private ExcursionService excursionService;
-    
+
     @Autowired
     private AccountService accountService;
-          
+
     @Autowired
     private MessageSource messageSource;
 
     @InitBinder
-    protected void initBinder(WebDataBinder binder) {        
+    protected void initBinder(WebDataBinder binder) {
         binder.registerCustomEditor(CustomerDTO.class, "customer", new PropertyEditorSupport() {
             @Override
             public void setAsText(String text) {
@@ -70,7 +70,7 @@ public class ReservationController {
                 setValue(type);
             }
         });
-        
+
         binder.registerCustomEditor(TripDTO.class, "trip", new PropertyEditorSupport() {
             @Override
             public void setAsText(String text) {
@@ -78,7 +78,7 @@ public class ReservationController {
                 setValue(type);
             }
         });
-        
+
         binder.registerCustomEditor(List.class, "excursions", new CustomCollectionEditor(List.class) {
             @Override
             protected Object convertElement(Object element) {
@@ -95,7 +95,7 @@ public class ReservationController {
             }
         });
     }
-    
+
     /**
      * List all excursions. Prepared to be called via ajax.
      * @param id
@@ -110,7 +110,7 @@ public class ReservationController {
         model.addAttribute("ajaxReload", true);
         return "reservation/excursionsAjax";
     }
-    
+
     /**
      * Get all reservations. User must be logged in, different funtionality for (USER vs STAFF,ADMIN).
      * @param model
@@ -132,11 +132,11 @@ public class ReservationController {
             else
                 return AuthCommons.forceDenied(uriBuilder);
         }
-        
+
         model.addAttribute("reservations", reservations);
         return "reservation/list";
     }
-    
+
     /**
      * Display a form for creating a new reservation.
      * @param model
@@ -147,7 +147,7 @@ public class ReservationController {
     @RequestMapping(value = "/new", method = RequestMethod.GET)
     public String newReservationForm(ModelMap model, UriComponentsBuilder uriBuilder) {
         List<TripDTO> allTrips = tripService.getAllTrips();
-        
+
         // ROLE_USERs can create reservation only for themselves, others can
         // create reservations for any Customers.
         ReservationDTO reservation = new ReservationDTO();
@@ -161,12 +161,12 @@ public class ReservationController {
                 return AuthCommons.forceDenied(uriBuilder);
         }
         model.addAttribute("reservationDTO", reservation);
-        
+
         model.addAttribute("trips", allTrips);
         if(!allTrips.isEmpty()) model.addAttribute("excursions", allTrips.get(0).getExcursions());
         return "reservation/new";
     }
-    
+
     /**
      * Process POST request for creating of a new reservation.
      * @param reservationDTO
@@ -178,13 +178,13 @@ public class ReservationController {
      */
     @Secured("ROLE_USER")
     @RequestMapping(value = "/new", method = RequestMethod.POST)
-    public String newReservation(@ModelAttribute ReservationDTO reservationDTO, BindingResult bindingResult, RedirectAttributes redirectAttributes, UriComponentsBuilder uriBuilder, Locale locale) {       
+    public String newReservation(@ModelAttribute ReservationDTO reservationDTO, BindingResult bindingResult, RedirectAttributes redirectAttributes, UriComponentsBuilder uriBuilder, Locale locale) {
         // check the form validator output
         if(bindingResult.hasErrors()) {
             logFormErrors(bindingResult);
             return "reservation/new";
         }
-        
+
         String resultStatus = "success";
 
         // so far so good, try to save reservation
@@ -194,12 +194,12 @@ public class ReservationController {
             logger.error(e.getMessage());
             resultStatus = "failure";
         }
-        
+
         String messageKey = "reservation.message.new" + (resultStatus.equals("success") ? "" : ".error");
         redirectAttributes.addFlashAttribute(resultStatus + "Message", messageSource.getMessage(messageKey, new Object[]{reservationDTO.getCustomer().getName()}, locale));
         return "redirect:" + uriBuilder.path("/reservations").queryParam("notification", resultStatus).build();
     }
-    
+
     /**
      * Display a form for editing of a reservation.
      * @param id
@@ -210,7 +210,7 @@ public class ReservationController {
     @RequestMapping(value = "/edit/{id}", method = RequestMethod.GET)
     public String editReservationForm(@PathVariable long id, ModelMap model) {
         ReservationDTO reservation = null;
-        
+
         try {
             reservation = reservationService.getReservationById(id);
         } catch(Exception e) {
@@ -218,14 +218,14 @@ public class ReservationController {
         }
 
         if(reservation == null) return "reservation/list";
-        
+
         model.addAttribute("reservationDTO", reservation);
         model.addAttribute("customers", customerService.getAllCustomers());
         model.addAttribute("trips", tripService.getAllTrips());
         model.addAttribute("excursions", reservation.getTrip().getExcursions());
         return "reservation/edit";
     }
-    
+
     /**
      * Process POST request for editing of a reservation.
      * @param reservationDTO
@@ -237,8 +237,8 @@ public class ReservationController {
      */
     @Secured("ROLE_STAFF")
     @RequestMapping(value = "/edit", method = RequestMethod.POST)
-    public String editReservation(@ModelAttribute ReservationDTO reservationDTO, BindingResult bindingResult, RedirectAttributes redirectAttributes, UriComponentsBuilder uriBuilder, Locale locale) {       
-        
+    public String editReservation(@ModelAttribute ReservationDTO reservationDTO, BindingResult bindingResult, RedirectAttributes redirectAttributes, UriComponentsBuilder uriBuilder, Locale locale) {
+
         // check the form validator output
         if(bindingResult.hasErrors()) {
             logFormErrors(bindingResult);
@@ -253,12 +253,12 @@ public class ReservationController {
             logger.error(e.getMessage());
             resultStatus = "failure";
         }
-        
+
         String messageKey = "reservation.message.edit" + (resultStatus.equals("success") ? "" : ".error");
         redirectAttributes.addFlashAttribute(resultStatus + "Message", messageSource.getMessage(messageKey, new Object[]{reservationDTO.getCustomer().getName()}, locale));
         return "redirect:" + uriBuilder.path("/reservations").queryParam("notification", resultStatus).build();
     }
-    
+
     /**
      * Delete reservation with the given id.
      * @param id
@@ -272,29 +272,29 @@ public class ReservationController {
     public String deleteReservation(@PathVariable long id, RedirectAttributes redirectAttributes, UriComponentsBuilder uriBuilder, Locale locale) {
         String name         = null;
         String resultStatus = "success";
-        
+
         try {
             ReservationDTO reservation = reservationService.getReservationById(id);
-            
+
             // If ROLE_USER is trying to delete reservation of someone other than himself, deny it.
             if(!AuthCommons.hasRole(UserRole.ROLE_STAFF)) {
                 AccountDTO account = accountService.getAccountByUsername(AuthCommons.getUsername());
                 if(account.getCustomer() == null || account.getCustomer().getId() != reservation.getCustomer().getId())
                     return AuthCommons.forceDenied(uriBuilder, redirectAttributes, messageSource.getMessage("reservation.message.delete.403", null, locale));
             }
-            
+
             name = reservation.getCustomer().getName();
             reservationService.deleteReservationById(id);
         } catch(Exception e) {
             logger.error(e.getMessage());
             resultStatus = "failure";
         }
-        
+
         String messageKey = "reservation.message.delete" + (resultStatus.equals("success") ? "" : ".error");
         redirectAttributes.addFlashAttribute(resultStatus + "Message", messageSource.getMessage(messageKey, new Object[]{ name }, locale));
         return "redirect:" + uriBuilder.path("/reservations").queryParam("notification", resultStatus).build();
     }
-    
+
     /**
      * Check BindingResult of a request for errors found by a validator.
      * @param bindingResult

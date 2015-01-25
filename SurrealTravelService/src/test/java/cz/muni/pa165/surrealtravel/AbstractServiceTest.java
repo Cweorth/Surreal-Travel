@@ -29,35 +29,35 @@ import org.mockito.Spy;
  */
 @RunWith(MockitoJUnitRunner.class)
 public abstract class AbstractServiceTest {
-    
+
     protected static final Logger     logger     = LogManager.getLogger("TestLogger");
-    
+
     @Spy
     protected static DozerBeanMapper  mapper;
     @Rule
     public final TestName             testName   = new TestName();
     @Rule
     public final ExceptionLoggingRule excpLogger = new ExceptionLoggingRule(logger);
-    
+
     //--[  Methods  ]-----------------------------------------------------------
-    
+
     @BeforeClass
     public static void setUpClass() {
         ApplicationContext context = new ClassPathXmlApplicationContext("service/testContext.xml");
         mapper = context.getBean("mapper", DozerBeanMapper.class);
     }
-    
+
     @Before
     public void setUp() {
         logger.info(String.format("==[(  %s  )]==============================================", testName.getMethodName()));
         logger.debug("[Setup] test started");
     }
-    
+
     @After
     public void tearDown() {
         logger.debug("[TearDown] test finished");
     }
-        
+
     /**
      * Convenience method for creating a date.
      * @param  day           The day of the date.
@@ -70,7 +70,7 @@ public abstract class AbstractServiceTest {
         calendar.set(year, month, day);
         return calendar.getTime();
     }
-    
+
     /**
      * Convenience method for creating a customer DTO.
      * @param  name          Customer's name.
@@ -81,11 +81,11 @@ public abstract class AbstractServiceTest {
         CustomerDTO customer = new CustomerDTO();
         customer.setName(name);
         customer.setAddress(address);
-        
+
         logger.info(String.format("[mk] Created %s", customer.toString()));
         return customer;
     }
-    
+
     /**
      * Convenience method for creating an excursion DTO.
      * @param  date          The date of the excursion.
@@ -102,11 +102,11 @@ public abstract class AbstractServiceTest {
         excursion.setDescription(description);
         excursion.setDestination(destination);
         excursion.setPrice(price);
-        
+
         logger.info(String.format("[mk] Created %s", excursion.toString()));
         return excursion;
     }
-    
+
     /**
      * Convenience method for creating a reservation.
      * @param  customer      A customer who makes this reservation.
@@ -117,11 +117,11 @@ public abstract class AbstractServiceTest {
         ReservationDTO reservation = new ReservationDTO();
         reservation.setCustomer(customer);
         reservation.setTrip(trip);
-        
+
         logger.info(String.format("[mk] Created %s", reservation.toString()));
         return reservation;
     }
-    
+
     /**
      * Convenience method for creating a trip.
      * @param  from          The date the trip starts.
@@ -138,9 +138,9 @@ public abstract class AbstractServiceTest {
         trip.setDestination(destination);
         trip.setCapacity(capacity);
         trip.setBasePrice(price);
-        
+
         logger.info(String.format("[mk] Created %s", trip.toString()));
         return trip;
-    }    
-    
+    }
+
 }

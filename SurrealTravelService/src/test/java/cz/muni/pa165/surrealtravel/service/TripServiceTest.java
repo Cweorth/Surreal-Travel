@@ -26,18 +26,18 @@ import static org.mockito.Mockito.when;
  * @author Petr Dvořák [359819]
  */
 public class TripServiceTest extends AbstractServiceTest{
-    
+
     @Mock
     private TripDAO     dao;
     @InjectMocks
     private DefaultTripService service;
-    
+
     private final List<TripDTO>      trips;
     private final List<ExcursionDTO> excursions;
-     
+
     public TripServiceTest() {
         super();
-        
+
          excursions = Arrays.asList(
             mkexcursion(mkdate(02, 02, 1990), 1, "navsteva prezidentskeho sidla",   "Prazsky hrad",      new BigDecimal(100)),
             mkexcursion(mkdate(04, 02, 1991), 3, "navsteva korunovacnich klenotu",       "Prazsky hrad",   new BigDecimal(1000)),
@@ -51,14 +51,14 @@ public class TripServiceTest extends AbstractServiceTest{
          trips.get(1).setExcursions(Arrays.asList(excursions.get(0), excursions.get(1)));
          trips.get(0).setId(1L);
          trips.get(1).setId(2L);
-         
+
     }
-    
+
     @Test(expected = NullPointerException.class)
     public void createNullTripTest() {
         service.addTrip(null);
     }
-    
+
     @Test
     public void addTripTest(){
         for(TripDTO trip : trips) {
@@ -66,43 +66,43 @@ public class TripServiceTest extends AbstractServiceTest{
         }
                 verify(dao, times(trips.size())).addTrip(any(Trip.class));
     }
-    
+
     @Test
     public void getTripByIdTest(){
         long uniqueId = 2L;
-        
+
         TripDTO expected = trips.get(1);
         Trip entity = mapper.map(expected, Trip.class);
-       
+
         when(dao.getTripById(uniqueId)).thenReturn(entity);
         TripDTO retrieved = service.getTripById(uniqueId);
-        
+
         verify(dao, times(1)).getTripById(Matchers.eq(uniqueId));
         assertNotNull(retrieved);
         assertEquals(uniqueId, retrieved.getId());
         assertEquals(expected, retrieved);
     }
-    
+
     @Test
     public void getAllTripsTest(){
         List<Trip> entities = new ArrayList<>();
         for(TripDTO e : trips)
             entities.add(mapper.map(e, Trip.class));
-        
+
         when(dao.getAllTrips()).thenReturn(entities);
         List<TripDTO> retrieved = service.getAllTrips();
-        
+
         verify(dao, times(1)).getAllTrips();
         assertTrue(retrieved.size() == trips.size());
-        assertEquals(trips, retrieved); 
+        assertEquals(trips, retrieved);
     }
-    
+
     @Test
     public void updateTripTest(){
         TripDTO tripToUpdate = trips.get(0);
         Trip entity = mapper.map(tripToUpdate, Trip.class);
         service.updateTrip(tripToUpdate);
         verify(dao, times(1)).updateTrip(entity);
-        
+
     }
 }

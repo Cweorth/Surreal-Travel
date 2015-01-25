@@ -15,11 +15,11 @@ import org.slf4j.LoggerFactory;
  * @author Roman Lacko [396157]
  */
 public class ExcursionsListHandler implements CommandHandler {
-    
+
     //--[  Interface implementation  ]------------------------------------------
-    
+
     private final static Logger logger = LoggerFactory.getLogger(ExcursionsListHandler.class);
-    
+
     @Override
     public Command getCommand() {
         return Command.EXCURSIONS_LIST;
@@ -29,7 +29,7 @@ public class ExcursionsListHandler implements CommandHandler {
     public String getDescription() {
         return "lists all excursions";
     }
-    
+
     @Override
     public void run(MainOptions options) {
         List<ExcursionDTO> excursions = AppConfig.getExcursionClient().getAllExcursions();
@@ -40,7 +40,7 @@ public class ExcursionsListHandler implements CommandHandler {
         }
 
         logger.info("Printing fetched excursion objects.");
-        
+
         CLITableExcursion.print(excursions);
     }
 

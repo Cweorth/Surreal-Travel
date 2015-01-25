@@ -1,4 +1,4 @@
-<%-- 
+<%--
     Document   : form
     Author     : Jan Klimeš
 --%>
@@ -35,7 +35,7 @@
         </td>
     </tr>
 </table>
-        
+
 <sec:authorize access="not hasRole('ROLE_STAFF')">
     <input type="hidden" id="customer" name="customer" value="${reservationDTO.customer.id}" />
 </sec:authorize>

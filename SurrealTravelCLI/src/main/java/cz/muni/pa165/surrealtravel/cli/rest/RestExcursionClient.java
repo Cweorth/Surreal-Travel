@@ -24,17 +24,17 @@ import org.springframework.web.client.RestTemplate;
 public class RestExcursionClient {
 
     private final static Logger logger = LoggerFactory.getLogger(RestExcursionClient.class);
-    
+
     private final RestTemplate template;
-    
+
     /**
      * Constructor.
-     * @param template 
+     * @param template
      */
     public RestExcursionClient(RestTemplate template) {
         this.template = Objects.requireNonNull(template, "template");
     }
-    
+
     /**
      * Returns the list of all excursions
      * @return the list of all excursions
@@ -46,12 +46,12 @@ public class RestExcursionClient {
         } catch(RestClientException ex) {
             throw new RESTAccessException(ex.getMessage(), ex);
         }
-        
+
         logger.info(response.toString());
-        
+
         return Arrays.asList(response.getBody());
     }
-    
+
     /**
      * Get a single excursion by the id.
      * @param id
@@ -69,18 +69,18 @@ public class RestExcursionClient {
         } catch(RestClientException ex) {
             throw new RESTAccessException(ex);
         }
-        
+
         logger.info(response.toString());
-        
+
         return response.getBody();
     }
-    
+
     /**
      * Create new excursion.
      * @param excursion
      * @return the new excursions
      */
-    public ExcursionDTO addExcursion(ExcursionDTO excursion) {        
+    public ExcursionDTO addExcursion(ExcursionDTO excursion) {
         ResponseEntity<ExcursionDTO> response;
         try {
             response = template.postForEntity(getAddress("excursions/new"), excursion, ExcursionDTO.class);
@@ -95,18 +95,18 @@ public class RestExcursionClient {
         }
 
         logger.info(response.toString());
-        
+
         return response.getBody();
     }
-    
+
     /**
      * Modify existing excursion.
      * @param excursion
      * @return the modified excursion
      */
-    public ExcursionDTO editExcursion(ExcursionDTO excursion) {        
+    public ExcursionDTO editExcursion(ExcursionDTO excursion) {
         final HttpEntity<ExcursionDTO> request = new HttpEntity<>(excursion, new HttpHeaders());
-        
+
         ResponseEntity<ExcursionDTO> response;
         try {
             response = template.exchange(getAddress("excursions/edit/" + excursion.getId()), HttpMethod.PUT, request, ExcursionDTO.class);
@@ -119,18 +119,18 @@ public class RestExcursionClient {
         } catch(RestClientException ex) {
             throw new RESTAccessException(ex);
         }
-        
+
         logger.info(response.toString());
 
         return response.getBody();
     }
-    
+
     /**
      * Delete excursion by id.
      * @param id
      * @return the deleted excursion
      */
-    public ExcursionDTO deleteExcursion(long id) {               
+    public ExcursionDTO deleteExcursion(long id) {
         ResponseEntity<ExcursionDTO> response;
         try {
             response = template.exchange(getAddress("excursions/delete/" + id), HttpMethod.DELETE, null, ExcursionDTO.class);
@@ -143,23 +143,23 @@ public class RestExcursionClient {
         } catch(RestClientException ex) {
             throw new RESTAccessException(ex);
         }
-        
+
         logger.info(response.toString());
-        
+
         return response.getBody();
     }
-    
+
     private String getAddress(String suffix) {
         URL address;
-        
+
         try {
             address = new URL(AppConfig.getBase(), suffix);
         } catch (MalformedURLException ex) {
             throw new RESTAccessException("Malformed URL", ex);
         }
-        
+
         logger.info("Retrieving from " + address.toString());
         return address.toString();
     }
-     
+
 }

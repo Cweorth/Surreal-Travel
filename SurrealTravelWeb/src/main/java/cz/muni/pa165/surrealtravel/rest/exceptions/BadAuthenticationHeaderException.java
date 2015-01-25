@@ -9,7 +9,7 @@ import org.springframework.web.bind.annotation.ResponseStatus;
 @ResponseStatus(value = HttpStatus.BAD_REQUEST, reason = "Multiple username or password fields in the request")
 public class BadAuthenticationHeaderException extends RestAPIException {
 
-    public BadAuthenticationHeaderException() 
+    public BadAuthenticationHeaderException()
     { }
 
     public BadAuthenticationHeaderException(String message) {

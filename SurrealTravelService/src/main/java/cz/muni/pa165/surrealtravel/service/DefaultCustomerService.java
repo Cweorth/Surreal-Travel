@@ -18,7 +18,7 @@ import org.springframework.transaction.annotation.Transactional;
  */
 @Service(value = "customerService")
 public class DefaultCustomerService implements CustomerService {
-    
+
     @Autowired
     private CustomerDAO customerDao;
 
@@ -33,7 +33,7 @@ public class DefaultCustomerService implements CustomerService {
         customerDao.addCustomer(entity);
         customer.setId(entity.getId());
     }
-    
+
     @Secured("ROLE_USER")
     @Transactional(readOnly = true)
     @Override
@@ -41,7 +41,7 @@ public class DefaultCustomerService implements CustomerService {
         Customer customer = customerDao.getCustomerById(id);
         return customer == null ? null : mapper.map(customer, CustomerDTO.class);
     }
-    
+
     @Secured("ROLE_USER")
     @Transactional(readOnly = true)
     @Override
@@ -51,7 +51,7 @@ public class DefaultCustomerService implements CustomerService {
             customersDTO.add(mapper.map(c, CustomerDTO.class));
         return customersDTO;
     }
-    
+
     @Secured("ROLE_USER")
     @Transactional
     @Override
@@ -71,9 +71,9 @@ public class DefaultCustomerService implements CustomerService {
     public void setCustomerDao(CustomerDAO customerDao) {
         this.customerDao = customerDao;
     }
-    
+
     public void setMapper(DozerBeanMapper mapper) {
         this.mapper = mapper;
     }
-    
+
 }

@@ -41,7 +41,7 @@ $ mvn --quiet exec:java -Dexec.args=" --url http://localhost:8084/pa165/rest \
 usage: [--debug] [--url url] [-? (--command-help) {command|LIST}] [-h (--help)] [-v (--verbose)] COMMAND
 use -? [--command-help] to show help for each subcommand
 
- COMMAND                                : main command                             
+ COMMAND                                : main command
  --debug                                : enables debug messaged
  --url url                              : specify base URL
  -? (--command-help) {command|LIST}     : show command help or lists commands

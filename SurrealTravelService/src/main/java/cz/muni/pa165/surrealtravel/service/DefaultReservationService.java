@@ -127,11 +127,11 @@ public class DefaultReservationService implements ReservationService {
     @Override
     public void deleteReservationById(long id) {
         reservationDAO.deleteReservationById(id);
-    }    
-    
+    }
+
     /**
      * Validate reservation DTO.
-     * @param reservationDTO 
+     * @param reservationDTO
      */
     private void validateReservation(ReservationDTO reservationDTO) {
         if (reservationDTO.getCustomer() == null) {

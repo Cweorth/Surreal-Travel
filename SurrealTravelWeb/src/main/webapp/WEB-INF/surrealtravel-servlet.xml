@@ -19,7 +19,7 @@
     <context:component-scan base-package="cz.muni.pa165.surrealtravel.service"/>
     <context:component-scan base-package="cz.muni.pa165.surrealtravel.controller"/>
     <context:component-scan base-package="cz.muni.pa165.surrealtravel.rest"/>
-    
+
     <mvc:annotation-driven />
     <mvc:view-controller path="/" view-name="index"/>
     <mvc:view-controller path="/about" view-name="about"/>
@@ -34,9 +34,9 @@
             <bean class="cz.muni.pa165.surrealtravel.utils.AuthInterceptor" />
         </mvc:interceptor>
     </mvc:interceptors>
-    
+
     <tx:annotation-driven/>
-    
+
     <security:global-method-security secured-annotations="enabled"/>
 
     <bean id="transactionManager" class="org.springframework.orm.jpa.JpaTransactionManager">
@@ -56,12 +56,12 @@
             </list>
         </property>
     </bean>
-    
+
     <bean id="viewResolver" class="org.springframework.web.servlet.view.InternalResourceViewResolver">
         <property name="prefix" value="/WEB-INF/jsp/"/>
         <property name="suffix" value=".jsp"/>
     </bean>
-    
+
     <bean id="mapper" class="org.dozer.DozerBeanMapper">
         <property name="mappingFiles">
             <list>

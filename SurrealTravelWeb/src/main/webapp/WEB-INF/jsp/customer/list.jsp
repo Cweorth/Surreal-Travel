@@ -1,4 +1,4 @@
-<%-- 
+<%--
     Document   : list
     Author     : Jan Klimeš
 --%>
@@ -27,7 +27,7 @@
     </c:if>
     <br/>
     </sec:authorize>
-    
+
     <table cellspacing="0" cellpadding="3" border="0" class="tableEntry">
         <tr class="head">
             <td width="25">#</td>
@@ -74,6 +74,6 @@
             </c:otherwise>
         </c:choose>
     </table>
-            
+
 </jsp:attribute>
 </t:layout>

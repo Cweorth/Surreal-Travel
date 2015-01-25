@@ -15,12 +15,12 @@ import org.slf4j.LoggerFactory;
  * @author Jan Klimeš [374259]
  */
 public class ExcursionsGetHandler implements CommandHandler {
-    
+
     @Option(name = "--id", metaVar = "id", usage = "specify the excursion id", required = true)
     private long id;
-    
+
     private final static Logger logger = LoggerFactory.getLogger(ExcursionsGetHandler.class);
-    
+
     @Override
     public Command getCommand() {
         return Command.EXCURSIONS_GET;
@@ -34,9 +34,9 @@ public class ExcursionsGetHandler implements CommandHandler {
     @Override
     public void run(MainOptions options) {
         ExcursionDTO excursion = AppConfig.getExcursionClient().getExcursion(id);
-        
+
         logger.info("Printing fetched excursion object.");
-        
+
         CLITableExcursion.print(excursion);
     }
 
@@ -47,5 +47,5 @@ public class ExcursionsGetHandler implements CommandHandler {
     public void setId(long id) {
         this.id = id;
     }
-    
+
 }

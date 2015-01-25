@@ -21,7 +21,7 @@ public class AccountNewValidator implements Validator {
     public AccountNewValidator(AccountService accountService) {
         this.accountService = Objects.requireNonNull(accountService, "accountService");
     }
-    
+
     @Override
     public boolean supports(Class<?> type) {
         return AccountWrapper.class.isAssignableFrom(type);
@@ -32,13 +32,13 @@ public class AccountNewValidator implements Validator {
         ValidationUtils.rejectIfEmptyOrWhitespace(errors, "account.username", "account.validator.username");
         ValidationUtils.rejectIfEmptyOrWhitespace(errors, "passwd1",          "account.validator.password");
         ValidationUtils.rejectIfEmptyOrWhitespace(errors, "passwd2",          "account.validator.password");
-        
+
         AccountWrapper wrapper = (AccountWrapper) o;
-        
+
         if (wrapper.isCustomer()) {
             ValidationUtils.rejectIfEmptyOrWhitespace(errors, "account.customer.name", "customer.validator.name");
         }
-        
+
         if (! (errors.hasFieldErrors("passwd1") && errors.hasFieldErrors("passwd2"))) {
             if (! StringUtils.equals(wrapper.getPasswd1(), wrapper.getPasswd2())) {
                 errors.rejectValue("passwd2", "account.validator.password.mismatch");
@@ -46,7 +46,7 @@ public class AccountNewValidator implements Validator {
                 errors.rejectValue("passwd2", "account.validator.password.length");
             }
         }
-        
+
         if (! errors.hasFieldErrors("account.username")) {
             Matcher matcher = username.matcher(wrapper.getAccount().getUsername());
             if (! matcher.matches()) {

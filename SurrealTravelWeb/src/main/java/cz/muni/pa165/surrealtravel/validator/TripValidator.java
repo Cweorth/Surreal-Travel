@@ -12,7 +12,7 @@ import org.springframework.validation.Validator;
  * @author Roman Lacko [396157]
  */
 public class TripValidator implements Validator {
-    
+
     @Override
     public boolean supports(Class<?> type) {
         return TripModelData.class.isAssignableFrom(type);
@@ -24,20 +24,20 @@ public class TripValidator implements Validator {
         ValidationUtils.rejectIfEmptyOrWhitespace(errors, "dateFrom",    "trip.validator.dateFrom");
         ValidationUtils.rejectIfEmptyOrWhitespace(errors, "dateTo",      "trip.validator.dateTo");
         ValidationUtils.rejectIfEmptyOrWhitespace(errors, "basePrice",   "trip.validator.basePrice");
-        
+
         if (errors.hasErrors()) {
             return;
         }
-        
+
         TripDTO trip = (TripDTO) o;
-         
+
         if (trip.getDateFrom().after(trip.getDateTo())) {
             errors.rejectValue("dateTo", "trip.validator.timemachine");
         }
-        
+
         if (trip.getBasePrice().compareTo(BigDecimal.ZERO) < 0) {
             errors.rejectValue("basePrice", "trip.validator.negativeBasePrice");
         }
     }
-    
+
 }

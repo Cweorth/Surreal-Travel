@@ -66,6 +66,6 @@ public class CustomerDTO implements Serializable {
     @Override
     public String toString() {
         return "CustomerDTO[" + "id=" + id + ", name=" + name + ", address=" + address + ']';
-    } 
-    
+    }
+
 }

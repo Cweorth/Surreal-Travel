@@ -22,9 +22,9 @@ public class RESTAccessException extends RuntimeException {
     public RESTAccessException(Throwable cause) {
         super(cause);
     }
-    
+
     public RESTAccessException(HttpStatus status, String text) {
         super("[" + status.toString() + "] " + text);
     }
-    
+
 }
