@@ -97,10 +97,7 @@ public class AccountDTO implements Serializable {
         if (!Objects.equals(this.customer, other.customer)) {
             return false;
         }
-        if (!Objects.equals(this.roles, other.roles)) {
-            return false;
-        }
-        return true;
+        return Objects.equals(this.roles, other.roles);
     }
 
     @Override
