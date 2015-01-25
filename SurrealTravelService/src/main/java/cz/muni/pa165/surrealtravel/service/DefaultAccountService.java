@@ -144,32 +144,6 @@ public class DefaultAccountService implements AccountService {
             throw new IllegalArgumentException("Insufficient rights to delete the given account");
         }
 
-        // customer shall be removed as well if this account is the only one
-        // that references it        
-        if (account.getCustomer() != null) {
-            boolean rmcustomer = true;
-            List<Account> accounts = accountDao.getAllAccounts();
-            
-            Account other;
-            for(Iterator<Account> it = accounts.iterator(); rmcustomer && it.hasNext(); ) {
-                other = it.next();
-                
-                rmcustomer &= (other.getCustomer()         == null)
-                           || (other.getId()               != account.getId())
-                           || (other.getCustomer().getId() != account.getCustomer().getId());
-            }
-            
-            if (rmcustomer) {
-                // the customer is referenced only by this account
-                CustomerDTO customer = account.getCustomer();
-                for(ReservationDTO reservation : reservationService.getAllReservationsByCustomer(customer)) {
-                    reservationService.deleteReservationById(reservation.getId());
-                }
-                
-                customerService.deleteCustomerById(customer.getId());
-            }
-        }
-        
         accountDao.deleteAccountById(id);
     }
     

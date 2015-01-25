@@ -378,7 +378,7 @@ public class AccountController {
             logFormErrors(bindingResult);
             return "account/delete";
         }
-        
+        logger.info("Returned back to controller delete account");
         AccountDTO account      = wrapper.getAccount();
         String     resultStatus = doDeleteAccount(account);
         String     messageKey   = "account.message.delete" + (resultStatus.equals("success") ? "" : ".error");
@@ -392,6 +392,7 @@ public class AccountController {
         String resultStatus = "success";
         
         try {
+            logger.debug("Deleting account");
             accountService.deleteAccountById(account.getId());
             
             // if user has removed his own account, invalidate session
