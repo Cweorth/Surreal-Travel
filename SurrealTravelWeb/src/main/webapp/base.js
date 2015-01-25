@@ -1,4 +1,4 @@
-customerCheckPath = "form input#customer";
+customerCheckPath = "form input[id='customer'][type='checkbox']";
 
 $(document).ready(function() {
     
@@ -167,6 +167,7 @@ function redirect(url) {
 }
 
 function toggleCustomer(selector) {
+    if(!$(selector).length) return;
     disable = !$(selector).prop('checked');
     $("form input#customer-name, form input#customer-address").attr('readonly', disable).val(disable ? "" : $(this).val());
 }

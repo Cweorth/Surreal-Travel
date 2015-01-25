@@ -54,7 +54,7 @@ public class AuthCommons {
      * @return 
      */
     public static String forceDenied(UriComponentsBuilder uriBuilder) {
-        return "redirect:" + uriBuilder.path("/auth/403").build();
+        return "redirect:" + uriBuilder.path("/403").build();
     }
     
     /**
@@ -67,7 +67,7 @@ public class AuthCommons {
      */
     public static String forceDenied(UriComponentsBuilder uriBuilder, RedirectAttributes redirectAttributes, String message) {
         redirectAttributes.addFlashAttribute("failureMessage", message);
-        return "redirect:" + uriBuilder.path("/auth/403").queryParam("notification", "failure").build();
+        return "redirect:" + uriBuilder.path("/403").queryParam("notification", "failure").build();
     }
     
 }

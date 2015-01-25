@@ -18,7 +18,7 @@
     <br><br>
     
     <c:choose>
-        <c:when test="${pageContext.request.locale == 'cs'}">
+        <c:when test="${pageContext.request.locale == 'cs' || pageContext.request.locale == 'cs_CZ'}">
             <jsp:include page="/WEB-INF/include/bulletin_cs.jsp" />
         </c:when>
         <c:otherwise>

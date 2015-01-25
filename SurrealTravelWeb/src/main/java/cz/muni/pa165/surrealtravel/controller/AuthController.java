@@ -42,13 +42,4 @@ public class AuthController {
         return "auth/logout";
     }
     
-    /**
-     * Area 51 error message page.
-     * @return 
-     */
-    @RequestMapping(value = "/403", method = RequestMethod.GET)
-    public String accessDenied() {
-        return "auth/403";
-    }
-    
 }

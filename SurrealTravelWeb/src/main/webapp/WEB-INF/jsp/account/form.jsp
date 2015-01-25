@@ -2,6 +2,11 @@
 <%@ taglib prefix="c" uri="http://java.sun.com/jsp/jstl/core" %>
 <%@ taglib prefix="f" uri="http://java.sun.com/jsp/jstl/fmt" %>
 <%@ taglib prefix="form" uri="http://www.springframework.org/tags/form" %>
+<%@ taglib prefix="sec" uri="http://www.springframework.org/security/tags" %>
+
+<sec:authorize access="not hasRole('ROLE_ADMIN')">
+    <input type="hidden" name="customer" id="customer" value="1"/>
+</sec:authorize>
 
 <table border="0" cellpadding="0" cellspacing="0" class="tableForm">
     <tr>
@@ -29,10 +34,12 @@
 <br/>
 <h3><f:message key="account.customerdata"/>:</h3>
 <table border="0" cellpadding="0" cellspacing="0" class="tableForm">
+    <sec:authorize access="hasRole('ROLE_ADMIN')">
     <tr>
         <td class="left">  <f:message key="account.customer"/>:</td>
         <td><form:checkbox path="customer" id="customer"/></td>
     </tr>
+    </sec:authorize>
     <tr>
         <td class="left">* <f:message key="customer.name"/>:</td>
         <td>
