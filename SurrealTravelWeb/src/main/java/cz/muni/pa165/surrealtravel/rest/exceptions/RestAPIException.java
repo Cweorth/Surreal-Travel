@@ -1,7 +1,6 @@
 package cz.muni.pa165.surrealtravel.rest.exceptions;
 
 /**
- *
  * @author Roman Lacko [396157]
  */
 public class RestAPIException extends RuntimeException {

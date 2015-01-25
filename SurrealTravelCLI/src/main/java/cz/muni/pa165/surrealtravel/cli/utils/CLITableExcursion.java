@@ -8,7 +8,6 @@ import java.util.List;
 import org.codehaus.plexus.util.StringUtils;
 
 /**
- *
  * @author Jan Klimeš [374259]
  */
 public class CLITableExcursion {

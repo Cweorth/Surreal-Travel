@@ -25,7 +25,7 @@ import org.springframework.web.bind.annotation.ResponseStatus;
 import org.springframework.web.bind.annotation.RestController;
 
 /**
- *
+ * The REST API controller for Excursions.
  * @author Petr Dvořák [359819]
  */
 @RestController

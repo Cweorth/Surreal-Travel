@@ -26,7 +26,7 @@ import org.springframework.web.bind.annotation.ResponseStatus;
 import org.springframework.web.bind.annotation.RestController;
 
 /**
- *
+ * The REST API controller for Trips.
  * @author Tomáš Kácel [359965]
  */
 @RestController

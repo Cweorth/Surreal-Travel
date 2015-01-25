@@ -7,8 +7,7 @@ import org.springframework.validation.ValidationUtils;
 import org.springframework.validation.Validator;
 
 /**
- *
- * @author cweorth
+ * @author Roman Lacko [396157]
  */
 public class AccountPasswordValidator implements Validator {
 

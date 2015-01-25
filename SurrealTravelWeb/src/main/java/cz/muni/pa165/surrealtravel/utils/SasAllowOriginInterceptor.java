@@ -5,7 +5,6 @@ import javax.servlet.http.HttpServletResponse;
 import org.springframework.web.servlet.handler.HandlerInterceptorAdapter;
 
 /**
- *
  * @author Petr Dvořák [359819]
  */
 public class SasAllowOriginInterceptor extends HandlerInterceptorAdapter {

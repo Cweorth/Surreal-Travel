@@ -4,8 +4,8 @@ import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.RequestMapping;
 
 /**
- *
- * @author cweorth
+ * Controller that maps generic {@code /httpstatuscode} to actual pages
+ * @author Roman Lacko [396157]
  */
 @Controller
 public class ErrorController {

@@ -1,3 +1,8 @@
+<%-- 
+    Document   : edit
+    Author     : Roman Lacko [396157]
+--%>
+
 <%@page import="java.util.EnumSet"%>
 <%@ page import="cz.muni.pa165.surrealtravel.dto.UserRole"         %>
 <%@ page import="cz.muni.pa165.surrealtravel.utils.AccountWrapper" %>

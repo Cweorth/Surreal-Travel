@@ -3,7 +3,10 @@ package cz.muni.pa165.surrealtravel.utils;
 import cz.muni.pa165.surrealtravel.dto.AccountDTO;
 
 /**
- *
+ * The class that wraps {@code AccountDTO} and extra login information.
+ * These extra information are password fields (new, retype), permission
+ * to change roles and password verification flag.
+ * 
  * @author Roman Lacko [396157]
  */
 public class AccountWrapper {

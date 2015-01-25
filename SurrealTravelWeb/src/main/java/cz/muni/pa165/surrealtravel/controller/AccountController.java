@@ -38,7 +38,7 @@ import org.springframework.web.servlet.mvc.support.RedirectAttributes;
 import org.springframework.web.util.UriComponentsBuilder;
 
 /**
- * Account registration controller
+ * Account controller
  * @author Roman Lacko [396157]
  */
 @Controller
@@ -200,8 +200,6 @@ public class AccountController {
         // the security specification for this operation is quite complex,
         // see Security.md for clarification
         //======================================================================
-        
-        // the following (!A || B) conditions should be seen as implication A => B
             //     I am not root ...
         if (       !iAmRoot()
             // ... but admin trying to edit root's account ...

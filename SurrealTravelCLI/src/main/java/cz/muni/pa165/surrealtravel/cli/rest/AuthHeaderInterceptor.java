@@ -10,7 +10,9 @@ import org.springframework.http.client.ClientHttpResponse;
 import org.springframework.http.client.support.HttpRequestWrapper;
 
 /**
- *
+ * Authentication Header Interceptor. 
+ * Wraps the request with "username" and "password" attributes.
+ * 
  * @author Roman Lacko [396157]
  */
 public class AuthHeaderInterceptor implements ClientHttpRequestInterceptor {

@@ -8,7 +8,7 @@ import org.kohsuke.args4j.spi.Parameters;
 import org.kohsuke.args4j.spi.Setter;
 
 /**
- *
+ * args4j option handler to support {@code Long[]} object
  * @author Roman Lacko [396157]
  */
 public class LongArrayOptionHandler extends OptionHandler<Long> {

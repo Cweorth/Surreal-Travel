@@ -2,7 +2,6 @@ package cz.muni.pa165.surrealtravel.rest;
 
 import cz.muni.pa165.surrealtravel.rest.exceptions.BadAuthenticationHeaderException;
 import cz.muni.pa165.surrealtravel.rest.exceptions.PermissionDeniedException;
-import cz.muni.pa165.surrealtravel.service.AccountService;
 import java.util.Enumeration;
 import javax.servlet.http.HttpServletRequest;
 import org.slf4j.Logger;
@@ -19,8 +18,8 @@ import org.springframework.security.web.authentication.WebAuthenticationDetails;
 import org.springframework.stereotype.Component;
 
 /**
- *
- * @author cweorth
+ * The component that deals with authentication for REST API.
+ * @author Roman Lacko [396157]
  */
 @Component
 public class RestAuthCommons {
@@ -29,12 +28,16 @@ public class RestAuthCommons {
     private final static BCryptPasswordEncoder encoder = new BCryptPasswordEncoder(12);
     
     @Autowired
-    private AccountService accountService;
-    
-    @Autowired
     @Qualifier("authenticationManager")
     private AuthenticationManager authenticationManager;
     
+    /**
+     * Logs in the user specified in the {@code request}'s header.
+     * The required attributes in the header are {@code username} and {@code password}.
+     * If neither is provided, the default credentials of {@code rest} account are used.
+     * 
+     * @param request        the {@code HttpServletRequest} that contains login information
+     */
     public void login(HttpServletRequest request) {
         logger.info("Logging in");
         Enumeration<String> usernames = request.getHeaders("username");
@@ -78,6 +81,9 @@ public class RestAuthCommons {
         logger.info("Logged in");
     }
     
+    /**
+     * Logs out the REST API user.
+     */
     public void logout() {
         SecurityContextHolder.getContext().setAuthentication(null);
         logger.info("Logged out");

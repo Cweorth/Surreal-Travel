@@ -1,3 +1,8 @@
+<%-- 
+    Document   : entryEditButton
+    Author     : Jan Klimeš
+--%>
+
 <%@page contentType="text/html" pageEncoding="UTF-8"%>
 <%@ taglib prefix="f" uri="http://java.sun.com/jsp/jstl/fmt" %>
 <%@ taglib prefix="c" uri="http://java.sun.com/jsp/jstl/core" %>

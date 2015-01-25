@@ -12,7 +12,7 @@ import org.springframework.http.converter.json.MappingJackson2HttpMessageConvert
 import org.springframework.web.client.RestTemplate;
 
 /**
- * Application configuration (things that can't be in Spring XML config)
+ * Application configuration (contains RestTemplate and clients)
  * @author Roman Lacko [396157]
  */
 public class AppConfig {

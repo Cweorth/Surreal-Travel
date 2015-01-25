@@ -28,7 +28,7 @@ import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.stereotype.Controller;
 
 /**
- *
+ * Controller that inserts default and demo entities into the system.
  * @author Roman Lacko [396157]
  */
 @Controller
@@ -148,7 +148,7 @@ public class InitialDataController {
         SecurityContextHolder.getContext().setAuthentication(authRequest);
 
         //----------------------------------------------------------------------
-        //  Core accounts (except root)
+        //  Core accounts (except root) specified in Security.md
         //----------------------------------------------------------------------
         
         CustomerDTO pa165 = mkcustomer("PA165", "Faculty of Informatics, Masaryk University, Brno");
