@@ -12,7 +12,7 @@
         Více než <b><span style="font-size: 150%">500</span></b> tisíc emzáků z <i>Alpha Centauri Bb</i> si právě rezervovalo naše zlevněné zájezdy.
     </span>
     <br/>
-    Úpřimně sme my a naše servery tolik zájmu nečekali.
+    Upřímně jsme my a naše servery tolik zájmu nečekali.
 </p>
 
 <br/>
@@ -25,7 +25,7 @@
         <div>
             <ul>
                 <li>Můžete se vrátit zpátky na <a href="/">hlavní stránku</a> a zkusit operaci znovu</li>
-                <li>Kontaktujte naše administrátory a nahlašte problém</li>
+                <li>Kontaktujte naše administrátory a nahlaste problém</li>
             </ul>
         </div>
         <h4>Jste z Alpha Centauri Bb?</h4>

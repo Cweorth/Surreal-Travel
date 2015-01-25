@@ -9,7 +9,7 @@
 
 <p style="text-align: center">
     <span style="font-size: 200%">
-        Bílý Čaroděj má <b><span style="font-size: 150%">403</span></b> důvodů proč Vám nezobrazit tuto stránku.
+        Bílý Čaroděj má <b><span style="font-size: 150%">403</span></b> důvodů, proč Vám nezobrazit tuto stránku.
     </span>
     <br/>
     Ten darebák má zřejmě něco za lubem.
@@ -24,7 +24,7 @@
         <h4>Jste ze světa bez čarodějů?</h4>
         <div>
             <ul>
-                <li>Můžete se vrátit na <a href="/">hlavní stránku</a> a zkusit něco jiné</li>
+                <li>Můžete se vrátit na <a href="/">hlavní stránku</a> a zkusit něco jiného</li>
                 <li>Pokud nejste přihlášen, zkuste se <a href="/auth/login">přihlásit</a></li>
                 <li>Zkontrolujte své přihlašovací údaje</li>
                 <li>Možná nemáte dostatečná oprávnění</li>

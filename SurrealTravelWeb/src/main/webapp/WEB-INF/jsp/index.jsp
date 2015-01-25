@@ -2,6 +2,7 @@
 <%@ taglib prefix="c" uri="http://java.sun.com/jsp/jstl/core" %>
 <%@ taglib prefix="t" tagdir="/WEB-INF/tags" %>
 <%@ taglib prefix="f" uri="http://java.sun.com/jsp/jstl/fmt" %>
+<%@ taglib prefix="fn" uri="http://java.sun.com/jsp/jstl/functions" %>
 
 <f:message var="title" key="index.title"/>
 
@@ -18,7 +19,7 @@
     <br><br>
     
     <c:choose>
-        <c:when test="${pageContext.request.locale == 'cs' || pageContext.request.locale == 'cs_CZ'}">
+        <c:when test="${fn:startsWith(pageContext.response.locale, 'cs')}">
             <jsp:include page="/WEB-INF/include/bulletin_cs.jsp" />
         </c:when>
         <c:otherwise>
