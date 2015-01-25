@@ -69,10 +69,10 @@ public class JPAReservationDAO implements ReservationDAO {
     @Override
     public Reservation updateReservation(Reservation reservation) {
         if(reservation == null) throw new NullPointerException("reservation doesnt exist.");
-        if(reservation.getId() < 0) throw new IllegalArgumentException("reservation id must be positiv number.");
+        if(reservation.getId() < 0) throw new IllegalArgumentException("reservation id must be positive number.");
         if(reservation.getCustomer() == null) throw new NullPointerException("customer in reservation is null.");
         if(reservation.getCustomer().getClass() != Customer.class ) throw new IllegalArgumentException("customer is not customer is empty string.");
-        if(reservation.getTrip()==null) throw new NullPointerException("No trip added to reservatio");        
+        if(reservation.getTrip()==null) throw new NullPointerException("No trip added to reservation");        
         
         Reservation merge = entityManager.merge(reservation);
         return merge;
@@ -82,7 +82,7 @@ public class JPAReservationDAO implements ReservationDAO {
     @Override
     public BigDecimal getFullPriceByCustomer(Customer customer) {
       if(customer==null) throw new NullPointerException("customer doesnt exist.");
-      if(customer.getId() < 0) throw new IllegalArgumentException("customer id must be positiv number.");
+      if(customer.getId() < 0) throw new IllegalArgumentException("customer id must be positive number.");
       
       List<Reservation> reserv =getAllReservationsByCustomer(customer);
       BigDecimal dec= new BigDecimal(0);

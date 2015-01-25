@@ -33,7 +33,7 @@ public interface AccountDAO {
     /**
      * Get the account with the given Customer attached. There may be more Accounts with the same customer.
      * @param customer
-     * @return customer collection
+     * @return account collection
      */
     public List<Account> getAccountByCustomer(Customer customer);
 

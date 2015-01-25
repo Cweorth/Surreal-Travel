@@ -2,7 +2,6 @@ package cz.muni.pa165.surrealtravel.dao;
 
 import cz.muni.pa165.surrealtravel.AbstractPersistenceTest;
 import cz.muni.pa165.surrealtravel.entity.Customer;
-import java.util.List;
 import org.junit.Test;
 import static org.junit.Assert.assertEquals;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -14,9 +13,7 @@ import org.springframework.transaction.annotation.Transactional;
  */
 @Transactional
 public class JPACustomerDAOTest extends AbstractPersistenceTest {
-
-    private List<Customer> customers;
-    
+   
     @Autowired
     private JPACustomerDAO dao;
 
