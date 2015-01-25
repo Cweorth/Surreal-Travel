@@ -129,6 +129,10 @@ public class DefaultReservationService implements ReservationService {
         reservationDAO.deleteReservationById(id);
     }    
     
+    /**
+     * Validate reservation DTO.
+     * @param reservationDTO 
+     */
     private void validateReservation(ReservationDTO reservationDTO) {
         if (reservationDTO.getCustomer() == null) {
             throw new IllegalArgumentException("Customer must exist");
