@@ -31,7 +31,7 @@
             <td><f:message key="excursion.excursionDate"/></td>
             <td><f:message key="excursion.duration"/></td>
             <td><f:message key="excursion.price"/></td>
-            <td width="200" align="right"><sec:authorize access="hasRole('ROLE_STAFF')"><f:message key="basic.action"/></sec:authorize></td>
+            <td width="210" align="right"><sec:authorize access="hasRole('ROLE_STAFF')"><f:message key="basic.action"/></sec:authorize></td>
         </tr>
         <c:choose>
             <c:when test="${not empty excursions}">
