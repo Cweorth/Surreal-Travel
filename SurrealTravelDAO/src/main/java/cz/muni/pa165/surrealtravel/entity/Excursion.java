@@ -4,14 +4,13 @@ import java.io.Serializable;
 import java.math.BigDecimal;
 import java.util.Date;
 import javax.persistence.Column;
-
+import javax.persistence.Entity;
 import javax.persistence.GeneratedValue;
 import javax.persistence.Id;
-import javax.persistence.Temporal;
-import javax.persistence.TemporalType;
-import javax.persistence.Entity;
 import javax.persistence.NamedQueries;
 import javax.persistence.NamedQuery;
+import javax.persistence.Temporal;
+import javax.persistence.TemporalType;
 
 /**
  *
@@ -43,7 +42,6 @@ public class Excursion implements Serializable{
     
     private BigDecimal price;
     
-
     public long getId() {
         return id;
     }
@@ -85,7 +83,6 @@ public class Excursion implements Serializable{
     public void setPrice(BigDecimal price) {
         this.price = price;
     }
-    
     
     @Override
     public int hashCode() {

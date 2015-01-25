@@ -319,19 +319,6 @@ public class JPAReservationDAOTest extends AbstractPersistenceTest {
     }
     
     /**
-     * Perform search and return Reservation objects only for the trips containing specified excursison.
-     * @param res
-     * @param excursion
-     * @return 
-     */
-    private List<Reservation> getReservationsForExcursion(List<Reservation> res, Excursion excursion) {
-        List<Reservation> subList = new ArrayList<>();
-        for(Reservation r : res)
-            if(r.getTrip().getExcursions().contains(excursion)) subList.add(r);
-        return subList;
-    }
-    
-    /**
      * Sum reservation price.
      * @param r
      * @return 

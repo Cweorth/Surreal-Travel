@@ -22,8 +22,6 @@ import javax.persistence.NamedQuery;
 @Entity
 public class Reservation implements Serializable {
 
-    //private methods
-
     @Id
     @GeneratedValue
     private long id = 0;
@@ -37,7 +35,6 @@ public class Reservation implements Serializable {
     @ManyToMany
     private List<Excursion> excursions;
 
-    //methods
     public Reservation() {
         excursions = new ArrayList<>();
     }
@@ -74,6 +71,10 @@ public class Reservation implements Serializable {
         this.excursions = excursions;
     }
 
+    /**
+     * Add new excursion to the collection.
+     * @param excursion 
+     */
     public void addExcursion(Excursion excursion) {
         if (excursion == null) {
             throw new NullPointerException("excursion");
@@ -81,10 +82,18 @@ public class Reservation implements Serializable {
         this.excursions.add(excursion);
     }
 
+    /**
+     * Remove excursion.
+     * @param excursion 
+     */
     public void removeExcursion(Excursion excursion) {
         this.excursions.remove(excursion);
     }
 
+    /**
+     * Get total price of reservation (base price + all selected excursions).
+     * @return total price
+     */
     public BigDecimal getTotalPrice() {
         BigDecimal base = this.getTrip().getBasePrice();
         BigDecimal dc = new BigDecimal(0);

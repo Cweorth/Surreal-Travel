@@ -20,14 +20,14 @@ public interface ReservationDAO {
 
     /**
      * Get the reservation with the given id.
-     * @param id the id in databaze
+     * @param id the id in database
      * @return Reservation
      */
     public Reservation getReservationById(long id);
 
     /**
      * Get all reservations.
-     * @return list of Resefvation
+     * @return list of Reservations
      */
     public List<Reservation> getAllReservations();
 
