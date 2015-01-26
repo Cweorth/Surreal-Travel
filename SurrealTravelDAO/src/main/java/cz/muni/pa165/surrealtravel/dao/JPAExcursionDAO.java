@@ -14,7 +14,7 @@ import org.springframework.stereotype.Repository;
 @Repository(value = "excursionDao")
 public class JPAExcursionDAO implements ExcursionDAO {
 
-    @PersistenceContext
+    @PersistenceContext(name = "Surreal-Travel")
     private EntityManager entityManager;
 
     public EntityManager getEntityManager() {

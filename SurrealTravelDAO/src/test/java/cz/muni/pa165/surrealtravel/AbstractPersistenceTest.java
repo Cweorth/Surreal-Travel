@@ -28,7 +28,7 @@ import org.springframework.test.context.junit4.SpringJUnit4ClassRunner;
 @ContextConfiguration(locations = {"classpath:persistence/testContext.xml"})
 public abstract class AbstractPersistenceTest {
 
-    @PersistenceContext
+    @PersistenceContext(name = "Surreal-Travel-Test")
     protected EntityManager         em;
 
     protected static final Logger   logger = LogManager.getLogger("TestLogger");

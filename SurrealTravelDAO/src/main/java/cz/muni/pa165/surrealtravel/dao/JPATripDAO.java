@@ -18,7 +18,7 @@ import org.springframework.stereotype.Repository;
 @Repository(value = "tripDao")
 public class JPATripDAO implements TripDAO {
 
-    @PersistenceContext
+    @PersistenceContext(name = "Surreal-Travel")
     private EntityManager entityManager;
 
     //--[  Private methods  ]---------------------------------------------------

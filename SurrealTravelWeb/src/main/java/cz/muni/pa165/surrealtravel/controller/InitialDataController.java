@@ -22,7 +22,10 @@ import javax.annotation.PostConstruct;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.beans.factory.annotation.Qualifier;
+import org.springframework.security.authentication.AuthenticationManager;
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
+import org.springframework.security.core.Authentication;
 import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.stereotype.Controller;
@@ -48,6 +51,10 @@ public class InitialDataController {
 
     @Autowired
     private ReservationService reservationService;
+    
+    @Autowired
+    @Qualifier("authenticationManager")
+    private AuthenticationManager authenticationManager;
 
     private static final Logger                logger  = LoggerFactory.getLogger(InitialDataController.class);
     private static final BCryptPasswordEncoder encoder = new BCryptPasswordEncoder(12);
@@ -141,16 +148,23 @@ public class InitialDataController {
 
     @PostConstruct
     public void init() {
+        // if there is either rest or pa165, return
+        if (   (accountService.getAccountByUsername("rest")  != null)
+            || (accountService.getAccountByUsername("pa165") != null)) {
+            return;
+        }
+        
         // Because we are using secured service methods, we need to do authentication.
         // User "root" is created by hibernate on DAO layer (see import.sql).
         // All of the following code is therefore done using root's credentials.
-        UsernamePasswordAuthenticationToken authRequest = new UsernamePasswordAuthenticationToken("root", "root");
-        SecurityContextHolder.getContext().setAuthentication(authRequest);
-
+        UsernamePasswordAuthenticationToken token = new UsernamePasswordAuthenticationToken("root", "root");
+        Authentication authentication = authenticationManager.authenticate(token);
+        SecurityContextHolder.getContext().setAuthentication(authentication);
+        
         //----------------------------------------------------------------------
         //  Core accounts (except root) specified in Security.md
         //----------------------------------------------------------------------
-
+        
         CustomerDTO pa165 = mkcustomer("PA165", "Faculty of Informatics, Masaryk University, Brno");
         customerService.addCustomer(pa165);
         accountService.addAccount(mkaccount("rest",  "rest",  UserRole.ROLE_STAFF,  null));

@@ -16,7 +16,7 @@ import org.springframework.stereotype.Repository;
 @Repository(value = "reservationDao")
 public class JPAReservationDAO implements ReservationDAO {
 
-    @PersistenceContext
+    @PersistenceContext(name = "Surreal-Travel")
     private EntityManager entityManager;
 
     public void setEntityManager(EntityManager entityManager) {

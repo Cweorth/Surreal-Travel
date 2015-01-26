@@ -13,7 +13,7 @@ import org.springframework.stereotype.Repository;
 @Repository(value = "customerDao")
 public class JPACustomerDAO implements CustomerDAO {
 
-    @PersistenceContext
+    @PersistenceContext(name = "Surreal-Travel")
     private EntityManager em;
 
     public EntityManager getEntityManager() {

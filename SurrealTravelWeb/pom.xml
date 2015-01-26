@@ -157,8 +157,8 @@
                 <configuration>
                     <url>http://localhost:8080/manager/text</url>
                     <path>/pa165</path>
-                    <username>ide</username>
-                    <password>FIMrqKhq</password>
+                    <username>pa165</username>
+                    <password>pa165</password>
                 </configuration>
             </plugin>
         </plugins>
